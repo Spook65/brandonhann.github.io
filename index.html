@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
   <style>
     :root {
@@ -103,6 +104,213 @@
       position: relative;
       z-index: 1;
       min-height: 100vh;
+    }
+
+    #hero {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 120px 48px 80px;
+    }
+
+    .hero-inner {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .hero-reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      animation: heroFadeUp 0.72s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      animation-delay: var(--delay, 0s);
+    }
+
+    @keyframes heroFadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(52px, 8vw, 96px);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      max-width: 10ch;
+    }
+
+    .hero-role {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.92rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      min-height: 1.4em;
+    }
+
+    .hero-role-text {
+      display: inline-block;
+      position: relative;
+      padding-right: 0.6em;
+    }
+
+    .hero-role-text::after {
+      content: '';
+      display: inline-block;
+      width: 1px;
+      height: 1em;
+      margin-left: 0.55em;
+      background: currentColor;
+      vertical-align: -0.16em;
+      animation: cursorBlink 1s steps(1) infinite;
+    }
+
+    @keyframes cursorBlink {
+      0%, 49% {
+        opacity: 1;
+      }
+      50%, 100% {
+        opacity: 0;
+      }
+    }
+
+    .hero-description {
+      max-width: 68ch;
+      color: rgba(230, 237, 243, 0.82);
+      font-size: 1rem;
+      line-height: 1.75;
+    }
+
+    .hero-actions,
+    .hero-quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .hero-quick-links {
+      gap: 10px;
+    }
+
+    .hero-button,
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      border-radius: 999px;
+      transition: transform var(--transition), background var(--transition), border-color var(--transition), color var(--transition), box-shadow var(--transition);
+      font-weight: 500;
+    }
+
+    .hero-button {
+      padding: 12px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: transparent;
+      color: var(--text);
+    }
+
+    .hero-button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #05070a;
+      box-shadow: 0 10px 26px rgba(58, 160, 255, 0.16);
+    }
+
+    .hero-button:hover,
+    .hero-pill:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255, 255, 255, 0.2);
+      background: var(--bg-surface);
+      color: var(--text);
+    }
+
+    .hero-button.primary:hover {
+      background: #53adff;
+      border-color: #53adff;
+      color: #05070a;
+    }
+
+    .hero-pill {
+      padding: 10px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.02);
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 0.82rem;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-focus-card {
+      margin-top: 10px;
+      padding: 22px 24px;
+      border-radius: var(--radius-lg);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .hero-focus-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .hero-focus-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.35rem, 2.2vw, 1.9rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      max-width: 28ch;
+    }
+
+    .hero-focus-copy {
+      color: var(--text-muted);
+      max-width: 60ch;
+      font-size: 0.96rem;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 900px) {
+      #hero {
+        padding: 112px 28px 72px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      #hero {
+        padding: 104px 20px 64px;
+      }
+
+      .hero-button {
+        padding: 11px 14px;
+      }
+
+      .hero-focus-card {
+        padding: 18px 18px;
+      }
     }
 
     #navbar {
@@ -513,65 +721,136 @@ animate();
   </script>
 
   <script>
-    const navbar = document.getElementById('navbar');
-    const navLinks = Array.from(document.querySelectorAll('.nav-link'));
-    const sectionIds = ['about', 'projects', 'skills', 'contact'];
-    const sections = sectionIds
-      .map((id) => document.getElementById(id))
-      .filter(Boolean);
+    document.addEventListener('DOMContentLoaded', () => {
+      const navbar = document.getElementById('navbar');
+      const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+      const sectionIds = ['about', 'projects', 'skills', 'contact'];
+      const sections = sectionIds
+        .map((id) => document.getElementById(id))
+        .filter(Boolean);
 
-    function setScrolledState() {
-      navbar.classList.toggle('scrolled', window.scrollY > 80);
-    }
+      function setScrolledState() {
+        navbar.classList.toggle('scrolled', window.scrollY > 80);
+      }
 
-    setScrolledState();
-    window.addEventListener('scroll', setScrolledState, { passive: true });
+      setScrolledState();
+      window.addEventListener('scroll', setScrolledState, { passive: true });
 
-    const linkById = new Map(
-      navLinks
-        .map((link) => [link.getAttribute('href')?.slice(1), link])
-        .filter(([id]) => Boolean(id))
-    );
+      const linkById = new Map(
+        navLinks
+          .map((link) => [link.getAttribute('href')?.slice(1), link])
+          .filter(([id]) => Boolean(id))
+      );
 
-    const observer = new IntersectionObserver((entries) => {
-      let activeId = null;
+      const observer = new IntersectionObserver((entries) => {
+        let activeId = null;
 
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          activeId = entry.target.id;
-        }
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            activeId = entry.target.id;
+          }
+        });
+
+        if (!activeId) return;
+
+        navLinks.forEach((link) => link.classList.remove('active'));
+        const activeLink = linkById.get(activeId);
+        if (activeLink) activeLink.classList.add('active');
+      }, {
+        root: null,
+        threshold: 0.4,
+        rootMargin: '-20% 0px -45% 0px'
       });
 
-      if (!activeId) return;
+      sections.forEach((section) => observer.observe(section));
 
-      navLinks.forEach((link) => link.classList.remove('active'));
-      const activeLink = linkById.get(activeId);
-      if (activeLink) activeLink.classList.add('active');
-    }, {
-      root: null,
-      threshold: 0.4,
-      rootMargin: '-20% 0px -45% 0px'
-    });
+      navLinks.forEach((link) => {
+        link.addEventListener('click', (event) => {
+          const href = link.getAttribute('href');
+          if (!href || !href.startsWith('#')) return;
+          const target = document.querySelector(href);
+          if (!target) return;
 
-    sections.forEach((section) => observer.observe(section));
-
-    navLinks.forEach((link) => {
-      link.addEventListener('click', (event) => {
-        const href = link.getAttribute('href');
-        if (!href || !href.startsWith('#')) return;
-        const target = document.querySelector(href);
-        if (!target) return;
-
-        event.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          event.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
       });
     });
   </script>
 
-  <section id="hero"></section>
+  <section id="hero">
+    <div class="hero-inner">
+      <p class="hero-label hero-reveal" style="--delay: 0s;">[YOUR_FIELD] PORTFOLIO</p>
+      <h1 class="hero-title hero-reveal" style="--delay: 0.1s;">[YOUR_NAME]</h1>
+      <p class="hero-role hero-reveal" style="--delay: 0.2s;"><span id="hero-role-text" class="hero-role-text"></span></p>
+      <p class="hero-description hero-reveal" style="--delay: 0.3s;">
+        I build software with a systems-first mindset: clear architecture, measured performance, and interfaces that stay readable as complexity grows. I like work that rewards precision, makes failure modes obvious, and keeps the user experience calm even when the underlying system is doing a lot.
+      </p>
+      <div class="hero-actions hero-reveal" style="--delay: 0.4s;">
+        <a class="hero-button primary" href="#projects">Projects</a>
+        <a class="hero-button" href="#resume">Resume</a>
+        <a class="hero-button" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+        <a class="hero-button" href="#contact">Contact</a>
+      </div>
+      <div class="hero-quick-links hero-reveal" style="--delay: 0.5s;">
+        <a class="hero-pill" href="#projects">View CUDA Mandelbrot</a>
+        <a class="hero-pill" href="#projects">Inspect Systems Grid</a>
+        <a class="hero-pill" href="#projects">Open Performance Lab</a>
+        <a class="hero-pill" href="#projects">Launch Kernel Viewer</a>
+      </div>
+      <div class="hero-focus-card hero-reveal" style="--delay: 0.6s;">
+        <span class="hero-focus-label">Technical Focus</span>
+        <div class="hero-focus-title">I care most about engineering interfaces that feel precise, stable, and fast under real-world load.</div>
+        <div class="hero-focus-copy">I’m looking for roles where I can work close to the system, collaborate with thoughtful teams, and build tools that are easy to trust.</div>
+      </div>
+    </div>
+  </section>
   <section id="about"></section>
   <section id="projects"></section>
   <section id="skills"></section>
   <section id="contact"></section>
+  <script>
+    (function () {
+      const roles = [
+        '[YOUR_ROLE]',
+        '[SPECIALTY_1]',
+        '[SPECIALTY_2]'
+      ];
+
+      const el = document.getElementById('hero-role-text');
+      if (!el) return;
+
+      let roleIndex = 0;
+      let charIndex = 0;
+      let isDeleting = false;
+
+      function tick() {
+        const current = roles[roleIndex];
+
+        if (isDeleting) {
+          charIndex = Math.max(charIndex - 1, 0);
+          el.textContent = current.slice(0, charIndex);
+        } else {
+          charIndex = Math.min(charIndex + 1, current.length);
+          el.textContent = current.slice(0, charIndex);
+        }
+
+        let delay = isDeleting ? 30 : 60;
+
+        if (!isDeleting && charIndex === current.length) {
+          delay = 2200;
+          isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+          isDeleting = false;
+          roleIndex = (roleIndex + 1) % roles.length;
+          delay = 240;
+        }
+
+        window.setTimeout(tick, delay);
+      }
+
+      tick();
+    })();
+  </script>
 </body>
 </html>
