@@ -7,16 +7,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
   <style>
     :root {
-      --bg: #0d0d0d;
-      --bg-card: #141414;
-      --bg-surface: #1a1a1a;
-      --text: #f0f0f0;
-      --text-muted: #888;
-      --accent: #E8763A;
-      --accent-muted: rgba(232, 118, 58, 0.15);
-      --border: rgba(255, 255, 255, 0.08);
+      --bg: #05070a;
+      --bg-card: #0b0f14;
+      --bg-surface: #10161d;
+      --text: #e6edf3;
+      --text-muted: #7d8b99;
+      --accent: #3aa0ff;
+      --accent-muted: rgba(58, 160, 255, 0.15);
+      --border: rgba(255, 255, 255, 0.06);
       --font-display: 'Syne', sans-serif;
       --font-mono: 'DM Mono', monospace;
       --radius: 12px;
@@ -39,28 +40,412 @@
     body {
       background: var(--bg);
       color: var(--text);
+      position: relative;
+      isolation: isolate;
       font-family: var(--font-mono);
       overflow-x: hidden;
       min-height: 100vh;
     }
 
     #bg-canvas {
-      position: absolute;
-      inset: 0;
-      z-index: -1;
+      position: fixed;
+      top: 0;
+      left: 0;
       display: block;
       width: 100%;
       height: 100%;
+      z-index: 0;
+      pointer-events: none;
     }
 
     section {
       position: relative;
+      z-index: 1;
       min-height: 100vh;
+    }
+
+    #navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 18px 24px;
+      transition: background var(--transition), backdrop-filter var(--transition), border-color var(--transition), box-shadow var(--transition);
+    }
+
+    #navbar.scrolled {
+      background: rgba(13, 13, 13, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .nav-left,
+    .nav-center,
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+      min-width: 0;
+    }
+
+    .nav-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--accent);
+      color: #05070a;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      flex: 0 0 auto;
+    }
+
+    .nav-copy {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+      min-width: 0;
+    }
+
+    .nav-name {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .nav-subtitle {
+      margin-top: 4px;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      white-space: nowrap;
+    }
+
+    .nav-github {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--text-muted);
+      text-decoration: none;
+      background: transparent;
+      transition: background var(--transition), color var(--transition), border-color var(--transition), transform var(--transition);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+
+    .nav-github:hover {
+      background: var(--bg-surface);
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    .nav-github svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+      flex: 0 0 auto;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      transition: color var(--transition);
+      white-space: nowrap;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--accent);
+    }
+
+    @media (max-width: 900px) {
+      #navbar {
+        padding: 14px 16px;
+      }
+
+      .nav-inner {
+        gap: 14px;
+      }
+
+      .nav-subtitle {
+        display: none;
+      }
+
+      .nav-links {
+        gap: 14px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav-inner {
+        flex-wrap: wrap;
+      }
+
+      .nav-center {
+        order: 3;
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .nav-right {
+        width: 100%;
+        justify-content: flex-start;
+      }
     }
   </style>
 </head>
 <body>
   <canvas id="bg-canvas"></canvas>
+  <nav id="navbar">
+    <div class="nav-inner">
+      <div class="nav-left">
+        <a class="nav-brand" href="#hero" aria-label="Go to hero section">
+          <span class="nav-avatar">[BH]</span>
+          <span class="nav-copy">
+            <span class="nav-name">[BRANDON_HANN]</span>
+            <span class="nav-subtitle">[COMPUTER_SCIENCE]</span>
+          </span>
+        </a>
+      </div>
+
+      <div class="nav-center">
+        <a class="nav-github" href="https://github.com/" target="_blank" rel="noreferrer">
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2 .37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.01.08-2.1 0 0 .67-.21 2.2.82a7.57 7.57 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.09.16 1.9.08 2.1.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          <span>GitHub</span>
+        </a>
+      </div>
+
+      <div class="nav-right nav-links">
+        <a class="nav-link" href="#about">About</a>
+        <a class="nav-link" href="#projects">Projects</a>
+        <a class="nav-link" href="#skills">Skills</a>
+        <a class="nav-link" href="#resume">Resume</a>
+        <a class="nav-link" href="#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+  <script>
+const canvas = document.querySelector("#bg-canvas");
+
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+  alpha: true,
+  antialias: true
+});
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+const scene = new THREE.Scene();
+
+const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+const geometry = new THREE.PlaneGeometry(2, 2);
+
+const uniforms = {
+  u_time: { value: 0 },
+  u_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+  u_mouse: { value: new THREE.Vector2(0.5, 0.5) }
+};
+
+const material = new THREE.ShaderMaterial({
+  uniforms,
+
+  vertexShader: `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = vec4(position, 1.0);
+    }
+  `,
+
+  fragmentShader: `
+    precision highp float;
+
+    uniform float u_time;
+    uniform vec2 u_resolution;
+    uniform vec2 u_mouse;
+
+    varying vec2 vUv;
+
+    float hash(vec2 p){
+      return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453123);
+    }
+
+    float grid(vec2 uv, float scale){
+      vec2 g = fract(uv * scale);
+      vec2 lines = smoothstep(0.0, 0.02, abs(g - 0.5));
+      return 1.0 - min(lines.x, lines.y);
+    }
+
+    void main() {
+
+      vec2 uv = vUv;
+
+      vec2 pos = uv - 0.5;
+      pos.x *= u_resolution.x / u_resolution.y;
+
+      // very subtle mouse influence
+      vec2 mouse = (u_mouse - 0.5) * 0.03;
+      pos += mouse;
+
+      vec3 color = vec3(0.02, 0.04, 0.06);
+
+      // COMPUTATIONAL GRID LAYERS
+      float g1 = grid(uv + u_time * 0.01, 18.0);
+      float g2 = grid(uv - u_time * 0.005, 36.0) * 0.5;
+
+      float gridField = g1 + g2;
+      color += gridField * 0.08;
+
+      // SYSTEM LIGHT FIELD (blue GPU tone)
+      float dist = length(pos);
+      float light = 0.15 / (dist + 0.3);
+
+      vec3 accent = vec3(0.23, 0.62, 1.0);
+      color += light * accent * 0.25;
+
+      // directional computation drift
+      float flow = sin(pos.x * 3.0 + u_time * 0.3) * 0.02;
+      color += flow;
+
+      // scanline (very subtle monitor effect)
+      float scan = sin(uv.y * u_resolution.y * 0.5 + u_time * 2.0);
+      color += scan * 0.005;
+
+      // noise (machine texture)
+      float n = hash(uv * u_resolution.xy + u_time);
+      color += (n - 0.5) * 0.02;
+
+      // vignette focus
+      float vignette = smoothstep(0.9, 0.2, dist);
+      color *= vignette;
+
+      gl_FragColor = vec4(color, 1.0);
+    }
+  `
+});
+
+const mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
+
+// mouse tracking
+window.addEventListener("mousemove", (e) => {
+  uniforms.u_mouse.value.x = e.clientX / window.innerWidth;
+  uniforms.u_mouse.value.y = 1.0 - e.clientY / window.innerHeight;
+});
+
+// resize handling
+window.addEventListener("resize", () => {
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight);
+});
+
+// render loop
+function animate(time) {
+  uniforms.u_time.value = time * 0.001;
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+}
+
+animate();
+  </script>
+
+  <script>
+    const navbar = document.getElementById('navbar');
+    const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+    const sectionIds = ['about', 'projects', 'skills', 'contact'];
+    const sections = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
+
+    function setScrolledState() {
+      navbar.classList.toggle('scrolled', window.scrollY > 80);
+    }
+
+    setScrolledState();
+    window.addEventListener('scroll', setScrolledState, { passive: true });
+
+    const linkById = new Map(
+      navLinks
+        .map((link) => [link.getAttribute('href')?.slice(1), link])
+        .filter(([id]) => Boolean(id))
+    );
+
+    const observer = new IntersectionObserver((entries) => {
+      let activeId = null;
+
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          activeId = entry.target.id;
+        }
+      });
+
+      if (!activeId) return;
+
+      navLinks.forEach((link) => link.classList.remove('active'));
+      const activeLink = linkById.get(activeId);
+      if (activeLink) activeLink.classList.add('active');
+    }, {
+      root: null,
+      threshold: 0.4,
+      rootMargin: '-20% 0px -45% 0px'
+    });
+
+    sections.forEach((section) => observer.observe(section));
+
+    navLinks.forEach((link) => {
+      link.addEventListener('click', (event) => {
+        const href = link.getAttribute('href');
+        if (!href || !href.startsWith('#')) return;
+        const target = document.querySelector(href);
+        if (!target) return;
+
+        event.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
 
   <section id="hero"></section>
   <section id="about"></section>
