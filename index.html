@@ -103,23 +103,37 @@
     section {
       position: relative;
       z-index: 1;
-      min-height: 100vh;
     }
 
     #hero {
       display: flex;
       align-items: center;
-      justify-content: flex-start;
-      min-height: auto;
-      padding: 120px 48px 40px;
+      justify-content: center;
+      padding: 120px 48px 96px;
     }
 
     .hero-inner {
       width: 100%;
-      max-width: 900px;
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+      gap: 36px;
+      align-items: start;
+    }
+
+    .hero-copy-column,
+    .hero-panel,
+    .hero-side-column {
       display: flex;
       flex-direction: column;
       gap: 18px;
+      min-width: 0;
+    }
+
+    .hero-panel,
+    .hero-side-column {
+      padding-top: 14px;
     }
 
     .hero-reveal {
@@ -147,11 +161,12 @@
 
     .hero-title {
       font-family: 'Syne', sans-serif;
-      font-size: clamp(52px, 8vw, 96px);
+      font-size: clamp(2.2rem, 3.4vw, 3.2rem);
       font-weight: 800;
-      line-height: 1;
+      line-height: 0.95;
       letter-spacing: -0.02em;
-      max-width: 10ch;
+      max-width: 11ch;
+      white-space: nowrap;
     }
 
     .hero-role {
@@ -191,10 +206,10 @@
     }
 
     .hero-description {
-      max-width: 68ch;
+      max-width: 62ch;
       color: rgba(230, 237, 243, 0.82);
-      font-size: 1rem;
-      line-height: 1.75;
+      font-size: 1.02rem;
+      line-height: 1.78;
     }
 
     .hero-actions,
@@ -258,19 +273,19 @@
     }
 
     .hero-focus-card {
-      margin-top: 10px;
-      padding: 22px 24px;
+      padding: 28px;
       border-radius: var(--radius-lg);
       background: var(--bg-card);
       border: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
+      min-height: 278px;
     }
 
     .hero-focus-tile {
       height: 100%;
-      min-height: 200px;
+      min-height: 190px;
       padding: 24px;
       border-radius: var(--radius-lg);
       background: var(--bg-card);
@@ -296,11 +311,11 @@
 
     .hero-focus-title {
       font-family: 'Syne', sans-serif;
-      font-size: clamp(1.35rem, 2.2vw, 1.9rem);
+      font-size: clamp(1.75rem, 2.1vw, 2.3rem);
       font-weight: 700;
-      line-height: 1.15;
+      line-height: 1.08;
       letter-spacing: -0.02em;
-      max-width: 28ch;
+      max-width: 18ch;
     }
 
     .hero-focus-copy {
@@ -312,7 +327,7 @@
 
     .hero-focus-tile-title {
       font-family: 'Syne', sans-serif;
-      font-size: clamp(1.15rem, 1.55vw, 1.45rem);
+      font-size: clamp(1rem, 1.05vw, 1.14rem);
       font-weight: 700;
       line-height: 1.15;
       letter-spacing: -0.02em;
@@ -328,15 +343,15 @@
     }
 
     #about {
-      padding: 120px 48px;
+      padding: 120px 48px 96px;
     }
 
     .about-inner {
-      max-width: 900px;
+      max-width: 1280px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 22px;
     }
 
     .about-label {
@@ -350,25 +365,25 @@
 
     .about-title {
       font-family: var(--font-display);
-      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-size: clamp(3.8rem, 5.6vw, 5.8rem);
       font-weight: 700;
-      line-height: 1.2;
+      line-height: 1.02;
       letter-spacing: -0.02em;
-      max-width: 16ch;
+      max-width: 13ch;
     }
 
     .about-copy {
-      max-width: 70ch;
+      max-width: 110ch;
       color: rgba(230, 237, 243, 0.82);
-      font-size: 1rem;
-      line-height: 1.75;
+      font-size: 1.02rem;
+      line-height: 1.78;
     }
 
     .about-cards {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 8px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 18px;
     }
 
     .about-card {
@@ -424,6 +439,339 @@
       transition-delay: 0.2s;
     }
 
+    #projects {
+      min-height: auto;
+      padding: 120px 48px 96px;
+    }
+
+    .projects-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .projects-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .projects-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.15rem, 4vw, 3.55rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      max-width: 14ch;
+    }
+
+    .projects-bus {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+    }
+
+    .projects-bus-header {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 12px;
+      padding: 22px 24px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .projects-bus-header-label {
+      justify-self: start;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .projects-bus-header-title {
+      justify-self: center;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .projects-bus-header-spacer {
+      justify-self: end;
+    }
+
+    .project-bus-row {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 4px minmax(0, 1fr);
+      align-items: stretch;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+    }
+
+    .project-bus-row + .project-bus-row {
+      border-top: 1px solid var(--border);
+    }
+
+    .project-bus-row:hover {
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .project-bus-row:focus-visible {
+      outline: 2px solid rgba(58, 160, 255, 0.45);
+      outline-offset: -2px;
+    }
+
+    .project-bus-accent {
+      display: block;
+      background: linear-gradient(180deg, #2fe0cb 0%, #ff8a3d 100%);
+      min-height: 100%;
+    }
+
+    .project-bus-content {
+      padding: 20px 24px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .project-bus-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .project-bus-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .project-bus-desc {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: var(--text-muted);
+      max-width: 76ch;
+    }
+
+    .projects-detail-list {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .project-card {
+      padding: 40px;
+      border-radius: var(--radius-lg);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      scroll-margin-top: 120px;
+    }
+
+    .project-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .project-card-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .project-card-squares {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .project-card-square {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+
+    .project-card-square.gray {
+      background: rgba(125, 139, 153, 0.95);
+    }
+
+    .project-card-square.accent {
+      background: var(--accent);
+    }
+
+    .project-card-square.orange {
+      background: #ff8a3d;
+    }
+
+    .project-card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 3vw, 32px);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      max-width: 22ch;
+    }
+
+    .project-metric {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      max-width: 40ch;
+    }
+
+    .project-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-width: 78ch;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .project-copy p {
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      color: inherit;
+    }
+
+    .project-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 78ch;
+    }
+
+    .project-bullets li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    .project-bullets li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      margin-top: 0.62em;
+      border-radius: 50%;
+      background: var(--accent);
+      flex: 0 0 auto;
+    }
+
+    .project-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 2px;
+    }
+
+    .project-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: transparent;
+      color: var(--text);
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-weight: 500;
+      transition: background var(--transition), border-color var(--transition), transform var(--transition), color var(--transition);
+    }
+
+    .project-button:hover {
+      background: var(--bg-surface);
+      border-color: rgba(255, 255, 255, 0.18);
+      transform: translateY(-1px);
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .project-tag {
+      padding: 6px 14px;
+      border-radius: 99px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .projects-bus.reveal,
+    .project-card.reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .projects-bus.reveal.visible,
+    .project-card.reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .projects-detail-list .reveal:nth-child(1) {
+      transition-delay: 0.0s;
+    }
+
+    .projects-detail-list .reveal:nth-child(2) {
+      transition-delay: 0.1s;
+    }
+
+    .projects-detail-list .reveal:nth-child(3) {
+      transition-delay: 0.2s;
+    }
+
     @media (max-width: 900px) {
       #hero {
         padding: 112px 28px 36px;
@@ -431,6 +779,33 @@
 
       #about {
         padding: 112px 28px;
+      }
+
+      #projects {
+        padding: 112px 28px 88px;
+      }
+
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .hero-side-column {
+        padding-top: 0;
+      }
+
+      .hero-title {
+        white-space: normal;
+        font-size: clamp(2rem, 5.5vw, 3rem);
+        max-width: none;
+      }
+
+      .about-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .project-card {
+        padding: 32px;
       }
     }
 
@@ -441,6 +816,14 @@
 
       #about {
         padding: 104px 20px;
+      }
+
+      #projects {
+        padding: 104px 20px 80px;
+      }
+
+      .hero-inner {
+        grid-template-columns: 1fr;
       }
 
       .hero-button {
@@ -461,8 +844,38 @@
         min-height: 0;
       }
 
+      .hero-focus-card {
+        min-height: 0;
+      }
+
       .about-card {
         padding: 22px;
+      }
+
+      .project-card {
+        padding: 24px;
+      }
+
+      .projects-bus-header {
+        grid-template-columns: 1fr;
+        justify-items: start;
+      }
+
+      .projects-bus-header-title,
+      .projects-bus-header-spacer {
+        justify-self: start;
+      }
+
+      .project-bus-content {
+        padding: 18px 18px 18px 16px;
+      }
+
+      .project-bus-name {
+        font-size: 18px;
+      }
+
+      .project-metric {
+        font-size: 16px;
       }
     }
 
@@ -895,6 +1308,8 @@ animate();
           .filter(([id]) => Boolean(id))
       );
 
+      const projectRows = Array.from(document.querySelectorAll('[data-project-target]'));
+
       const observer = new IntersectionObserver((entries) => {
         let activeId = null;
 
@@ -929,6 +1344,17 @@ animate();
         });
       });
 
+      projectRows.forEach((row) => {
+        row.addEventListener('click', () => {
+          const targetId = row.getAttribute('data-project-target');
+          if (!targetId) return;
+          const target = document.getElementById(targetId);
+          if (!target) return;
+
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
       const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
@@ -947,49 +1373,54 @@ animate();
 
   <section id="hero">
     <div class="hero-inner">
-      <p class="hero-label hero-reveal" style="--delay: 0s;">[YOUR_FIELD] PORTFOLIO</p>
-      <h1 class="hero-title hero-reveal" style="--delay: 0.1s;">[YOUR_NAME]</h1>
-      <p class="hero-role hero-reveal" style="--delay: 0.2s;"><span id="hero-role-text" class="hero-role-text"></span></p>
-      <p class="hero-description hero-reveal" style="--delay: 0.3s;">
-        I build software with a systems-first mindset: clear architecture, measured performance, and interfaces that stay readable as complexity grows. I like work that rewards precision, makes failure modes obvious, and keeps the user experience calm even when the underlying system is doing a lot.
-      </p>
-      <div class="hero-actions hero-reveal" style="--delay: 0.4s;">
-        <a class="hero-button primary" href="#projects">Projects</a>
-        <a class="hero-button" href="#resume">Resume</a>
-        <a class="hero-button" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
-        <a class="hero-button" href="#contact">Contact</a>
-      </div>
-      <div class="hero-quick-links hero-reveal" style="--delay: 0.5s;">
-        <a class="hero-pill" href="#projects">View CUDA Mandelbrot</a>
-        <a class="hero-pill" href="#projects">Inspect Systems Grid</a>
-        <a class="hero-pill" href="#projects">Open Performance Lab</a>
-        <a class="hero-pill" href="#projects">Launch Kernel Viewer</a>
-      </div>
-      <div class="hero-focus-card hero-reveal" style="--delay: 0.6s;">
-        <span class="hero-focus-label">Technical Focus</span>
-        <div class="hero-focus-title">I care most about engineering interfaces that feel precise, stable, and fast under real-world load.</div>
-        <div class="hero-focus-copy">I’m looking for roles where I can work close to the system, collaborate with thoughtful teams, and build tools that are easy to trust.</div>
+      <div class="hero-copy-column">
+      <p class="hero-label hero-reveal" style="--delay: 0s;">CYBERSECURITY, AI ETHICS, AND SYSTEMS PORTFOLIO</p>
+      <h1 class="hero-title hero-reveal" style="--delay: 0.1s;">Brandon Hann</h1>
+        <p class="hero-role hero-reveal" style="--delay: 0.2s;"><span id="hero-role-text" class="hero-role-text"></span></p>
+        <p class="hero-description hero-reveal" style="--delay: 0.3s;">
+          I build software with a systems-first mindset: clear architecture, measured performance, and interfaces that stay readable as complexity grows. I care about security, responsibility, and making failure modes obvious so the tools I build stay useful under real-world load.
+        </p>
+        <div class="hero-actions hero-reveal" style="--delay: 0.4s;">
+          <a class="hero-button primary" href="#projects">Projects</a>
+          <a class="hero-button" href="#resume">Resume</a>
+          <a class="hero-button" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="hero-button" href="#contact">Contact</a>
+        </div>
+        <div class="hero-quick-links hero-reveal" style="--delay: 0.5s;">
+          <a class="hero-pill" href="#project-cuda-mandelbrot">View CUDA Mandelbrot</a>
+          <a class="hero-pill" href="#project-systems-grid">Inspect Systems Grid</a>
+          <a class="hero-pill" href="#project-performance-lab">Open Performance Lab</a>
+          <a class="hero-pill" href="#projects">Launch Kernel Viewer</a>
+        </div>
       </div>
 
-      <div class="hero-supporting-cards">
-        <article class="hero-focus-tile hero-reveal" style="--delay: 0.7s;">
-          <span class="hero-focus-label">Best fit roles</span>
-          <div class="hero-focus-tile-title">Systems software, ML infrastructure, performance engineering</div>
-        </article>
+      <div class="hero-panel">
+        <div class="hero-focus-card hero-reveal" style="--delay: 0.6s;">
+          <span class="hero-focus-label">Technical Focus</span>
+          <div class="hero-focus-title">I care most about building secure systems that stay understandable, reliable, and fast under real-world load.</div>
+          <div class="hero-focus-copy">I’m looking for roles where I can work close to the system, collaborate with thoughtful teams, and improve software that people can trust.</div>
+        </div>
 
-        <article class="hero-focus-tile hero-reveal" style="--delay: 0.8s;">
-          <span class="hero-focus-label">Core stack</span>
-          <div class="hero-focus-tile-title">C++, Python, C#, CUDA, PyTorch, Unity, profiling tools</div>
-        </article>
+        <div class="hero-supporting-cards">
+          <article class="hero-focus-tile hero-reveal" style="--delay: 0.7s;">
+            <span class="hero-focus-label">Best fit roles</span>
+            <div class="hero-focus-tile-title">Systems software, security engineering, AI governance</div>
+          </article>
+
+          <article class="hero-focus-tile hero-reveal" style="--delay: 0.8s;">
+            <span class="hero-focus-label">Core stack</span>
+            <div class="hero-focus-tile-title">Python, JavaScript, TypeScript, React, Node.js, Git, APIs</div>
+          </article>
+        </div>
       </div>
     </div>
   </section>
   <section id="about">
     <div class="about-inner">
       <p class="about-label">ABOUT</p>
-      <h2 class="about-title">Build secure systems — stay accountable</h2>
+      <h2 class="about-title">Technical, hands-on, and metrics-driven.</h2>
       <p class="about-copy">
-        I’m a fourth-year Computer Science student at the University of the Pacific focused on cybersecurity, AI ethics, and software development. My work sits at the intersection of technical execution, security and risk awareness, and ethical thinking around AI systems. I build with a habit of asking how a system can fail, who it affects, and how to make it more secure, responsible, and useful.
+        I’m a fourth-year Computer Science student at the University of the Pacific focused on cybersecurity, AI ethics, and software development. I like work that balances technical execution with security, risk awareness, and responsibility. I build with a habit of asking how a system can fail, who it affects, and how to make it more secure, useful, and easy to trust.
       </p>
 
       <div class="about-cards">
@@ -1016,15 +1447,174 @@ animate();
       </div>
     </div>
   </section>
-  <section id="projects"></section>
+  <section id="projects">
+    <div class="projects-inner">
+      <p class="projects-label">PROJECTS</p>
+      <h2 class="projects-title">Selected work across systems, speed, and reliability</h2>
+
+      <div class="projects-bus reveal">
+        <div class="projects-bus-header">
+          <span class="projects-bus-header-label">PROJECT BUS</span>
+          <span class="projects-bus-header-title">Selected Work</span>
+          <span class="projects-bus-header-spacer" aria-hidden="true"></span>
+        </div>
+
+        <button class="project-bus-row" type="button" data-project-target="project-cuda-mandelbrot">
+          <span class="project-bus-accent" aria-hidden="true"></span>
+          <span class="project-bus-content">
+            <span class="project-bus-label">PROJECT 01</span>
+            <span class="project-bus-name">CUDA Mandelbrot Renderer</span>
+            <span class="project-bus-desc">A GPU fractal renderer tuned with Nsight until the hot loop stopped wasting work.</span>
+          </span>
+        </button>
+
+        <button class="project-bus-row" type="button" data-project-target="project-systems-grid">
+          <span class="project-bus-accent" aria-hidden="true"></span>
+          <span class="project-bus-content">
+            <span class="project-bus-label">PROJECT 02</span>
+            <span class="project-bus-name">Systems Grid Diagnostics</span>
+            <span class="project-bus-desc">A UI and data-flow surface for making runtime behavior easier to inspect, trust, and debug.</span>
+          </span>
+        </button>
+
+        <button class="project-bus-row" type="button" data-project-target="project-performance-lab">
+          <span class="project-bus-accent" aria-hidden="true"></span>
+          <span class="project-bus-content">
+            <span class="project-bus-label">PROJECT 03</span>
+            <span class="project-bus-name">Performance Lab</span>
+            <span class="project-bus-desc">A profiling-oriented toolchain for measuring load, isolating bottlenecks, and validating fixes.</span>
+          </span>
+        </button>
+      </div>
+
+      <div class="projects-detail-list">
+        <article id="project-cuda-mandelbrot" class="project-card reveal">
+          <div class="project-card-top">
+            <span class="project-card-label">PROJECT 01</span>
+            <div class="project-card-squares" aria-hidden="true">
+              <span class="project-card-square gray"></span>
+              <span class="project-card-square accent"></span>
+              <span class="project-card-square orange"></span>
+            </div>
+          </div>
+
+          <h3 class="project-card-title">CUDA Mandelbrot Renderer</h3>
+          <p class="project-metric">374 ms → 1.0 ms with Nsight-validated ~370x speedup</p>
+
+          <div class="project-copy">
+            <p>I built a CUDA Mandelbrot renderer to study how far a compact kernel could be pushed when the launch configuration, memory access pattern, and iteration logic were tuned together instead of treated separately.</p>
+            <p>I profiled the hot path with Nsight, traced most of the time loss to unnecessary work in the iteration loop, and tightened the execution path so the GPU spent its time on actual fractal computation.</p>
+            <p>The result is a deliberately measured GPU program: easy to benchmark, easy to compare, and grounded in visible performance data instead of guesswork.</p>
+          </div>
+
+          <ul class="project-bullets">
+            <li>Reworked the kernel to reduce wasted iterations and make thread work more consistent across the image.</li>
+            <li>Used Nsight to validate changes and confirm the speedup was coming from real kernel improvements.</li>
+            <li>Kept the rendering path compact so the benchmark stays stable and easy to reason about.</li>
+          </ul>
+
+          <div class="project-actions">
+            <a class="project-button" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="project-button" href="#project-cuda-mandelbrot">Technical Details</a>
+          </div>
+
+          <div class="project-tags">
+            <span class="project-tag">CUDA</span>
+            <span class="project-tag">C++</span>
+            <span class="project-tag">Nsight</span>
+            <span class="project-tag">GPU profiling</span>
+            <span class="project-tag">Visualization</span>
+          </div>
+        </article>
+
+        <article id="project-systems-grid" class="project-card reveal">
+          <div class="project-card-top">
+            <span class="project-card-label">PROJECT 02</span>
+            <div class="project-card-squares" aria-hidden="true">
+              <span class="project-card-square gray"></span>
+              <span class="project-card-square accent"></span>
+              <span class="project-card-square orange"></span>
+            </div>
+          </div>
+
+          <h3 class="project-card-title">Systems Grid Diagnostics</h3>
+          <p class="project-metric">812 ms → 96 ms after flattening state updates and tightening the data pipeline</p>
+
+          <div class="project-copy">
+            <p>I built this as a systems-style interface for inspecting data flow, runtime status, and the parts of a UI that usually turn fragile when the state graph gets bigger than expected.</p>
+            <p>The main work was turning a noisy update path into something that stayed readable under load: I normalized state boundaries, reduced redundant rerenders, and made the data path easier to inspect while debugging.</p>
+            <p>That approach made the interface feel less like a decorative dashboard and more like a practical analysis surface for reliability work.</p>
+          </div>
+
+          <ul class="project-bullets">
+            <li>Restructured the update flow so the UI could stay responsive while still reflecting live system changes.</li>
+            <li>Reduced complexity in the render path by separating derived state from primary input data.</li>
+            <li>Made failure points easier to trace by keeping the interface aligned with actual runtime behavior.</li>
+          </ul>
+
+          <div class="project-actions">
+            <a class="project-button" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="project-button" href="#project-systems-grid">Technical Details</a>
+          </div>
+
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">TypeScript</span>
+            <span class="project-tag">APIs</span>
+            <span class="project-tag">State management</span>
+            <span class="project-tag">Debugging</span>
+          </div>
+        </article>
+
+        <article id="project-performance-lab" class="project-card reveal">
+          <div class="project-card-top">
+            <span class="project-card-label">PROJECT 03</span>
+            <div class="project-card-squares" aria-hidden="true">
+              <span class="project-card-square gray"></span>
+              <span class="project-card-square accent"></span>
+              <span class="project-card-square orange"></span>
+            </div>
+          </div>
+
+          <h3 class="project-card-title">Performance Lab</h3>
+          <p class="project-metric">1.8 s → 140 ms after profiling bottlenecks and removing the heaviest repeated work</p>
+
+          <div class="project-copy">
+            <p>I treated this project like a small performance lab: measure first, isolate the slow path, then change only the parts that clearly moved the bottleneck.</p>
+            <p>That meant profiling the critical path, identifying repeated work that could be cached or batched, and simplifying the interface around the actual runtime cost instead of assumptions.</p>
+            <p>The end result is a tool that makes throughput and reliability easier to see, which is useful when I want to reason about a system instead of just watch it animate.</p>
+          </div>
+
+          <ul class="project-bullets">
+            <li>Profiled the slow path before changing behavior so the optimization work stayed grounded in evidence.</li>
+            <li>Reduced repeated computation and adjusted state flow to avoid unnecessary blocking work.</li>
+            <li>Kept the UI focused on measurable outcomes such as latency, load, and consistency.</li>
+          </ul>
+
+          <div class="project-actions">
+            <a class="project-button" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="project-button" href="#project-performance-lab">Technical Details</a>
+          </div>
+
+          <div class="project-tags">
+            <span class="project-tag">Profiling</span>
+            <span class="project-tag">Benchmarking</span>
+            <span class="project-tag">Performance tuning</span>
+            <span class="project-tag">UI reliability</span>
+            <span class="project-tag">Systems thinking</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
   <section id="skills"></section>
   <section id="contact"></section>
   <script>
     (function () {
       const roles = [
-        '[YOUR_ROLE]',
-        '[SPECIALTY_1]',
-        '[SPECIALTY_2]'
+        'Computer Science Student',
+        'Cybersecurity',
+        'AI Ethics'
       ];
 
       const el = document.getElementById('hero-role-text');
