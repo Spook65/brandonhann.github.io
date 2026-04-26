@@ -110,8 +110,8 @@
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      min-height: 100vh;
-      padding: 120px 48px 80px;
+      min-height: auto;
+      padding: 120px 48px 40px;
     }
 
     .hero-inner {
@@ -268,6 +268,23 @@
       gap: 10px;
     }
 
+    .hero-focus-tile {
+      height: 100%;
+      min-height: 200px;
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: border-color var(--transition), transform var(--transition), background var(--transition);
+    }
+
+    .hero-focus-tile:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
     .hero-focus-label {
       font-family: 'DM Mono', monospace;
       font-size: 11px;
@@ -293,15 +310,137 @@
       line-height: 1.7;
     }
 
+    .hero-focus-tile-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.15rem, 1.55vw, 1.45rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      max-width: 22ch;
+    }
+
+    .hero-supporting-cards {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    #about {
+      padding: 120px 48px;
+    }
+
+    .about-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .about-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .about-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      max-width: 16ch;
+    }
+
+    .about-copy {
+      max-width: 70ch;
+      color: rgba(230, 237, 243, 0.82);
+      font-size: 1rem;
+      line-height: 1.75;
+    }
+
+    .about-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .about-card {
+      padding: 28px;
+      border-radius: var(--radius-lg);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      transition: border-color var(--transition), transform var(--transition), background var(--transition);
+    }
+
+    .about-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .about-card-title {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: 0.02em;
+      margin-bottom: 10px;
+    }
+
+    .about-card-body {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-muted);
+      line-height: 1.7;
+      letter-spacing: 0.01em;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .about-cards .reveal:nth-child(1) {
+      transition-delay: 0.0s;
+    }
+
+    .about-cards .reveal:nth-child(2) {
+      transition-delay: 0.1s;
+    }
+
+    .about-cards .reveal:nth-child(3) {
+      transition-delay: 0.2s;
+    }
+
     @media (max-width: 900px) {
       #hero {
-        padding: 112px 28px 72px;
+        padding: 112px 28px 36px;
+      }
+
+      #about {
+        padding: 112px 28px;
       }
     }
 
     @media (max-width: 600px) {
       #hero {
-        padding: 104px 20px 64px;
+        padding: 104px 20px 32px;
+      }
+
+      #about {
+        padding: 104px 20px;
       }
 
       .hero-button {
@@ -310,6 +449,20 @@
 
       .hero-focus-card {
         padding: 18px 18px;
+      }
+
+      .hero-supporting-cards {
+        width: 100%;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .hero-focus-tile {
+        min-height: 0;
+      }
+
+      .about-card {
+        padding: 22px;
       }
     }
 
@@ -775,6 +928,20 @@ animate();
           target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
       });
+
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, {
+        threshold: 0.15
+      });
+
+      document.querySelectorAll('.reveal').forEach((element) => {
+        revealObserver.observe(element);
+      });
     });
   </script>
 
@@ -803,9 +970,52 @@ animate();
         <div class="hero-focus-title">I care most about engineering interfaces that feel precise, stable, and fast under real-world load.</div>
         <div class="hero-focus-copy">I’m looking for roles where I can work close to the system, collaborate with thoughtful teams, and build tools that are easy to trust.</div>
       </div>
+
+      <div class="hero-supporting-cards">
+        <article class="hero-focus-tile hero-reveal" style="--delay: 0.7s;">
+          <span class="hero-focus-label">Best fit roles</span>
+          <div class="hero-focus-tile-title">Systems software, ML infrastructure, performance engineering</div>
+        </article>
+
+        <article class="hero-focus-tile hero-reveal" style="--delay: 0.8s;">
+          <span class="hero-focus-label">Core stack</span>
+          <div class="hero-focus-tile-title">C++, Python, C#, CUDA, PyTorch, Unity, profiling tools</div>
+        </article>
+      </div>
     </div>
   </section>
-  <section id="about"></section>
+  <section id="about">
+    <div class="about-inner">
+      <p class="about-label">ABOUT</p>
+      <h2 class="about-title">Build secure systems — stay accountable</h2>
+      <p class="about-copy">
+        I’m a fourth-year Computer Science student at the University of the Pacific focused on cybersecurity, AI ethics, and software development. My work sits at the intersection of technical execution, security and risk awareness, and ethical thinking around AI systems. I build with a habit of asking how a system can fail, who it affects, and how to make it more secure, responsible, and useful.
+      </p>
+
+      <div class="about-cards">
+        <article class="about-card reveal">
+          <div class="about-card-title">What I like working on</div>
+          <div class="about-card-body">
+            Secure software, AI governance, debugging complex UI and data-flow issues, and projects that make reliability visible. I like work that solves real problems while also accounting for privacy, bias, transparency, and compliance.
+          </div>
+        </article>
+
+        <article class="about-card reveal">
+          <div class="about-card-title">Engineering approach</div>
+          <div class="about-card-body">
+            I build systems-first: I think about failure modes, security risks, and who is impacted by design choices before I optimize for features. I’m iterative, efficient, and deliberate about keeping functionality, accountability, and performance in balance.
+          </div>
+        </article>
+
+        <article class="about-card reveal">
+          <div class="about-card-title">Core technical toolkit</div>
+          <div class="about-card-body">
+            Python, JavaScript, TypeScript, React, Node.js, APIs, Git, debugging tools, data structures and algorithms, systems basics, and secure coding practices.
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
   <section id="projects"></section>
   <section id="skills"></section>
   <section id="contact"></section>
