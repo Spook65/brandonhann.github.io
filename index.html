@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0d0d0d;
+      --bg-card: #141414;
+      --bg-surface: #1a1a1a;
+      --text: #f0f0f0;
+      --text-muted: #888;
+      --accent: #E8763A;
+      --accent-muted: rgba(232, 118, 58, 0.15);
+      --border: rgba(255, 255, 255, 0.08);
+      --font-display: 'Syne', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+      --radius: 12px;
+      --radius-lg: 20px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-mono);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    #bg-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    section {
+      position: relative;
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg-canvas"></canvas>
+
+  <section id="hero"></section>
+  <section id="about"></section>
+  <section id="projects"></section>
+  <section id="skills"></section>
+  <section id="contact"></section>
+</body>
+</html>
