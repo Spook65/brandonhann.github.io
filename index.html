@@ -6,7 +6,7 @@
   <title>Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
   <style>
     :root {
@@ -18,8 +18,8 @@
       --accent: #3aa0ff;
       --accent-muted: rgba(58, 160, 255, 0.15);
       --border: rgba(255, 255, 255, 0.06);
-      --font-display: 'Syne', sans-serif;
-      --font-mono: 'DM Mono', monospace;
+      --font-display: 'Inter', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
       --radius: 12px;
       --radius-lg: 20px;
       --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -42,9 +42,50 @@
       color: var(--text);
       position: relative;
       isolation: isolate;
-      font-family: var(--font-mono);
+      font-family: var(--font-display);
+      font-weight: 400;
+      line-height: 1.7;
       overflow-x: hidden;
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: var(--font-display);
+      font-weight: 700;
+    }
+
+    h1,
+    h2 {
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      line-height: 1.08;
+    }
+
+    h2 {
+      line-height: 1.2;
+    }
+
+    h3 {
+      line-height: 1.25;
+    }
+
+    p,
+    li {
+      font-family: var(--font-display);
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    button,
+    .nav-github {
+      font-family: var(--font-display);
+      font-weight: 500;
     }
 
     #bg-canvas {
@@ -115,10 +156,10 @@
       place-items: center;
       background: var(--accent);
       color: #05070a;
-      font-family: var(--font-display);
-      font-weight: 800;
+      font-family: var(--font-mono);
+      font-weight: 500;
       font-size: 0.8rem;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.02em;
       flex: 0 0 auto;
     }
 
@@ -130,10 +171,10 @@
     }
 
     .nav-name {
-      font-family: var(--font-display);
-      font-weight: 800;
+      font-family: var(--font-mono);
+      font-weight: 500;
       font-size: 0.95rem;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.02em;
       white-space: nowrap;
     }
 
@@ -141,8 +182,10 @@
       margin-top: 4px;
       color: var(--text-muted);
       font-size: 0.72rem;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.02em;
       white-space: nowrap;
+      font-family: var(--font-mono);
+      font-weight: 500;
     }
 
     .nav-github {
@@ -157,7 +200,7 @@
       background: transparent;
       transition: background var(--transition), color var(--transition), border-color var(--transition), transform var(--transition);
       font-size: 0.78rem;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.02em;
       white-space: nowrap;
     }
 
@@ -186,9 +229,25 @@
       color: var(--text-muted);
       text-decoration: none;
       font-size: 0.78rem;
-      letter-spacing: 0.08em;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      letter-spacing: 0.02em;
       transition: color var(--transition);
       white-space: nowrap;
+    }
+
+    code,
+    pre,
+    kbd,
+    samp,
+    .metric,
+    .terminal,
+    .profiler,
+    .label,
+    .metadata {
+      font-family: var(--font-mono);
+      font-weight: 500;
+      letter-spacing: 0.02em;
     }
 
     .nav-link:hover,
