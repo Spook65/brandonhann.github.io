@@ -51,6 +51,18 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
+    body.custom-cursor,
+    body.custom-cursor * {
+      cursor: none !important;
+    }
+
+    body.custom-cursor input,
+    body.custom-cursor textarea,
+    body.custom-cursor select,
+    body.custom-cursor [contenteditable='true'] {
+      cursor: auto !important;
+    }
+
     h1,
     h2,
     h3 {
@@ -69,6 +81,20 @@
 
     h2 {
       line-height: 1.2;
+    }
+
+    h2.split-heading .split-word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+      transition-delay: calc(var(--word-index) * 0.05s);
+      will-change: transform, opacity;
+    }
+
+    h2.split-heading.visible .split-word {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     h3 {
@@ -97,6 +123,67 @@
       height: 100%;
       z-index: 0;
       pointer-events: none;
+    }
+
+    #scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      z-index: 101;
+      pointer-events: none;
+      transform: scaleX(0);
+      transform-origin: left center;
+      background: linear-gradient(90deg, var(--accent), #ff9c52);
+    }
+
+    #cursor,
+    #cursor-ring {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0;
+      will-change: left, top, opacity, transform;
+    }
+
+    body.custom-cursor #cursor,
+    body.custom-cursor #cursor-ring {
+      opacity: 1;
+    }
+
+    #cursor {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      transform: translate3d(-50%, -50%, 0) scale(var(--cursor-scale, 1));
+      transition: transform 0.1s ease, opacity 0.15s ease;
+    }
+
+    #cursor-ring {
+      width: 32px;
+      height: 32px;
+      border: 1.5px solid var(--accent);
+      border-radius: 50%;
+      opacity: 0.5;
+      transform: translate3d(-50%, -50%, 0) scale(var(--cursor-ring-scale, 1));
+      transition: all 0.12s ease;
+    }
+
+    #cursor.hovering {
+      --cursor-scale: 0.3;
+    }
+
+    #cursor.mousedown {
+      --cursor-scale: 0.7;
+    }
+
+    #cursor-ring.hovering {
+      --cursor-ring-scale: 1.6;
+      opacity: 1;
     }
 
     section {
@@ -733,6 +820,15 @@
       box-shadow: 0 0 0 1px rgba(58, 160, 255, 0.12), 0 16px 34px rgba(0, 0, 0, 0.24);
     }
 
+    .project-card.reveal {
+      transform: perspective(1000px) translateY(40px) rotateX(4deg);
+      transform-origin: top center;
+    }
+
+    .project-card.reveal.visible {
+      transform: perspective(1000px) translateY(0) rotateX(0);
+    }
+
     .project-card-top {
       display: flex;
       align-items: center;
@@ -1165,6 +1261,44 @@
       gap: 10px;
     }
 
+    @media (min-width: 901px) {
+      .skill-chip-list {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        position: relative;
+        padding: 2px 24px 2px 8px;
+        margin: -2px -8px 0;
+      }
+
+      .skill-chip-list::-webkit-scrollbar {
+        display: none;
+      }
+
+      .skill-chip-list::before,
+      .skill-chip-list::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 30px;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .skill-chip-list::before {
+        left: 0;
+        background: linear-gradient(90deg, var(--bg-card), rgba(11, 15, 20, 0));
+      }
+
+      .skill-chip-list::after {
+        right: 0;
+        background: linear-gradient(270deg, var(--bg-card), rgba(11, 15, 20, 0));
+      }
+    }
+
     .skill-chip {
       display: inline-flex;
       align-items: center;
@@ -1270,6 +1404,18 @@
 
       .skill-card-wide {
         grid-column: span 1;
+      }
+
+      .skill-chip-list {
+        flex-wrap: wrap;
+        overflow: visible;
+        padding: 0;
+        margin: 0;
+      }
+
+      .skill-chip-list::before,
+      .skill-chip-list::after {
+        display: none;
       }
 
       .contact-grid {
@@ -1637,6 +1783,9 @@
 </head>
 <body>
   <canvas id="bg-canvas"></canvas>
+  <div id="scroll-progress" aria-hidden="true"></div>
+  <div id="cursor" aria-hidden="true"></div>
+  <div id="cursor-ring" aria-hidden="true"></div>
   <nav id="navbar">
     <div class="nav-inner">
       <div class="nav-left">
@@ -1797,8 +1946,11 @@ animate();
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const navbar = document.getElementById('navbar');
+      const progressBar = document.getElementById('scroll-progress');
+      const cursor = document.getElementById('cursor');
+      const cursorRing = document.getElementById('cursor-ring');
       const navLinks = Array.from(document.querySelectorAll('.nav-link'));
-      const sectionIds = ['about', 'projects', 'skills', 'contact'];
+      const sectionIds = ['about', 'projects', 'skills', 'resume', 'contact'];
       const sections = sectionIds
         .map((id) => document.getElementById(id))
         .filter(Boolean);
@@ -1810,6 +1962,17 @@ animate();
       setScrolledState();
       window.addEventListener('scroll', setScrolledState, { passive: true });
 
+      function updateScrollProgress() {
+        if (!progressBar) return;
+        const scrollMax = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = scrollMax > 0 ? Math.min(Math.max(window.scrollY / scrollMax, 0), 1) : 0;
+        progressBar.style.transform = `scaleX(${progress})`;
+      }
+
+      updateScrollProgress();
+      window.addEventListener('scroll', updateScrollProgress, { passive: true });
+      window.addEventListener('resize', updateScrollProgress);
+
       const linkById = new Map(
         navLinks
           .map((link) => [link.getAttribute('href')?.slice(1), link])
@@ -1817,6 +1980,98 @@ animate();
       );
 
       const projectRows = Array.from(document.querySelectorAll('[data-project-target]'));
+
+      const skillChipLists = Array.from(document.querySelectorAll('.skill-chip-list'));
+      if (window.matchMedia('(min-width: 901px)').matches) {
+        skillChipLists.forEach((list) => {
+          list.addEventListener('wheel', (event) => {
+            if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+            if (list.scrollWidth <= list.clientWidth) return;
+            event.preventDefault();
+            list.scrollLeft += event.deltaY;
+          }, { passive: false });
+        });
+      }
+
+      const isTouchDevice = navigator.maxTouchPoints > 0 || window.matchMedia('(pointer: coarse)').matches;
+      if (!isTouchDevice && cursor && cursorRing) {
+        document.body.classList.add('custom-cursor');
+
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let ringX = mouseX;
+        let ringY = mouseY;
+        let hovering = false;
+
+        const hoverTargets = 'a, button, [role="button"], .project-bus-card, .contact-card';
+
+        const setHovering = (state) => {
+          hovering = state;
+          cursor.classList.toggle('hovering', state);
+          cursorRing.classList.toggle('hovering', state);
+        };
+
+        document.addEventListener('mousemove', (event) => {
+          mouseX = event.clientX;
+          mouseY = event.clientY;
+          cursor.style.left = `${mouseX}px`;
+          cursor.style.top = `${mouseY}px`;
+        });
+
+        document.addEventListener('mouseover', (event) => {
+          if (event.target instanceof Element) {
+            setHovering(Boolean(event.target.closest(hoverTargets)));
+          }
+        });
+
+        document.addEventListener('mousedown', () => {
+          cursor.classList.add('mousedown');
+        });
+
+        document.addEventListener('mouseup', () => {
+          cursor.classList.remove('mousedown');
+        });
+
+        document.addEventListener('mouseout', (event) => {
+          if (!event.relatedTarget || !(event.relatedTarget instanceof Element) || !event.relatedTarget.closest(hoverTargets)) {
+            setHovering(false);
+          }
+        });
+
+        const animateCursor = () => {
+          ringX += (mouseX - ringX) * 0.15;
+          ringY += (mouseY - ringY) * 0.15;
+          cursorRing.style.left = `${ringX}px`;
+          cursorRing.style.top = `${ringY}px`;
+          requestAnimationFrame(animateCursor);
+        };
+
+        animateCursor();
+      }
+
+      const headingObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, {
+        threshold: 0.2,
+        rootMargin: '0px 0px -10% 0px'
+      });
+
+      document.querySelectorAll('h2').forEach((heading) => {
+        const text = heading.textContent?.trim();
+        if (!text || heading.dataset.splitWords === 'true') return;
+
+        heading.dataset.splitWords = 'true';
+        heading.classList.add('split-heading');
+        heading.innerHTML = text
+          .split(/\s+/)
+          .map((word, index) => `<span class="split-word" style="--word-index:${index}">${word}</span>`)
+          .join(' ');
+        headingObserver.observe(heading);
+      });
 
       const observer = new IntersectionObserver((entries) => {
         let activeId = null;
