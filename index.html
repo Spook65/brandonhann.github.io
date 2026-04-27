@@ -6,8 +6,7 @@
   <title>Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
   <style>
     :root {
@@ -19,8 +18,8 @@
       --accent: #3aa0ff;
       --accent-muted: rgba(58, 160, 255, 0.15);
       --border: rgba(255, 255, 255, 0.06);
-      --font-display: 'Inter', system-ui, sans-serif;
-      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+      --font-display: 'Sora', system-ui, sans-serif;
+      --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
       --radius: 12px;
       --radius-lg: 20px;
       --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -151,7 +150,7 @@
     }
 
     .hero-label {
-      font-family: 'DM Mono', monospace;
+      font-family: var(--font-mono);
       font-size: 11px;
       font-weight: 500;
       letter-spacing: 0.15em;
@@ -160,17 +159,17 @@
     }
 
     .hero-title {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(2.2rem, 3.4vw, 3.2rem);
+      font-family: var(--font-display);
+      font-size: clamp(4rem, 6.2vw, 6.5rem);
       font-weight: 800;
-      line-height: 0.95;
+      line-height: 0.92;
       letter-spacing: -0.02em;
-      max-width: 11ch;
-      white-space: nowrap;
+      max-width: none;
+      white-space: normal;
     }
 
     .hero-role {
-      font-family: 'DM Mono', monospace;
+      font-family: var(--font-mono);
       font-size: 0.92rem;
       font-weight: 500;
       letter-spacing: 0.12em;
@@ -268,7 +267,7 @@
       background: rgba(255, 255, 255, 0.02);
       color: rgba(255, 255, 255, 0.82);
       font-size: 0.82rem;
-      font-family: 'DM Mono', monospace;
+      font-family: var(--font-mono);
       letter-spacing: 0.02em;
     }
 
@@ -301,7 +300,7 @@
     }
 
     .hero-focus-label {
-      font-family: 'DM Mono', monospace;
+      font-family: var(--font-mono);
       font-size: 11px;
       font-weight: 500;
       letter-spacing: 0.15em;
@@ -310,8 +309,8 @@
     }
 
     .hero-focus-title {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(1.75rem, 2.1vw, 2.3rem);
+      font-family: var(--font-display);
+      font-size: clamp(2.15rem, 3vw, 3.35rem);
       font-weight: 700;
       line-height: 1.08;
       letter-spacing: -0.02em;
@@ -326,7 +325,7 @@
     }
 
     .hero-focus-tile-title {
-      font-family: 'Syne', sans-serif;
+      font-family: var(--font-display);
       font-size: clamp(1rem, 1.05vw, 1.14rem);
       font-weight: 700;
       line-height: 1.15;
@@ -366,7 +365,7 @@
     .about-title,
     .projects-title {
       font-family: var(--font-display);
-      font-size: clamp(3.25rem, 4.8vw, 5rem);
+      font-size: clamp(3.35rem, 4.9vw, 5.2rem);
       font-weight: 700;
       line-height: 1.02;
       letter-spacing: -0.02em;
@@ -454,7 +453,7 @@
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 22px;
+      gap: 24px;
     }
 
     .projects-label {
@@ -467,90 +466,210 @@
     }
 
     .projects-title {
-      max-width: 18ch;
+      max-width: 24ch;
+    }
+
+    .projects-copy {
+      max-width: 78ch;
+      color: rgba(230, 237, 243, 0.82);
+      font-size: 1.02rem;
+      line-height: 1.78;
     }
 
     .projects-bus {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+      position: relative;
       border-radius: var(--radius-lg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01)),
+        var(--bg-card);
       overflow: hidden;
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
     }
 
-    .projects-bus-header {
+    .projects-bus::before {
+      content: '';
+      position: absolute;
+      inset: 16px;
+      border-radius: calc(var(--radius-lg) - 8px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      pointer-events: none;
+    }
+
+    .projects-bus::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(58, 160, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(58, 160, 255, 0.02) 1px, transparent 1px);
+      background-size: 72px 72px;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .projects-bus-visual {
+      position: relative;
       display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 12px;
-      padding: 22px 24px;
-      border-bottom: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.01);
-    }
-
-    .projects-bus-header-label {
-      justify-self: start;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--accent);
-    }
-
-    .projects-bus-header-title {
-      justify-self: center;
-      font-family: var(--font-display);
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: var(--text);
-    }
-
-    .projects-bus-header-spacer {
-      justify-self: end;
-    }
-
-    .project-bus-row {
-      width: 100%;
-      display: grid;
-      grid-template-columns: 4px minmax(0, 1fr);
+      grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+      justify-content: space-between;
       align-items: stretch;
-      border: 0;
-      background: transparent;
+      gap: 24px;
+      padding: 24px 24px 26px;
+      min-height: 540px;
+    }
+
+    .projects-bus-node {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+      min-height: 100%;
+      padding: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 2px;
+      background: linear-gradient(180deg, rgba(16, 22, 29, 0.78), rgba(10, 14, 18, 0.88));
+      box-shadow: inset 0 0 0 1px rgba(58, 160, 255, 0.03);
+    }
+
+    .projects-bus-node .projects-label {
+      margin-bottom: 6px;
+    }
+
+    .projects-bus-node-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 2.0vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      max-width: 9ch;
+    }
+
+    .projects-bus-node-copy {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text-muted);
+      max-width: 24ch;
+    }
+
+    .projects-bus-graph {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .bus-wire {
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .bus-wire-base {
+      stroke: rgba(58, 160, 255, 0.18);
+      stroke-width: 3;
+    }
+
+    .bus-wire-flow {
+      stroke: #ff9f4d;
+      stroke-width: 4.5;
+      stroke-dasharray: 20 16;
+      filter: drop-shadow(0 0 10px rgba(255, 159, 77, 0.44));
+      animation: busWireFlow 8s linear infinite;
+    }
+
+    .bus-wire-flow.bus-wire-flow-2 {
+      animation-duration: 9s;
+      animation-delay: 0.8s;
+    }
+
+    .bus-wire-flow.bus-wire-flow-3 {
+      animation-duration: 10s;
+      animation-delay: 1.3s;
+    }
+
+    .bus-wire-flow.bus-wire-flow-4 {
+      animation-duration: 11s;
+      animation-delay: 1.7s;
+    }
+
+    .bus-wire-flow.bus-wire-flow-5 {
+      animation-duration: 12s;
+      animation-delay: 2.1s;
+    }
+
+    @keyframes busWireFlow {
+      from {
+        stroke-dashoffset: 0;
+      }
+      to {
+        stroke-dashoffset: -240;
+      }
+    }
+
+    .projects-bus-stack {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      max-width: 100%;
+      margin-left: auto;
+      padding-top: 22px;
+      padding-right: 8px;
+    }
+
+    .project-bus-card {
+      width: 100%;
+      min-height: 130px;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-left: 4px solid var(--accent);
+      border-radius: 2px;
+      background: linear-gradient(180deg, rgba(21, 17, 14, 0.96), rgba(17, 14, 11, 0.98));
       color: inherit;
       text-align: left;
       cursor: pointer;
-      transition: background var(--transition), transform var(--transition);
+      padding: 20px 22px 18px 22px;
+      transition:
+        transform var(--transition),
+        border-color var(--transition),
+        box-shadow var(--transition),
+        background var(--transition);
+      box-shadow: inset 0 0 0 1px rgba(58, 160, 255, 0.02);
     }
 
-    .project-bus-row + .project-bus-row {
-      border-top: 1px solid var(--border);
+    .project-bus-card:hover,
+    .project-bus-card:focus-visible {
+      transform: translateY(-3px) scale(1.015);
+      border-color: rgba(58, 160, 255, 0.78);
+      box-shadow:
+        0 0 0 1px rgba(58, 160, 255, 0.28),
+        0 0 30px rgba(58, 160, 255, 0.16),
+        0 0 14px rgba(255, 154, 74, 0.08),
+        inset 0 0 0 1px rgba(58, 160, 255, 0.08);
+      background: linear-gradient(180deg, rgba(26, 20, 16, 0.98), rgba(18, 15, 12, 1));
+      outline: none;
     }
 
-    .project-bus-row:hover {
-      background: rgba(255, 255, 255, 0.025);
+    .project-bus-card:hover .project-bus-card-title,
+    .project-bus-card:focus-visible .project-bus-card-title {
+      color: #ffffff;
     }
 
-    .project-bus-row:focus-visible {
-      outline: 2px solid rgba(58, 160, 255, 0.45);
-      outline-offset: -2px;
-    }
-
-    .project-bus-accent {
-      display: block;
-      background: linear-gradient(180deg, #2fe0cb 0%, #ff8a3d 100%);
-      min-height: 100%;
-    }
-
-    .project-bus-content {
-      padding: 20px 24px 20px 20px;
+    .project-bus-card-top {
       display: flex;
-      flex-direction: column;
-      gap: 7px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 10px;
     }
 
-    .project-bus-label {
+    .project-bus-card-label {
       font-family: var(--font-mono);
       font-size: 11px;
       font-weight: 500;
@@ -559,22 +678,35 @@
       color: var(--accent);
     }
 
-    .project-bus-name {
-      font-family: 'Syne', sans-serif;
-      font-size: 20px;
-      font-weight: 700;
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-      color: var(--text);
+    .project-bus-card-chip {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      display: inline-block;
+      background: linear-gradient(180deg, #a5a5a5, #5f5f5f);
+      box-shadow:
+        18px 0 0 0 var(--accent),
+        36px 0 0 0 #ff8a3d;
+      margin-right: 36px;
+      opacity: 0.95;
     }
 
-    .project-bus-desc {
+    .project-bus-card-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.1rem, 1.25vw, 1.32rem);
+      font-weight: 700;
+      line-height: 1.06;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .project-bus-card-desc {
       font-family: var(--font-mono);
       font-size: 12px;
       font-weight: 400;
-      line-height: 1.6;
+      line-height: 1.65;
       color: var(--text-muted);
-      max-width: 76ch;
     }
 
     .projects-detail-list {
@@ -592,6 +724,13 @@
       flex-direction: column;
       gap: 20px;
       scroll-margin-top: 120px;
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(58, 160, 255, 0.24);
+      box-shadow: 0 0 0 1px rgba(58, 160, 255, 0.12), 0 16px 34px rgba(0, 0, 0, 0.24);
     }
 
     .project-card-top {
@@ -636,7 +775,7 @@
     }
 
     .project-card-title {
-      font-family: 'Syne', sans-serif;
+      font-family: var(--font-display);
       font-size: clamp(2rem, 3vw, 32px);
       font-weight: 800;
       line-height: 1.08;
@@ -645,7 +784,7 @@
     }
 
     .project-metric {
-      font-family: 'Syne', sans-serif;
+      font-family: var(--font-display);
       font-size: 17px;
       font-weight: 700;
       line-height: 1.35;
@@ -760,6 +899,14 @@
       transform: translateY(0);
     }
 
+    .projects-bus.reveal.visible .bus-wire-flow {
+      animation-play-state: running;
+    }
+
+    .projects-bus .bus-wire-flow {
+      animation-play-state: running;
+    }
+
     .projects-detail-list .reveal:nth-child(1) {
       transition-delay: 0.0s;
     }
@@ -809,6 +956,32 @@
       }
     }
 
+    @media (max-width: 1280px) {
+      .projects-bus-visual {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .projects-bus-node {
+        min-height: 220px;
+      }
+
+      .projects-bus-stack {
+        padding-top: 0;
+        padding-right: 0;
+        max-width: none;
+        margin-left: 0;
+      }
+
+      .projects-bus-graph {
+        display: none;
+      }
+
+      .project-bus-card {
+        min-height: 0;
+      }
+    }
+
     @media (max-width: 600px) {
       #hero {
         padding: 104px 20px 24px;
@@ -855,27 +1028,21 @@
       .project-card {
         padding: 24px;
       }
-
-      .projects-bus-header {
-        grid-template-columns: 1fr;
-        justify-items: start;
-      }
-
-      .projects-bus-header-title,
-      .projects-bus-header-spacer {
-        justify-self: start;
-      }
-
-      .project-bus-content {
-        padding: 18px 18px 18px 16px;
-      }
-
-      .project-bus-name {
-        font-size: 18px;
-      }
-
       .project-metric {
         font-size: 16px;
+      }
+
+      .projects-bus-visual {
+        padding: 18px;
+        gap: 18px;
+      }
+
+      .projects-bus-node {
+        padding: 24px;
+      }
+
+      .project-bus-card {
+        padding: 20px 18px 18px 18px;
       }
     }
 
@@ -1368,6 +1535,7 @@ animate();
       document.querySelectorAll('.reveal').forEach((element) => {
         revealObserver.observe(element);
       });
+
     });
   </script>
 
@@ -1451,40 +1619,58 @@ animate();
     <div class="projects-inner">
       <p class="projects-label">PROJECTS</p>
       <h2 class="projects-title">Selected work across systems, speed, and reliability</h2>
+      <p class="projects-copy">Selected projects focused on performance, systems design, and measurable engineering results.</p>
 
       <div class="projects-bus reveal">
-        <div class="projects-bus-header">
-          <span class="projects-bus-header-label">PROJECT BUS</span>
-          <span class="projects-bus-header-title">Selected Work</span>
-          <span class="projects-bus-header-spacer" aria-hidden="true"></span>
+        <div class="projects-bus-visual">
+        <div class="projects-bus-node" data-bus-node>
+          <p class="projects-label">PROJECT BUS</p>
+          <div class="projects-bus-node-title">Selected Work</div>
+          <div class="projects-bus-node-copy">A small circuit of projects connected by implementation detail, profiling, and measurable outcomes.</div>
         </div>
 
-        <button class="project-bus-row" type="button" data-project-target="project-cuda-mandelbrot">
-          <span class="project-bus-accent" aria-hidden="true"></span>
-          <span class="project-bus-content">
-            <span class="project-bus-label">PROJECT 01</span>
-            <span class="project-bus-name">CUDA Mandelbrot Renderer</span>
-            <span class="project-bus-desc">A GPU fractal renderer tuned with Nsight until the hot loop stopped wasting work.</span>
-          </span>
-        </button>
+          <svg class="projects-bus-graph" data-bus-graph viewBox="0 0 1200 360" preserveAspectRatio="none" aria-hidden="true">
+            <path class="bus-wire bus-wire-base bus-wire-base-1" d="M250 180 H390" />
+            <path class="bus-wire bus-wire-base bus-wire-base-2" d="M390 180 V72" />
+            <path class="bus-wire bus-wire-base bus-wire-base-3" d="M390 72 H520" />
+            <path class="bus-wire bus-wire-base bus-wire-base-4" d="M390 180 H520" />
+            <path class="bus-wire bus-wire-base bus-wire-base-5" d="M390 180 V288" />
+            <path class="bus-wire bus-wire-flow bus-wire-flow-1" d="M250 180 H390" />
+            <path class="bus-wire bus-wire-flow bus-wire-flow-2" d="M390 180 V72" />
+            <path class="bus-wire bus-wire-flow bus-wire-flow-3" d="M390 72 H520" />
+            <path class="bus-wire bus-wire-flow bus-wire-flow-4" d="M390 180 H520" />
+            <path class="bus-wire bus-wire-flow bus-wire-flow-5" d="M390 180 V288" />
+          </svg>
 
-        <button class="project-bus-row" type="button" data-project-target="project-systems-grid">
-          <span class="project-bus-accent" aria-hidden="true"></span>
-          <span class="project-bus-content">
-            <span class="project-bus-label">PROJECT 02</span>
-            <span class="project-bus-name">Systems Grid Diagnostics</span>
-            <span class="project-bus-desc">A UI and data-flow surface for making runtime behavior easier to inspect, trust, and debug.</span>
-          </span>
-        </button>
+          <div class="projects-bus-stack" data-bus-stack>
+            <button class="project-bus-card" type="button" data-project-target="project-cuda-mandelbrot" data-bus-card>
+              <div class="project-bus-card-top">
+                <span class="project-bus-card-label">PROJECT 01</span>
+                <span class="project-bus-card-chip" aria-hidden="true"></span>
+              </div>
+              <div class="project-bus-card-title">CUDA Mandelbrot</div>
+              <div class="project-bus-card-desc">GPU renderer and Nsight-validated speedup</div>
+            </button>
 
-        <button class="project-bus-row" type="button" data-project-target="project-performance-lab">
-          <span class="project-bus-accent" aria-hidden="true"></span>
-          <span class="project-bus-content">
-            <span class="project-bus-label">PROJECT 03</span>
-            <span class="project-bus-name">Performance Lab</span>
-            <span class="project-bus-desc">A profiling-oriented toolchain for measuring load, isolating bottlenecks, and validating fixes.</span>
-          </span>
-        </button>
+            <button class="project-bus-card" type="button" data-project-target="project-systems-grid" data-bus-card>
+              <div class="project-bus-card-top">
+                <span class="project-bus-card-label">PROJECT 02</span>
+                <span class="project-bus-card-chip" aria-hidden="true"></span>
+              </div>
+              <div class="project-bus-card-title">Systems Grid Diagnostics</div>
+              <div class="project-bus-card-desc">UI and data-flow surface for runtime inspection and debugging</div>
+            </button>
+
+            <button class="project-bus-card" type="button" data-project-target="project-performance-lab" data-bus-card>
+              <div class="project-bus-card-top">
+                <span class="project-bus-card-label">PROJECT 03</span>
+                <span class="project-bus-card-chip" aria-hidden="true"></span>
+              </div>
+              <div class="project-bus-card-title">Performance Lab</div>
+              <div class="project-bus-card-desc">Profiling-oriented tooling for measuring load and bottlenecks</div>
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="projects-detail-list">
