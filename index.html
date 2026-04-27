@@ -1363,6 +1363,267 @@
       margin-top: 8px;
     }
 
+    .contributions-section {
+      padding: 88px 48px 40px;
+    }
+
+    .contributions-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .contributions-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .contributions-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.1rem, 3vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      max-width: 18ch;
+    }
+
+    .contributions-copy {
+      max-width: 78ch;
+      color: rgba(230, 237, 243, 0.82);
+      font-size: 1.02rem;
+      line-height: 1.78;
+    }
+
+    .contributions-shell {
+      display: grid;
+      grid-template-columns: minmax(260px, 320px) 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .contributions-count-card,
+    .contributions-meta-card,
+    .contributions-graph-card {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      overflow: hidden;
+    }
+
+    .contributions-count-card {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      background:
+        radial-gradient(circle at top left, rgba(58, 160, 255, 0.18), transparent 56%),
+        linear-gradient(180deg, rgba(16, 22, 29, 0.96), rgba(11, 15, 20, 0.98));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+      position: relative;
+    }
+
+    .contributions-count-card::after {
+      content: '';
+      position: absolute;
+      inset: auto -20% -40% -20%;
+      height: 80%;
+      background: radial-gradient(circle, rgba(58, 160, 255, 0.18), transparent 70%);
+      pointer-events: none;
+      filter: blur(16px);
+    }
+
+    .contributions-count-top {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .contributions-count-value {
+      font-family: var(--font-display);
+      font-size: clamp(3.1rem, 6vw, 5.4rem);
+      line-height: 0.92;
+      letter-spacing: -0.04em;
+      font-weight: 800;
+      color: #f7fbff;
+      text-shadow: 0 0 18px rgba(58, 160, 255, 0.18);
+    }
+
+    .contributions-count-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .contributions-count-note {
+      position: relative;
+      z-index: 1;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--text-muted);
+    }
+
+    .contributions-meta-card {
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      justify-content: center;
+      background: var(--bg-card);
+    }
+
+    .contributions-meta-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .contributions-legend {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .contributions-swatches {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .contribution-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      background: #151b22;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+    }
+
+    .contribution-swatch.level-1 { background: #143d2a; }
+    .contribution-swatch.level-2 { background: #196c2e; }
+    .contribution-swatch.level-3 { background: #27a744; }
+    .contribution-swatch.level-4 { background: #56d364; }
+
+    .contributions-graph-card {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-width: 0;
+      grid-column: 1 / -1;
+    }
+
+    .contributions-graph-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .contributions-graph-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .contributions-graph-subtitle {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .contributions-graph-wrap {
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+
+    .contributions-graph-wrap::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .contributions-graph-wrap::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+    }
+
+    .contributions-graph {
+      --contrib-columns: 53;
+      display: grid;
+      grid-template-columns: repeat(var(--contrib-columns), minmax(0, 1fr));
+      grid-template-rows: repeat(7, minmax(0, 1fr));
+      gap: 6px;
+      min-width: 940px;
+      aspect-ratio: 53 / 7;
+    }
+
+    .contribution-cell {
+      border-radius: 4px;
+      background: #151b22;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+      transition: transform var(--transition), background var(--transition), box-shadow var(--transition);
+    }
+
+    .contribution-cell:hover {
+      transform: translateY(-1px) scale(1.03);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 6px 12px rgba(0, 0, 0, 0.18);
+    }
+
+    .contribution-cell.level-1 { background: #143d2a; }
+    .contribution-cell.level-2 { background: #196c2e; }
+    .contribution-cell.level-3 { background: #27a744; }
+    .contribution-cell.level-4 { background: #56d364; }
+
+    .contributions-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .contributions-footer strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .contributions-card {
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      overflow: hidden;
+    }
+
+    .contributions-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
     .contact-card {
       display: flex;
       align-items: flex-start;
@@ -1595,6 +1856,18 @@
 
       .contact-grid {
         grid-template-columns: 1fr;
+      }
+
+      .contributions-section {
+        padding: 80px 24px 32px;
+      }
+
+      .contributions-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .contributions-graph {
+        min-width: 760px;
       }
     }
 
@@ -2059,7 +2332,7 @@
       </div>
 
       <div class="nav-center">
-        <a class="nav-github" href="https://github.com/" target="_blank" rel="noreferrer">
+        <a class="nav-github" href="https://github.com/Spook65" target="_blank" rel="noreferrer">
           <svg viewBox="0 0 16 16" aria-hidden="true">
             <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2 .37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.01.08-2.1 0 0 .67-.21 2.2.82a7.57 7.57 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.09.16 1.9.08 2.1.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
           </svg>
@@ -2542,6 +2815,171 @@ animate();
         metricObserver.observe(metricGrid);
       }
 
+      const contributionsCount = document.getElementById('contrib-count');
+      const contributionsGraph = document.getElementById('contrib-graph');
+      const contributionsRange = document.getElementById('contrib-range');
+      const contributionsApiUrl = 'https://github-contributions-api.jogruber.de/v4/Spook65?y=last';
+      const contributionsFallbackImage = 'https://github-contributions.vercel.app/Spook65.svg';
+
+      const formatDateKey = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      };
+
+      const formatDateLabel = (date) => new Intl.DateTimeFormat(undefined, {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      }).format(date);
+
+      const animateContribCount = (targetValue, duration = 1400) => {
+        if (!contributionsCount) return;
+        const easeOutExpo = (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
+        const start = performance.now();
+
+        const frame = (now) => {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = easeOutExpo(progress);
+          const value = Math.round(targetValue * eased);
+          contributionsCount.textContent = value.toLocaleString();
+          if (progress < 1) {
+            requestAnimationFrame(frame);
+          } else {
+            contributionsCount.textContent = Number(targetValue).toLocaleString();
+          }
+        };
+
+        requestAnimationFrame(frame);
+      };
+
+      const deriveLevel = (count, providedLevel) => {
+        if (Number.isFinite(Number(providedLevel))) {
+          return Math.max(0, Math.min(4, Number(providedLevel)));
+        }
+
+        if (count <= 0) return 0;
+        if (count < 4) return 1;
+        if (count < 8) return 2;
+        if (count < 16) return 3;
+        return 4;
+      };
+
+      const renderContributionFallback = () => {
+        if (!contributionsGraph) return;
+        contributionsGraph.innerHTML = '';
+
+        const fallback = document.createElement('img');
+        fallback.src = contributionsFallbackImage;
+        fallback.alt = 'Live GitHub contribution graph for Spook65';
+        fallback.loading = 'lazy';
+        fallback.style.display = 'block';
+        fallback.style.width = '100%';
+        fallback.style.height = 'auto';
+        contributionsGraph.appendChild(fallback);
+      };
+
+      const renderContributionHeatmap = (items) => {
+        if (!contributionsGraph || !Array.isArray(items) || !items.length) {
+          renderContributionFallback();
+          return;
+        }
+
+        const normalized = items
+          .map((entry) => {
+            const date = new Date(`${entry.date}T12:00:00`);
+            return {
+              date,
+              key: formatDateKey(date),
+              count: Number(entry.count || 0),
+              level: Number(entry.level || 0)
+            };
+          })
+          .filter((entry) => !Number.isNaN(entry.date.getTime()))
+          .sort((a, b) => a.date - b.date);
+
+        if (!normalized.length) {
+          renderContributionFallback();
+          return;
+        }
+
+        const firstDate = normalized[0].date;
+        const lastDate = normalized[normalized.length - 1].date;
+        const start = new Date(firstDate);
+        start.setDate(start.getDate() - start.getDay());
+        start.setHours(12, 0, 0, 0);
+
+        const end = new Date(lastDate);
+        end.setDate(end.getDate() + (6 - end.getDay()));
+        end.setHours(12, 0, 0, 0);
+
+        const weekCount = Math.max(1, Math.ceil((end - start) / (7 * 24 * 60 * 60 * 1000)));
+        contributionsGraph.innerHTML = '';
+        contributionsGraph.style.setProperty('--contrib-columns', String(weekCount));
+        contributionsGraph.style.aspectRatio = `${weekCount} / 7`;
+
+        const lookup = new Map(normalized.map((entry) => [entry.key, entry]));
+        const fragment = document.createDocumentFragment();
+
+        for (let week = 0; week < weekCount; week += 1) {
+          for (let day = 0; day < 7; day += 1) {
+            const cellDate = new Date(start);
+            cellDate.setDate(start.getDate() + (week * 7) + day);
+            const key = formatDateKey(cellDate);
+            const entry = lookup.get(key);
+            const count = entry ? entry.count : 0;
+            const level = deriveLevel(count, entry ? entry.level : 0);
+
+            const cell = document.createElement('span');
+            cell.className = `contribution-cell ${level > 0 ? `level-${level}` : ''}`.trim();
+            cell.title = `${formatDateLabel(cellDate)}: ${count} contributions`;
+            cell.setAttribute('aria-hidden', 'true');
+            fragment.appendChild(cell);
+          }
+        }
+
+        contributionsGraph.appendChild(fragment);
+
+        if (contributionsRange) {
+          const startLabel = new Intl.DateTimeFormat(undefined, { month: 'short', year: 'numeric' }).format(firstDate);
+          const endLabel = new Intl.DateTimeFormat(undefined, { month: 'short', year: 'numeric' }).format(lastDate);
+          contributionsRange.textContent = `${startLabel} → ${endLabel}`;
+        }
+      };
+
+      if (contributionsCount || contributionsGraph || contributionsRange) {
+        fetch(contributionsApiUrl, { cache: 'no-store' })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`Contribution fetch failed with ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            const totals = data && typeof data === 'object' ? data.total || {} : {};
+            const totalLastYear = Number(totals.lastYear ?? totals[String(new Date().getFullYear() - 1)] ?? 0);
+            const fallbackTotal = Array.isArray(data.contributions)
+              ? data.contributions.reduce((sum, entry) => sum + Number(entry.count || 0), 0)
+              : 0;
+            const countTarget = Number.isFinite(totalLastYear) && totalLastYear > 0 ? totalLastYear : fallbackTotal;
+            if (contributionsCount && countTarget > 0) {
+              animateContribCount(countTarget, 1200);
+            }
+
+            renderContributionHeatmap(Array.isArray(data.contributions) ? data.contributions : []);
+          })
+          .catch(() => {
+            if (contributionsCount) {
+              contributionsCount.textContent = '—';
+            }
+            if (contributionsRange) {
+              contributionsRange.textContent = 'Live data unavailable right now';
+            }
+            renderContributionFallback();
+          });
+      }
+
     });
   </script>
 
@@ -2557,7 +2995,7 @@ animate();
         <div class="hero-actions hero-reveal" style="--delay: 0.4s;">
           <a class="hero-button primary" href="#projects">Projects</a>
           <a class="hero-button" href="#resume">Resume</a>
-          <a class="hero-button" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+          <a class="hero-button" href="https://github.com/Spook65" target="_blank" rel="noreferrer">GitHub</a>
           <a class="hero-button" href="#contact">Contact</a>
         </div>
         <div class="hero-quick-links hero-reveal" style="--delay: 0.5s;">
@@ -2727,7 +3165,7 @@ animate();
           </ul>
 
           <div class="project-actions">
-            <a class="project-button" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="project-button" href="https://github.com/Spook65" target="_blank" rel="noreferrer">GitHub</a>
             <a class="project-button" href="#project-cuda-mandelbrot">Technical Details</a>
           </div>
 
@@ -2766,7 +3204,7 @@ animate();
           </ul>
 
           <div class="project-actions">
-            <a class="project-button" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="project-button" href="https://github.com/Spook65" target="_blank" rel="noreferrer">GitHub</a>
             <a class="project-button" href="#project-systems-grid">Technical Details</a>
           </div>
 
@@ -2805,7 +3243,7 @@ animate();
           </ul>
 
           <div class="project-actions">
-            <a class="project-button" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="project-button" href="https://github.com/Spook65" target="_blank" rel="noreferrer">GitHub</a>
             <a class="project-button" href="#project-performance-lab">Technical Details</a>
           </div>
 
@@ -2912,7 +3350,7 @@ animate();
       <p class="contact-copy">I like talking with teams that care about thoughtful implementation, measurable results, and building software that stays useful under real-world load.</p>
 
       <div class="contact-grid">
-        <a class="contact-card reveal" href="https://github.com/alien4rmspace" target="_blank" rel="noreferrer" aria-label="GitHub profile">
+        <a class="contact-card reveal" href="https://github.com/Spook65" target="_blank" rel="noreferrer" aria-label="GitHub profile">
           <span class="contact-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
               <path d="M12 2C6.48 2 2 6.59 2 12.25c0 4.53 2.87 8.37 6.84 9.72.5.1.68-.22.68-.49 0-.24-.01-.89-.01-1.74-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.57 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.36 9.36 0 0 1 5.01 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.64 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.95.68 1.91 0 1.38-.01 2.5-.01 2.83 0 .27.18.59.69.49A10.01 10.01 0 0 0 22 12.25C22 6.59 17.52 2 12 2Z" fill="currentColor"/>
@@ -2937,6 +3375,54 @@ animate();
             <span class="contact-card-copy">Background, experience, and recruiting contact</span>
           </span>
         </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contributions" class="contributions-section" role="region" aria-label="Live GitHub contributions.">
+    <div class="contributions-inner">
+      <p class="contributions-label">GitHub contributions</p>
+      <h2 class="contributions-title">Live activity across the last year.</h2>
+      <p class="contributions-copy">A live contribution calendar pulled from your GitHub profile so the bottom of the portfolio stays current without manual updates.</p>
+      <div class="contributions-shell">
+        <div class="contributions-count-card reveal">
+          <div class="contributions-count-top">
+            <span class="contributions-count-value" id="contrib-count">--</span>
+            <span class="contributions-count-label">Contributions in the last year</span>
+          </div>
+          <div class="contributions-count-note">
+            From <strong>@Spook65</strong>, updated live and styled to match the rest of the portfolio.
+          </div>
+        </div>
+
+        <div class="contributions-meta-card reveal">
+          <div class="contributions-meta-title">Cartoony contribution heatmap</div>
+          <div class="contributions-legend">
+            <span>Less</span>
+            <span class="contributions-swatches" aria-hidden="true">
+              <span class="contribution-swatch"></span>
+              <span class="contribution-swatch level-1"></span>
+              <span class="contribution-swatch level-2"></span>
+              <span class="contribution-swatch level-3"></span>
+              <span class="contribution-swatch level-4"></span>
+            </span>
+            <span>More</span>
+          </div>
+        </div>
+
+        <div class="contributions-graph-card reveal">
+          <div class="contributions-graph-header">
+            <div class="contributions-graph-title">GitHub contribution graph</div>
+            <div class="contributions-graph-subtitle">Live from @Spook65</div>
+          </div>
+          <div class="contributions-graph-wrap">
+            <div class="contributions-graph" id="contrib-graph" aria-label="GitHub contribution heatmap"></div>
+          </div>
+          <div class="contributions-footer">
+            <span id="contrib-range">Loading latest year...</span>
+            <span><strong>Green intensity</strong> reflects contribution activity</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
