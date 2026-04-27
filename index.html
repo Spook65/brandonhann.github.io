@@ -1252,7 +1252,7 @@
     .skills-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
+      gap: 18px;
       margin-top: 8px;
     }
 
@@ -1472,45 +1472,7 @@
       list-style: none;
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    @media (min-width: 901px) {
-      .skill-chip-list {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        overflow-y: hidden;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        position: relative;
-        padding: 2px 24px 2px 8px;
-        margin: -2px -8px 0;
-      }
-
-      .skill-chip-list::-webkit-scrollbar {
-        display: none;
-      }
-
-      .skill-chip-list::before,
-      .skill-chip-list::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 30px;
-        pointer-events: none;
-        z-index: 1;
-      }
-
-      .skill-chip-list::before {
-        left: 0;
-        background: linear-gradient(90deg, var(--bg-card), rgba(11, 15, 20, 0));
-      }
-
-      .skill-chip-list::after {
-        right: 0;
-        background: linear-gradient(270deg, var(--bg-card), rgba(11, 15, 20, 0));
-      }
+      gap: 10px 12px;
     }
 
     .skill-chip {
@@ -1629,11 +1591,6 @@
         overflow: visible;
         padding: 0;
         margin: 0;
-      }
-
-      .skill-chip-list::before,
-      .skill-chip-list::after {
-        display: none;
       }
 
       .contact-grid {
@@ -2369,18 +2326,6 @@ animate();
       );
 
       const projectRows = Array.from(document.querySelectorAll('[data-project-target]'));
-
-      const skillChipLists = Array.from(document.querySelectorAll('.skill-chip-list'));
-      if (window.matchMedia('(min-width: 901px)').matches) {
-        skillChipLists.forEach((list) => {
-          list.addEventListener('wheel', (event) => {
-            if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
-            if (list.scrollWidth <= list.clientWidth) return;
-            event.preventDefault();
-            list.scrollLeft += event.deltaY;
-          }, { passive: false });
-        });
-      }
 
       const isTouchDevice = navigator.maxTouchPoints > 0 || window.matchMedia('(pointer: coarse)').matches;
       if (isTouchDevice) {
