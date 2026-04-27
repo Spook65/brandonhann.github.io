@@ -2415,27 +2415,37 @@ animate();
         headingObserver.observe(heading);
       });
 
-      const observer = new IntersectionObserver((entries) => {
-        let activeId = null;
+      let activeSectionId = '';
 
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            activeId = entry.target.id;
+      const updateActiveSection = () => {
+        if (!sections.length) return;
+
+        const navbarHeight = navbar ? navbar.getBoundingClientRect().height : 0;
+        const anchorY = Math.min(Math.max(window.innerHeight * 0.33, navbarHeight + 12), window.innerHeight * 0.5);
+        const viewportY = window.scrollY + anchorY;
+        const reachedPageBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+
+        let nextActive = reachedPageBottom ? sections[sections.length - 1].id : sections[0].id;
+
+        for (const section of sections) {
+          if (section.offsetTop <= viewportY) {
+            nextActive = section.id;
+          } else {
+            break;
           }
-        });
+        }
 
-        if (!activeId) return;
+        if (nextActive === activeSectionId) return;
+        activeSectionId = nextActive;
 
         navLinks.forEach((link) => link.classList.remove('active'));
-        const activeLink = linkById.get(activeId);
+        const activeLink = linkById.get(nextActive);
         if (activeLink) activeLink.classList.add('active');
-      }, {
-        root: null,
-        threshold: 0.4,
-        rootMargin: '-20% 0px -45% 0px'
-      });
+      };
 
-      sections.forEach((section) => observer.observe(section));
+      updateActiveSection();
+      window.addEventListener('scroll', updateActiveSection, { passive: true });
+      window.addEventListener('resize', updateActiveSection);
 
       navLinks.forEach((link) => {
         link.addEventListener('click', (event) => {
