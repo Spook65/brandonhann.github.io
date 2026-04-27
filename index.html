@@ -3,11 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Computer Science portfolio focused on systems engineering, security, AI ethics, and measurable performance work." />
+  <meta name="theme-color" content="#0d0d0d" />
+  <meta property="og:title" content="Brandon Hann | Systems, Security, and Performance Portfolio" />
+  <meta property="og:description" content="Computer Science portfolio focused on systems engineering, security, AI ethics, and measurable performance work." />
+  <meta property="og:image" content="assets/social/og-image.png" />
   <title>Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
   <style>
     :root {
       --bg: #05070a;
@@ -49,6 +54,12 @@
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      opacity: 0;
+      transition: opacity 250ms ease;
+    }
+
+    body.loaded {
+      opacity: 1;
     }
 
     body.custom-cursor,
@@ -61,6 +72,11 @@
     body.custom-cursor select,
     body.custom-cursor [contenteditable='true'] {
       cursor: auto !important;
+    }
+
+    *:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
     }
 
     h1,
@@ -125,6 +141,35 @@
       pointer-events: none;
     }
 
+    #page-grid,
+    #cursor-spotlight {
+      position: fixed;
+      pointer-events: none;
+    }
+
+    #page-grid {
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      background-position: 0 0;
+      opacity: 0.55;
+      mask-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.45) 70%, transparent 100%);
+    }
+
+    #cursor-spotlight {
+      z-index: 0;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232, 118, 58, 0.06) 0%, transparent 70%);
+      opacity: 0.9;
+      filter: blur(2px);
+      mix-blend-mode: screen;
+    }
+
     #scroll-progress {
       position: fixed;
       top: 0;
@@ -184,6 +229,94 @@
     #cursor-ring.hovering {
       --cursor-ring-scale: 1.6;
       opacity: 1;
+    }
+
+    body.touch-device #cursor-spotlight {
+      display: none;
+    }
+
+    .nav-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background var(--transition), border-color var(--transition), color var(--transition), transform var(--transition);
+    }
+
+    .nav-toggle:hover {
+      background: var(--bg-surface);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    .nav-toggle-lines {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .nav-toggle-lines span {
+      display: block;
+      width: 14px;
+      height: 1.5px;
+      border-radius: 99px;
+      background: currentColor;
+    }
+
+    .nav-mobile-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 110;
+      background: rgba(13, 13, 13, 0.97);
+      display: grid;
+      place-items: center;
+      padding: 96px 24px 24px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-4px);
+      transition: opacity var(--transition), transform var(--transition);
+    }
+
+    .nav-mobile-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .nav-mobile-links {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      text-align: center;
+    }
+
+    .nav-mobile-link {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 5vw, 28px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      text-decoration: none;
+      transition: color var(--transition), transform var(--transition);
+    }
+
+    .nav-mobile-link:hover,
+    .nav-mobile-link:focus-visible {
+      color: var(--accent);
+      transform: translateY(-1px);
     }
 
     section {
@@ -1320,6 +1453,11 @@
       line-height: 1.6;
     }
 
+    .terminal-modal {
+      width: min(90vw, 960px);
+      height: min(60vh, 720px);
+    }
+
     .skill-card-title {
       font-family: var(--font-display);
       font-size: 18px;
@@ -1831,6 +1969,76 @@
       }
     }
 
+    @media (max-width: 768px) {
+      body.custom-cursor,
+      body.custom-cursor * {
+        cursor: auto !important;
+      }
+
+      #cursor,
+      #cursor-ring {
+        display: none !important;
+      }
+
+      #hero {
+        padding: 100px 24px 60px;
+      }
+
+      #about,
+      #projects,
+      #skills,
+      #resume,
+      #contact {
+        padding: 80px 24px;
+      }
+
+      .hero-title {
+        font-size: clamp(40px, 10vw, 64px);
+      }
+
+      .projects-detail-list,
+      .skills-grid,
+      .contact-grid,
+      .project-metrics-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .projects-detail-list {
+        gap: 24px;
+      }
+
+      .project-metrics-grid {
+        gap: 10px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .nav-toggle {
+        display: inline-flex;
+        margin-left: auto;
+      }
+
+      .nav-right {
+        flex: 0 0 auto;
+        margin-left: auto;
+        justify-content: flex-end;
+      }
+
+      .nav-brand {
+        gap: 10px;
+      }
+
+      .nav-name {
+        font-size: 0.9rem;
+      }
+
+      .site-footer {
+        padding: 32px 24px;
+      }
+    }
+
     @media (max-width: 600px) {
       .nav-inner {
         flex-wrap: wrap;
@@ -1857,6 +2065,14 @@
       .nav-subtitle {
         display: block;
       }
+
+      .hero-title {
+        font-size: clamp(40px, 10vw, 58px);
+      }
+
+      #cursor-spotlight {
+        display: none;
+      }
     }
 
     @media (max-width: 460px) {
@@ -1868,6 +2084,8 @@
 </head>
 <body>
   <canvas id="bg-canvas"></canvas>
+  <div id="page-grid" aria-hidden="true"></div>
+  <div id="cursor-spotlight" aria-hidden="true"></div>
   <div id="scroll-progress" aria-hidden="true"></div>
   <div id="cursor" aria-hidden="true"></div>
   <div id="cursor-ring" aria-hidden="true"></div>
@@ -1899,9 +2117,31 @@
         <a class="nav-link" href="#resume">Resume</a>
         <a class="nav-link" href="#contact">Contact</a>
       </div>
+
+      <button class="nav-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-nav-overlay" data-nav-toggle>
+        <span class="nav-toggle-lines" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <span>Menu</span>
+      </button>
     </div>
   </nav>
+  <div class="nav-mobile-overlay" id="mobile-nav-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Mobile navigation menu">
+    <nav class="nav-mobile-links" aria-label="Mobile primary">
+      <a class="nav-mobile-link" href="#about" data-mobile-nav-link>About</a>
+      <a class="nav-mobile-link" href="#projects" data-mobile-nav-link>Projects</a>
+      <a class="nav-mobile-link" href="#skills" data-mobile-nav-link>Skills</a>
+      <a class="nav-mobile-link" href="#resume" data-mobile-nav-link>Resume</a>
+      <a class="nav-mobile-link" href="#contact" data-mobile-nav-link>Contact</a>
+    </nav>
+  </div>
   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!window.THREE) {
+        return;
+      }
 const canvas = document.querySelector("#bg-canvas");
 
 const renderer = new THREE.WebGLRenderer({
@@ -2026,19 +2266,83 @@ function animate(time) {
 }
 
 animate();
+    });
   </script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const navbar = document.getElementById('navbar');
       const progressBar = document.getElementById('scroll-progress');
+      const spotlight = document.getElementById('cursor-spotlight');
       const cursor = document.getElementById('cursor');
       const cursorRing = document.getElementById('cursor-ring');
+      const navToggle = document.querySelector('[data-nav-toggle]');
+      const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+      const mobileNavLinks = Array.from(document.querySelectorAll('[data-mobile-nav-link]'));
       const navLinks = Array.from(document.querySelectorAll('.nav-link'));
       const sectionIds = ['about', 'projects', 'skills', 'resume', 'contact'];
       const sections = sectionIds
         .map((id) => document.getElementById(id))
         .filter(Boolean);
+
+      window.setTimeout(() => {
+        document.body.classList.add('loaded');
+      }, 250);
+
+      if (spotlight) {
+        spotlight.style.left = `${Math.max(window.innerWidth / 2 - 300, 0)}px`;
+        spotlight.style.top = `${Math.max(window.innerHeight / 3 - 300, 0)}px`;
+      }
+
+      const closeMobileNav = () => {
+        if (!navToggle || !mobileNavOverlay) return;
+        mobileNavOverlay.classList.remove('open');
+        mobileNavOverlay.setAttribute('aria-hidden', 'true');
+        navToggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      };
+
+      const openMobileNav = () => {
+        if (!navToggle || !mobileNavOverlay) return;
+        mobileNavOverlay.classList.add('open');
+        mobileNavOverlay.setAttribute('aria-hidden', 'false');
+        navToggle.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      };
+
+      if (navToggle && mobileNavOverlay) {
+        navToggle.addEventListener('click', () => {
+          if (mobileNavOverlay.classList.contains('open')) {
+            closeMobileNav();
+          } else {
+            openMobileNav();
+          }
+        });
+
+        mobileNavOverlay.addEventListener('click', (event) => {
+          if (event.target === mobileNavOverlay) {
+            closeMobileNav();
+          }
+        });
+
+        mobileNavLinks.forEach((link) => {
+          link.addEventListener('click', () => {
+            closeMobileNav();
+          });
+        });
+
+        window.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape') {
+            closeMobileNav();
+          }
+        });
+
+        window.addEventListener('resize', () => {
+          if (window.innerWidth > 768) {
+            closeMobileNav();
+          }
+        });
+      }
 
       function setScrolledState() {
         navbar.classList.toggle('scrolled', window.scrollY > 80);
@@ -2079,6 +2383,10 @@ animate();
       }
 
       const isTouchDevice = navigator.maxTouchPoints > 0 || window.matchMedia('(pointer: coarse)').matches;
+      if (isTouchDevice) {
+        document.body.classList.add('touch-device');
+      }
+
       if (!isTouchDevice && cursor && cursorRing) {
         document.body.classList.add('custom-cursor');
 
@@ -2101,6 +2409,10 @@ animate();
           mouseY = event.clientY;
           cursor.style.left = `${mouseX}px`;
           cursor.style.top = `${mouseY}px`;
+          if (spotlight) {
+            spotlight.style.left = `${mouseX - 300}px`;
+            spotlight.style.top = `${mouseY - 300}px`;
+          }
         });
 
         document.addEventListener('mouseover', (event) => {
@@ -2217,6 +2529,11 @@ animate();
         revealObserver.observe(element);
       });
 
+      const splitMetricCards = Array.from(document.querySelectorAll('.project-metrics-grid'));
+      splitMetricCards.forEach((grid) => {
+        grid.classList.add('reveal');
+      });
+
       const metricGrid = document.querySelector('[data-metric-grid]');
       if (metricGrid) {
         const metricValues = Array.from(metricGrid.querySelectorAll('[data-count-target]'));
@@ -2273,7 +2590,7 @@ animate();
     });
   </script>
 
-  <section id="hero">
+  <section id="hero" role="region" aria-label="Cybersecurity, AI Ethics, and Systems Portfolio">
     <div class="hero-inner">
       <div class="hero-copy-column">
       <p class="hero-label hero-reveal" style="--delay: 0s;">CYBERSECURITY, AI ETHICS, AND SYSTEMS PORTFOLIO</p>
@@ -2317,7 +2634,7 @@ animate();
       </div>
     </div>
   </section>
-  <section id="about">
+  <section id="about" role="region" aria-label="Technical, hands-on, and metrics-driven.">
     <div class="about-inner">
       <p class="about-label">ABOUT</p>
       <h2 class="about-title">Technical, hands-on, and metrics-driven.</h2>
@@ -2349,7 +2666,7 @@ animate();
       </div>
     </div>
   </section>
-  <section id="projects">
+  <section id="projects" role="region" aria-label="Selected work across systems, speed, and reliability">
     <div class="projects-inner">
       <p class="projects-label">PROJECTS</p>
       <h2 class="projects-title">Selected work across systems, speed, and reliability</h2>
@@ -2548,7 +2865,7 @@ animate();
       </div>
     </div>
   </section>
-  <section id="skills">
+  <section id="skills" role="region" aria-label="Core tools for systems, ML, and security work.">
     <div class="skills-inner">
       <p class="skills-label">SKILLS</p>
       <h2 class="skills-title">Core tools for systems, ML, and security work.</h2>
@@ -2620,7 +2937,7 @@ animate();
       </div>
     </div>
   </section>
-  <section id="resume">
+  <section id="resume" role="region" aria-label="Resume focused on projects, tooling, and measured engineering results.">
     <div class="resume-inner reveal">
       <p class="resume-label">RESUME</p>
       <h2 class="resume-title">Resume focused on projects, tooling, and measured engineering results.</h2>
@@ -2633,7 +2950,7 @@ animate();
     </div>
   </section>
 
-  <section id="contact">
+  <section id="contact" role="region" aria-label="Connect for internships, engineering roles, and technical conversations.">
     <div class="contact-inner">
       <p class="contact-label">CONTACT</p>
       <h2 class="contact-title">Connect for internships, engineering roles, and technical conversations.</h2>
