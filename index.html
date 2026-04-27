@@ -879,6 +879,82 @@
       max-width: 22ch;
     }
 
+    .project-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .project-metric-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .project-metric-value {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      color: var(--accent);
+    }
+
+    .project-metric-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.5;
+      letter-spacing: 0.02em;
+      color: var(--text-muted);
+    }
+
+    .project-profiler-card {
+      border-radius: 8px;
+      border: 1px solid rgba(34, 238, 34, 0.22);
+      background: #0a0e0a;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .project-profiler-header {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #22ee22;
+    }
+
+    .project-profiler-output {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      line-height: 1.7;
+      letter-spacing: 0.01em;
+      color: #22ee22;
+      background: rgba(34, 238, 34, 0.04);
+      border-radius: 6px;
+      padding: 12px 14px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .project-metrics-grid.reveal {
+      transform: perspective(1000px) translateY(40px) rotateX(4deg);
+      transform-origin: top center;
+    }
+
+    .project-metrics-grid.reveal.visible {
+      transform: perspective(1000px) translateY(0) rotateX(0);
+    }
+
     .project-metric {
       font-family: var(--font-display);
       font-size: 17px;
@@ -1389,6 +1465,10 @@
         padding: 32px;
       }
 
+      .project-metrics-grid {
+        grid-template-columns: 1fr;
+      }
+
       #skills {
         padding: 88px 28px 64px;
       }
@@ -1504,6 +1584,11 @@
       .project-card {
         padding: 24px;
       }
+
+      .project-metrics-grid {
+        gap: 10px;
+      }
+
       .project-metric {
         font-size: 16px;
       }
@@ -2132,6 +2217,59 @@ animate();
         revealObserver.observe(element);
       });
 
+      const metricGrid = document.querySelector('[data-metric-grid]');
+      if (metricGrid) {
+        const metricValues = Array.from(metricGrid.querySelectorAll('[data-count-target]'));
+        const easeOutExpo = (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t));
+        let metricTriggered = false;
+
+        const animateMetric = (element) => {
+          const target = Number(element.dataset.countTarget || '0');
+          const duration = Number(element.dataset.countDuration || '1000');
+          const decimals = Number(element.dataset.countDecimals || '0');
+          const suffix = element.dataset.countSuffix || '';
+          const start = performance.now();
+
+          const frame = (now) => {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = easeOutExpo(progress);
+            const currentValue = target * eased;
+
+            if (decimals > 0) {
+              const step = Number(element.dataset.countStep || '0');
+              const stepped = step > 0 ? Math.min(target, Math.round(currentValue / step) * step) : Math.min(target, currentValue);
+              element.textContent = `${stepped.toFixed(decimals)}${suffix}`;
+            } else {
+              const value = Math.min(target, Math.round(currentValue));
+              element.textContent = `${value}${suffix}`;
+            }
+
+            if (progress < 1) {
+              requestAnimationFrame(frame);
+            } else if (decimals > 0) {
+              element.textContent = `${target.toFixed(decimals)}${suffix}`;
+            } else {
+              element.textContent = `${target}${suffix}`;
+            }
+          };
+
+          requestAnimationFrame(frame);
+        };
+
+        const metricObserver = new IntersectionObserver((entries, observerInstance) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting || metricTriggered) return;
+            metricTriggered = true;
+            metricValues.forEach((element) => animateMetric(element));
+            observerInstance.disconnect();
+          });
+        }, {
+          threshold: 0.5
+        });
+
+        metricObserver.observe(metricGrid);
+      }
+
     });
   </script>
 
@@ -2281,7 +2419,28 @@ animate();
           </div>
 
           <h3 class="project-card-title">CUDA Mandelbrot Renderer</h3>
-          <p class="project-metric">374 ms → 1.0 ms with Nsight-validated ~370x speedup</p>
+
+          <div class="project-metrics-grid reveal" id="cuda-metrics" data-metric-grid>
+            <article class="project-metric-card">
+              <div class="project-metric-value" data-count-target="370" data-count-suffix="x" data-count-decimals="0" data-count-duration="1400">0x</div>
+              <div class="project-metric-label">Speedup vs. CPU path</div>
+            </article>
+
+            <article class="project-metric-card">
+              <div class="project-metric-value" data-count-target="374" data-count-suffix=" ms" data-count-decimals="0" data-count-duration="1200">0 ms</div>
+              <div class="project-metric-label">CPU updateRender timing</div>
+            </article>
+
+            <article class="project-metric-card">
+              <div class="project-metric-value" data-count-target="1.0" data-count-suffix=" ms" data-count-decimals="1" data-count-step="0.1" data-count-duration="800">0.0 ms</div>
+              <div class="project-metric-label">GPU frame time</div>
+            </article>
+          </div>
+
+          <div class="project-profiler-card">
+            <div class="project-profiler-header">PROFILER EVIDENCE</div>
+            <div class="project-profiler-output">[NVTX] kernel: 0.87ms | [CPU] post-process: 0.13ms | total: 1.0ms</div>
+          </div>
 
           <div class="project-copy">
             <p>I built a CUDA Mandelbrot renderer to study how far a compact kernel could be pushed when the launch configuration, memory access pattern, and iteration logic were tuned together instead of treated separately.</p>
