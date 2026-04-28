@@ -731,12 +731,12 @@
     .projects-bus-visual {
       position: relative;
       display: grid;
-      grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+      grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
       justify-content: space-between;
       align-items: stretch;
-      gap: 24px;
-      padding: 24px 24px 26px;
-      min-height: 540px;
+      gap: 20px;
+      padding: 20px 20px 22px;
+      min-height: 500px;
     }
 
     .projects-bus-node {
@@ -747,7 +747,9 @@
       justify-content: center;
       gap: 12px;
       min-height: 100%;
-      padding: 32px;
+      padding: 24px;
+      max-width: 300px;
+      align-self: center;
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 2px;
       background: linear-gradient(180deg, rgba(16, 22, 29, 0.78), rgba(10, 14, 18, 0.88));
@@ -838,15 +840,16 @@
       flex-direction: column;
       gap: 16px;
       width: 100%;
-      max-width: 100%;
+      max-width: 88%;
       margin-left: auto;
-      padding-top: 22px;
-      padding-right: 8px;
+      padding-top: 16px;
+      padding-right: 12px;
+      align-items: flex-end;
     }
 
     .project-bus-card {
-      width: 100%;
-      min-height: 130px;
+      width: min(100%, 90%);
+      min-height: 118px;
       border: 1px solid rgba(255, 255, 255, 0.10);
       border-left: 4px solid var(--accent);
       border-radius: 2px;
@@ -854,7 +857,7 @@
       color: inherit;
       text-align: left;
       cursor: pointer;
-      padding: 20px 22px 18px 22px;
+      padding: 18px 20px 16px 20px;
       transition:
         transform var(--transition),
         border-color var(--transition),
@@ -913,7 +916,7 @@
 
     .project-bus-card-title {
       font-family: var(--font-display);
-      font-size: clamp(1.1rem, 1.25vw, 1.32rem);
+      font-size: clamp(1.02rem, 1.08vw, 1.18rem);
       font-weight: 700;
       line-height: 1.06;
       letter-spacing: -0.02em;
@@ -2514,6 +2517,10 @@ animate();
       const sections = sectionIds
         .map((id) => document.getElementById(id))
         .filter(Boolean);
+      const projectsBusVisual = document.querySelector('.projects-bus-visual');
+      const projectsBusGraph = document.querySelector('[data-bus-graph]');
+      const projectsBusNode = document.querySelector('[data-bus-node]');
+      const projectBusCards = Array.from(document.querySelectorAll('[data-bus-card]'));
 
       window.setTimeout(() => {
         document.body.classList.add('loaded');
@@ -2719,6 +2726,74 @@ animate();
       updateActiveSection();
       window.addEventListener('scroll', updateActiveSection, { passive: true });
       window.addEventListener('resize', updateActiveSection);
+
+      const updateProjectsBusGraph = () => {
+        if (!projectsBusVisual || !projectsBusGraph || !projectsBusNode || projectBusCards.length < 3) return;
+        if (window.innerWidth <= 1280) return;
+
+        const containerRect = projectsBusVisual.getBoundingClientRect();
+        const nodeRect = projectsBusNode.getBoundingClientRect();
+        const cardRects = projectBusCards
+          .slice(0, 3)
+          .map((card) => card.getBoundingClientRect());
+
+        if (cardRects.some((rect) => rect.width === 0 || rect.height === 0)) return;
+
+        const relX = (value) => value - containerRect.left;
+        const relY = (value) => value - containerRect.top;
+
+        const nodeRight = relX(nodeRect.right);
+        const nodeMidY = relY(nodeRect.top + (nodeRect.height * 0.5));
+
+        const cardLeft = Math.min(...cardRects.map((rect) => relX(rect.left)));
+        const cardRight = Math.max(...cardRects.map((rect) => relX(rect.right)));
+        const cardMidYs = cardRects.map((rect) => relY(rect.top + (rect.height * 0.5)));
+        const topY = Math.min(...cardMidYs);
+        const midY = cardMidYs[1] ?? cardMidYs[0];
+        const bottomY = Math.max(...cardMidYs);
+        const gap = Math.max(cardLeft - nodeRight, 180);
+        const forkX = nodeRight + Math.min(gap * 0.48, 170);
+        const branchX = Math.min(cardLeft + 14, cardRight - 40);
+        const svgWidth = containerRect.width;
+        const svgHeight = containerRect.height;
+
+        projectsBusGraph.setAttribute('viewBox', `0 0 ${svgWidth} ${svgHeight}`);
+        projectsBusGraph.setAttribute('preserveAspectRatio', 'none');
+        projectsBusGraph.innerHTML = `
+          <defs>
+            <filter id="busGlowWide" x="0" y="0" width="${svgWidth}" height="${svgHeight}" filterUnits="userSpaceOnUse">
+              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <path class="bus-wire bus-wire-base" d="M ${nodeRight} ${nodeMidY} H ${forkX}" />
+          <path class="bus-wire bus-wire-base" d="M ${forkX} ${topY} V ${bottomY}" />
+          <path class="bus-wire bus-wire-base" d="M ${forkX} ${topY} H ${branchX}" />
+          <path class="bus-wire bus-wire-base" d="M ${forkX} ${midY} H ${branchX}" />
+          <path class="bus-wire bus-wire-base" d="M ${forkX} ${bottomY} H ${branchX}" />
+          <path class="bus-wire bus-wire-flow" d="M ${nodeRight} ${nodeMidY} H ${forkX}" />
+          <path class="bus-wire bus-wire-flow" d="M ${forkX} ${topY} V ${bottomY}" />
+          <path class="bus-wire bus-wire-flow" d="M ${forkX} ${topY} H ${branchX}" />
+          <path class="bus-wire bus-wire-flow" d="M ${forkX} ${midY} H ${branchX}" />
+          <path class="bus-wire bus-wire-flow" d="M ${forkX} ${bottomY} H ${branchX}" />
+        `;
+      };
+
+      const scheduleBusUpdate = () => {
+        requestAnimationFrame(updateProjectsBusGraph);
+      };
+
+      scheduleBusUpdate();
+      window.addEventListener('resize', scheduleBusUpdate);
+      window.addEventListener('scroll', scheduleBusUpdate, { passive: true });
+      if (window.ResizeObserver && projectsBusVisual) {
+        const busObserver = new ResizeObserver(scheduleBusUpdate);
+        busObserver.observe(projectsBusVisual);
+        projectBusCards.forEach((card) => busObserver.observe(card));
+      }
 
       navLinks.forEach((link) => {
         link.addEventListener('click', (event) => {
