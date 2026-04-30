@@ -3074,10 +3074,10 @@ animate();
           <a class="hero-button" href="#contact">Contact</a>
         </div>
         <div class="hero-quick-links hero-reveal" style="--delay: 0.5s;">
-          <a class="hero-pill" href="#project-cuda-mandelbrot">View CUDA Mandelbrot</a>
-          <a class="hero-pill" href="#project-systems-grid">Inspect Systems Grid</a>
-          <a class="hero-pill" href="#project-performance-lab">Open Performance Lab</a>
-          <a class="hero-pill" href="#projects">Launch Kernel Viewer</a>
+          <a class="hero-pill" href="#project-cuda-mandelbrot">View Mapetite</a>
+          <a class="hero-pill" href="#project-systems-grid">Explore THREATGRID</a>
+          <a class="hero-pill" href="#project-performance-lab">Open Pokémon Classifier</a>
+          <a class="hero-pill" href="#projects">Browse Projects</a>
         </div>
       </div>
 
@@ -3134,11 +3134,11 @@ animate();
       </div>
     </div>
   </section>
-  <section id="projects" role="region" aria-label="Selected work across systems, speed, and reliability">
+  <section id="projects" role="region" aria-label="Selected work across product design, security, and GPU systems">
     <div class="projects-inner">
       <p class="projects-label">PROJECTS</p>
-      <h2 class="projects-title">Selected work across systems, speed, and reliability</h2>
-      <p class="projects-copy">Selected projects focused on performance, systems design, and measurable engineering results.</p>
+      <h2 class="projects-title">Selected work across product design, security, and GPU systems</h2>
+      <p class="projects-copy">Selected projects focused on culinary discovery, cybersecurity visualization, and GPU-accelerated machine learning.</p>
 
       <div class="projects-bus reveal">
         <div class="projects-bus-visual">
@@ -3167,8 +3167,8 @@ animate();
                 <span class="project-bus-card-label">PROJECT 01</span>
                 <span class="project-bus-card-chip" aria-hidden="true"></span>
               </div>
-              <div class="project-bus-card-title">CUDA Mandelbrot</div>
-              <div class="project-bus-card-desc">GPU renderer and Nsight-validated speedup</div>
+              <div class="project-bus-card-title">Mapetite</div>
+              <div class="project-bus-card-desc">Premium culinary discovery platform with global restaurant search</div>
             </button>
 
             <button class="project-bus-card" type="button" data-project-target="project-systems-grid" data-bus-card>
@@ -3176,8 +3176,8 @@ animate();
                 <span class="project-bus-card-label">PROJECT 02</span>
                 <span class="project-bus-card-chip" aria-hidden="true"></span>
               </div>
-              <div class="project-bus-card-title">Systems Grid Diagnostics</div>
-              <div class="project-bus-card-desc">UI and data-flow surface for runtime inspection and debugging</div>
+              <div class="project-bus-card-title">THREATGRID</div>
+              <div class="project-bus-card-desc">Cybersecurity intelligence dashboard concept with analyst-guided threat response</div>
             </button>
 
             <button class="project-bus-card" type="button" data-project-target="project-performance-lab" data-bus-card>
@@ -3185,8 +3185,8 @@ animate();
                 <span class="project-bus-card-label">PROJECT 03</span>
                 <span class="project-bus-card-chip" aria-hidden="true"></span>
               </div>
-              <div class="project-bus-card-title">Performance Lab</div>
-              <div class="project-bus-card-desc">Profiling-oriented tooling for measuring load and bottlenecks</div>
+              <div class="project-bus-card-title">Pokémon Classifier</div>
+              <div class="project-bus-card-desc">GPU-accelerated ML pipeline for classifying Pokémon card images</div>
             </button>
           </div>
         </div>
@@ -3203,53 +3203,53 @@ animate();
             </div>
           </div>
 
-          <h3 class="project-card-title">CUDA Mandelbrot Renderer</h3>
+          <h3 class="project-card-title">Mapetite</h3>
 
           <div class="project-metrics-grid reveal" id="cuda-metrics" data-metric-grid>
             <article class="project-metric-card">
-              <div class="project-metric-value" data-count-target="370" data-count-suffix="x" data-count-decimals="0" data-count-duration="1400">0x</div>
-              <div class="project-metric-label">Speedup vs. CPU path</div>
+              <div class="project-metric-value" data-count-target="24" data-count-suffix="+" data-count-decimals="0" data-count-duration="1400">0+</div>
+              <div class="project-metric-label">Restaurant filters</div>
             </article>
 
             <article class="project-metric-card">
-              <div class="project-metric-value" data-count-target="374" data-count-suffix=" ms" data-count-decimals="0" data-count-duration="1200">0 ms</div>
-              <div class="project-metric-label">CPU updateRender timing</div>
+              <div class="project-metric-value" data-count-target="3" data-count-suffix="" data-count-decimals="0" data-count-duration="1200">0</div>
+              <div class="project-metric-label">Core discovery flows</div>
             </article>
 
             <article class="project-metric-card">
-              <div class="project-metric-value" data-count-target="1.0" data-count-suffix=" ms" data-count-decimals="1" data-count-step="0.1" data-count-duration="800">0.0 ms</div>
-              <div class="project-metric-label">GPU frame time</div>
+              <div class="project-metric-value" data-count-target="1" data-count-suffix="" data-count-decimals="0" data-count-duration="800">0</div>
+              <div class="project-metric-label">Premium visual system</div>
             </article>
           </div>
 
           <div class="project-profiler-card">
-            <div class="project-profiler-header">PROFILER EVIDENCE</div>
-            <div class="project-profiler-output">[NVTX] kernel: 0.87ms | [CPU] post-process: 0.13ms | total: 1.0ms</div>
+            <div class="project-profiler-header">PROJECT FOCUS</div>
+            <div class="project-profiler-output">[Search] global restaurant discovery | [UX] premium brand presentation | [Scope] trustworthy dining exploration</div>
           </div>
 
           <div class="project-copy">
-            <p>I built a CUDA Mandelbrot renderer to study how far a compact kernel could be pushed when the launch configuration, memory access pattern, and iteration logic were tuned together instead of treated separately.</p>
-            <p>I profiled the hot path with Nsight, traced most of the time loss to unnecessary work in the iteration loop, and tightened the execution path so the GPU spent its time on actual fractal computation.</p>
-            <p>The result is a deliberately measured GPU program: easy to benchmark, easy to compare, and grounded in visible performance data instead of guesswork.</p>
+            <p>Mapetite is a premium culinary dining platform designed to help users discover their next restaurant through a polished and trustworthy search experience.</p>
+            <p>The current design iteration focuses on global restaurant discovery, detailed filters, and a high-contrast brand presentation that feels more intentional than a generic food search page.</p>
+            <p>The goal is to make culinary exploration feel elevated, easy to scan, and ready for a refined product experience.</p>
           </div>
 
           <ul class="project-bullets">
-            <li>Reworked the kernel to reduce wasted iterations and make thread work more consistent across the image.</li>
-            <li>Used Nsight to validate changes and confirm the speedup was coming from real kernel improvements.</li>
-            <li>Kept the rendering path compact so the benchmark stays stable and easy to reason about.</li>
+            <li>Designed a premium search and filter flow for discovering restaurants across cuisines and dining styles.</li>
+            <li>Focused the visual system on trust, clarity, and a high-end dining brand feel.</li>
+            <li>Built the concept around a smooth discovery experience that feels curated rather than directory-like.</li>
           </ul>
 
           <div class="project-actions">
-            <a class="project-button" href="https://github.com/Spook65" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="project-button" href="https://github.com/Spook65/Mapetite" target="_blank" rel="noreferrer">GitHub</a>
             <a class="project-button" href="#project-cuda-mandelbrot">Technical Details</a>
           </div>
 
           <div class="project-tags">
-            <span class="project-tag">CUDA</span>
-            <span class="project-tag">C++</span>
-            <span class="project-tag">Nsight</span>
-            <span class="project-tag">GPU profiling</span>
-            <span class="project-tag">Visualization</span>
+            <span class="project-tag">Product design</span>
+            <span class="project-tag">Search filters</span>
+            <span class="project-tag">Premium UX</span>
+            <span class="project-tag">Responsive web</span>
+            <span class="project-tag">Brand system</span>
           </div>
         </article>
 
@@ -3263,32 +3263,32 @@ animate();
             </div>
           </div>
 
-          <h3 class="project-card-title">Systems Grid Diagnostics</h3>
-          <p class="project-metric">812 ms → 96 ms after flattening state updates and tightening the data pipeline</p>
+          <h3 class="project-card-title">THREATGRID</h3>
+          <p class="project-metric">6 threat types, 4 severity levels, and a 3-step neutralization flow on a live globe concept</p>
 
           <div class="project-copy">
-            <p>I built this as a systems-style interface for inspecting data flow, runtime status, and the parts of a UI that usually turn fragile when the state graph gets bigger than expected.</p>
-            <p>The main work was turning a noisy update path into something that stayed readable under load: I normalized state boundaries, reduced redundant rerenders, and made the data path easier to inspect while debugging.</p>
-            <p>That approach made the interface feel less like a decorative dashboard and more like a practical analysis surface for reliability work.</p>
+            <p>THREATGRID is a cybersecurity intelligence dashboard concept built around a dark rotating 3D globe where threat events pulse at their geographic origin.</p>
+            <p>Clicking a threat opens an AI analyst panel that explains the attack vector, affected systems, and a step-by-step neutralization guide in a workflow that feels like a real ops dashboard.</p>
+            <p>The idea is educational first, but it is framed like a serious security tool so students and professionals can understand what is happening and how to respond.</p>
           </div>
 
           <ul class="project-bullets">
-            <li>Restructured the update flow so the UI could stay responsive while still reflecting live system changes.</li>
-            <li>Reduced complexity in the render path by separating derived state from primary input data.</li>
-            <li>Made failure points easier to trace by keeping the interface aligned with actual runtime behavior.</li>
+            <li>Interactive globe with simulated threat nodes spawning at geographic coordinates.</li>
+            <li>AI analyst panel types out a breakdown and mitigation sequence for each threat.</li>
+            <li>Neutralization flow clears the threat and produces a debrief-style report.</li>
           </ul>
 
           <div class="project-actions">
-            <a class="project-button" href="https://github.com/Spook65" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="project-button" href="https://github.com/Spook65/Spook65.github.io" target="_blank" rel="noreferrer">GitHub</a>
             <a class="project-button" href="#project-systems-grid">Technical Details</a>
           </div>
 
           <div class="project-tags">
-            <span class="project-tag">React</span>
-            <span class="project-tag">TypeScript</span>
-            <span class="project-tag">APIs</span>
-            <span class="project-tag">State management</span>
-            <span class="project-tag">Debugging</span>
+            <span class="project-tag">Three.js</span>
+            <span class="project-tag">Cybersecurity</span>
+            <span class="project-tag">Typewriter UI</span>
+            <span class="project-tag">Data visualization</span>
+            <span class="project-tag">Ops dashboard</span>
           </div>
         </article>
 
@@ -3302,32 +3302,32 @@ animate();
             </div>
           </div>
 
-          <h3 class="project-card-title">Performance Lab</h3>
-          <p class="project-metric">1.8 s → 140 ms after profiling bottlenecks and removing the heaviest repeated work</p>
+          <h3 class="project-card-title">GPU-Accelerated Pokémon Card Classifier</h3>
+          <p class="project-metric">199.871 s → 66.714 s after GPU and DataLoader throughput tuning</p>
 
           <div class="project-copy">
-            <p>I treated this project like a small performance lab: measure first, isolate the slow path, then change only the parts that clearly moved the bottleneck.</p>
-            <p>That meant profiling the critical path, identifying repeated work that could be cached or batched, and simplifying the interface around the actual runtime cost instead of assumptions.</p>
-            <p>The end result is a tool that makes throughput and reliability easier to see, which is useful when I want to reason about a system instead of just watch it animate.</p>
+            <p>I built this classifier as an end-to-end machine learning pipeline for Pokémon card images, with the goal of making the data path and training behavior easier to improve rather than just easier to run.</p>
+            <p>The project uses PyTorch, Torchvision, and CUDA so the GPU does the heavy lifting while the CPU stays focused on orchestration, preprocessing, and input pipeline work.</p>
+            <p>I also used profiling tools to reduce data-loading overhead and keep the training loop centered on throughput instead of hidden stalls.</p>
           </div>
 
           <ul class="project-bullets">
-            <li>Profiled the slow path before changing behavior so the optimization work stayed grounded in evidence.</li>
-            <li>Reduced repeated computation and adjusted state flow to avoid unnecessary blocking work.</li>
-            <li>Kept the UI focused on measurable outcomes such as latency, load, and consistency.</li>
+            <li>Collected card images asynchronously and organized them into training, validation, and test splits.</li>
+            <li>Normalized noisy labels to keep the supervised dataset consistent.</li>
+            <li>Tuned the input pipeline and GPU execution path to improve throughput instead of just raw model code.</li>
           </ul>
 
           <div class="project-actions">
-            <a class="project-button" href="https://github.com/Spook65" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="project-button" href="https://github.com/Spook65/pokemon-card-classifier" target="_blank" rel="noreferrer">GitHub</a>
             <a class="project-button" href="#project-performance-lab">Technical Details</a>
           </div>
 
           <div class="project-tags">
-            <span class="project-tag">Profiling</span>
-            <span class="project-tag">Benchmarking</span>
-            <span class="project-tag">Performance tuning</span>
-            <span class="project-tag">UI reliability</span>
-            <span class="project-tag">Systems thinking</span>
+            <span class="project-tag">Python</span>
+            <span class="project-tag">PyTorch</span>
+            <span class="project-tag">CUDA</span>
+            <span class="project-tag">Torchvision</span>
+            <span class="project-tag">Nsight Systems</span>
           </div>
         </article>
       </div>
