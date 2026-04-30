@@ -24,6 +24,7 @@
       --accent-muted: rgba(58, 160, 255, 0.15);
       --border: rgba(255, 255, 255, 0.06);
       --border-hover: rgba(255, 255, 255, 0.15);
+      --ease: cubic-bezier(0.4, 0, 0.2, 1);
       --font-display: 'Sora', system-ui, sans-serif;
       --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
       --radius: 12px;
@@ -574,6 +575,47 @@
       gap: 22px;
     }
 
+    /* PHOTOS — rename your image files to match these exactly:
+       brandon-about.jpg   → your gym selfie
+       calhacks-team.jpg   → CalHacks team photo
+       brandon-gaming.jpg  → gaming lounge photo
+       Place all three files in the same folder as index.html */
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .about-left {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .about-right {
+      position: sticky;
+      top: 100px;
+      align-self: start;
+      width: 100%;
+      max-width: 280px;
+      margin-left: auto;
+    }
+
+    .about-photo {
+      width: 100%;
+      max-width: 280px;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      margin: 0 auto;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+    }
+
     .about-label {
       font-family: var(--font-mono);
       font-size: 11px;
@@ -971,6 +1013,42 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
+    }
+
+    .pcard-photo-wrap {
+      width: 100%;
+      margin-bottom: 20px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+
+    .pcard-photo {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      object-position: center 30%;
+      display: block;
+      transition: transform 0.4s var(--ease);
+    }
+
+    .pcard-photo-wrap:hover .pcard-photo {
+      transform: scale(1.02);
+    }
+
+    .pcard-photo-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 10px 14px;
+      background: linear-gradient(transparent, rgba(7, 9, 15, 0.85));
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      font-family: var(--font-mono);
+      pointer-events: none;
     }
 
     .project-card-label {
@@ -1967,6 +2045,43 @@
       color: var(--text-muted);
     }
 
+    .btc-photo-block {
+      margin-top: 24px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      position: relative;
+      max-height: 340px;
+    }
+
+    .btc-photo {
+      width: 100%;
+      height: 340px;
+      object-fit: cover;
+      object-position: center 20%;
+      display: block;
+      filter: brightness(0.88);
+      transition: filter 0.3s var(--ease), transform 0.4s var(--ease);
+    }
+
+    .btc-photo-block:hover .btc-photo {
+      filter: brightness(1);
+      transform: scale(1.01);
+    }
+
+    .btc-photo-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 14px 18px;
+      background: linear-gradient(transparent, rgba(7, 9, 15, 0.9));
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      pointer-events: none;
+    }
+
     .projects-detail-list .reveal:nth-child(1) {
       transition-delay: 0.0s;
     }
@@ -2068,6 +2183,46 @@
       }
     }
 
+    @media (max-width: 768px) {
+      #about,
+      #projects,
+      #skills,
+      #beyond,
+      #resume,
+      #contact {
+        padding: 80px 24px 56px;
+      }
+
+      .about-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .about-right {
+        position: static;
+        order: -1;
+        margin-bottom: 32px;
+        max-width: none;
+      }
+
+      .about-photo {
+        max-width: 100%;
+        aspect-ratio: 4 / 3;
+      }
+
+      .pcard-photo {
+        height: 180px;
+      }
+
+      .btc-photo-block {
+        max-height: 220px;
+      }
+
+      .btc-photo {
+        height: 220px;
+      }
+    }
+
     @media (max-width: 1280px) {
       .projects-bus-visual {
         grid-template-columns: 1fr;
@@ -2100,24 +2255,24 @@
       }
 
       #about {
-        padding: 80px 20px 56px;
+        padding: 80px 24px 56px;
       }
 
       #projects {
-        padding: 80px 20px 56px;
+        padding: 80px 24px 56px;
       }
 
       #skills {
-        padding: 80px 20px 56px;
+        padding: 80px 24px 56px;
       }
 
       #beyond {
-        padding: 80px 20px 56px;
+        padding: 80px 24px 56px;
       }
 
       #resume,
       #contact {
-        padding: 80px 20px 56px;
+        padding: 80px 24px 56px;
       }
 
       .hero-inner {
@@ -3313,32 +3468,40 @@ animate();
   <section id="about" role="region" aria-label="Technical, hands-on, and metrics-driven.">
     <div class="about-inner">
       <p class="about-label">ABOUT</p>
-      <h2 class="about-title">Technical, hands-on, and metrics-driven.</h2>
-      <p class="about-copy">
-        I’m a fourth-year Computer Science student at the University of the Pacific focused on cybersecurity, AI ethics, and software development. I like work that balances technical execution with security, risk awareness, and responsibility. I build with a habit of asking how a system can fail, who it affects, and how to make it more secure, useful, and easy to trust.
-      </p>
+      <div class="about-layout">
+        <div class="about-left">
+          <h2 class="about-title">Technical, hands-on, and metrics-driven.</h2>
+          <p class="about-copy">
+            I’m a fourth-year Computer Science student at the University of the Pacific focused on cybersecurity, AI ethics, and software development. I like work that balances technical execution with security, risk awareness, and responsibility. I build with a habit of asking how a system can fail, who it affects, and how to make it more secure, useful, and easy to trust.
+          </p>
 
-      <div class="about-cards">
-        <article class="about-card reveal">
-          <div class="about-card-title">What I like working on</div>
-          <div class="about-card-body">
-            Secure software, AI governance, debugging complex UI and data-flow issues, and projects that make reliability visible. I like work that solves real problems while also accounting for privacy, bias, transparency, and compliance.
-          </div>
-        </article>
+          <div class="about-cards">
+            <article class="about-card reveal">
+              <div class="about-card-title">What I like working on</div>
+              <div class="about-card-body">
+                Secure software, AI governance, debugging complex UI and data-flow issues, and projects that make reliability visible. I like work that solves real problems while also accounting for privacy, bias, transparency, and compliance.
+              </div>
+            </article>
 
-        <article class="about-card reveal">
-          <div class="about-card-title">Engineering approach</div>
-          <div class="about-card-body">
-            I build systems-first: I think about failure modes, security risks, and who is impacted by design choices before I optimize for features. I’m iterative, efficient, and deliberate about keeping functionality, accountability, and performance in balance.
-          </div>
-        </article>
+            <article class="about-card reveal">
+              <div class="about-card-title">Engineering approach</div>
+              <div class="about-card-body">
+                I build systems-first: I think about failure modes, security risks, and who is impacted by design choices before I optimize for features. I’m iterative, efficient, and deliberate about keeping functionality, accountability, and performance in balance.
+              </div>
+            </article>
 
-        <article class="about-card reveal">
-          <div class="about-card-title">Core technical toolkit</div>
-          <div class="about-card-body">
-            Python, JavaScript, TypeScript, React, Node.js, APIs, Git, debugging tools, data structures and algorithms, systems basics, and secure coding practices.
+            <article class="about-card reveal">
+              <div class="about-card-title">Core technical toolkit</div>
+              <div class="about-card-body">
+                Python, JavaScript, TypeScript, React, Node.js, APIs, Git, debugging tools, data structures and algorithms, systems basics, and secure coding practices.
+              </div>
+            </article>
           </div>
-        </article>
+        </div>
+
+        <div class="about-right">
+          <img src="brandon-about.jpg" alt="Brandon Hann" class="about-photo" loading="lazy" decoding="async" onerror="this.style.display='none'; this.parentElement.style.border='none'">
+        </div>
       </div>
     </div>
   </section>
@@ -3409,6 +3572,11 @@ animate();
               <span class="project-card-square accent"></span>
               <span class="project-card-square orange"></span>
             </div>
+          </div>
+
+          <div class="pcard-photo-wrap">
+            <img src="calhacks-team.jpg" alt="Brandon and team at CalHacks" class="pcard-photo" loading="lazy" decoding="async" onerror="this.style.display='none'; this.parentElement.style.border='none'">
+            <div class="pcard-photo-caption">CalHacks — team at venue</div>
           </div>
 
           <h3 class="project-card-title">Mapetite</h3>
@@ -3685,6 +3853,11 @@ animate();
             <div class="interest-copy">Always mid-three-series at any given moment.</div>
           </article>
         </div>
+      </div>
+
+      <div class="btc-photo-block reveal">
+        <img src="brandon-gaming.jpg" alt="Brandon with friends at gaming lounge" class="btc-photo" loading="lazy" decoding="async" onerror="this.style.display='none'; this.parentElement.style.border='none'">
+        <div class="btc-photo-label">📍 Gaming lounge with the crew</div>
       </div>
     </div>
   </section>
