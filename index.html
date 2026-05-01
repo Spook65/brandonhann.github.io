@@ -583,8 +583,8 @@
 
     .about-layout {
       display: grid;
-      grid-template-columns: 1fr 280px;
-      gap: 48px;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 40px;
       align-items: start;
     }
 
@@ -597,23 +597,25 @@
 
     .about-right {
       position: sticky;
-      top: 100px;
+      top: 112px;
       align-self: start;
       width: 100%;
-      max-width: 280px;
+      max-width: 320px;
       margin-left: auto;
+      z-index: 1;
     }
 
     .about-photo {
       width: 100%;
-      max-width: 280px;
+      max-width: 320px;
       aspect-ratio: 3 / 4;
       object-fit: cover;
-      object-position: center top;
+      object-position: center 18%;
       display: block;
       margin: 0 auto;
       border-radius: var(--radius-lg);
       border: 1px solid var(--border);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
     }
 
     .about-label {
@@ -1334,7 +1336,7 @@
     .skills-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 18px;
+      gap: 16px;
       margin-top: 8px;
     }
 
@@ -1353,6 +1355,26 @@
 
     .skill-card-wide {
       grid-column: span 2;
+    }
+
+    @media (min-width: 1200px) {
+      .skills-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        align-items: stretch;
+      }
+
+      .skill-card-wide {
+        grid-column: auto;
+      }
+    }
+
+    .skills-grid > .skill-card {
+      height: 100%;
+    }
+
+    .skill-card {
+      display: flex;
+      flex-direction: column;
     }
 
     #resume,
@@ -2051,16 +2073,21 @@
       overflow: hidden;
       border: 1px solid var(--border);
       position: relative;
-      max-height: 340px;
+      max-height: none;
+      background: var(--bg-card);
     }
 
     .btc-photo {
-      width: 100%;
-      height: 340px;
-      object-fit: cover;
-      object-position: center 20%;
+      width: auto;
+      max-width: 100%;
+      height: auto;
+      max-height: min(78vh, 760px);
+      object-fit: contain;
+      object-position: center center;
       display: block;
-      filter: brightness(0.88);
+      margin: 0 auto;
+      background: var(--bg-card);
+      filter: brightness(0.95);
       transition: filter 0.3s var(--ease), transform 0.4s var(--ease);
     }
 
@@ -2215,11 +2242,11 @@
       }
 
       .btc-photo-block {
-        max-height: 220px;
+        max-height: none;
       }
 
       .btc-photo {
-        height: 220px;
+        max-height: min(58vh, 520px);
       }
     }
 
