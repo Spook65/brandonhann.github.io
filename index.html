@@ -3823,7 +3823,7 @@ animate();
 
       <div class="resume-actions">
         <a class="resume-button primary" href="resume.html">View Resume</a>
-        <a class="resume-button" href="assets/resume/Brandon-Hann-Resume.pdf" download>Download PDF</a>
+        <a class="resume-button" href="assets/resume/Brandon-Hann-Resume.pdf" download="Brandon-Hann-Resume.pdf" data-force-download-pdf>Download PDF</a>
       </div>
     </div>
   </section>
@@ -3984,6 +3984,33 @@ animate();
     <p>© 2026 Brandon Hann. Portfolio for systems, ML, and security engineering roles.</p>
   </footer>
   <script>
+    (function () {
+      async function forceDownload(url, filename) {
+        const response = await fetch(url, { cache: 'no-store' });
+        if (!response.ok) {
+          throw new Error('Download failed');
+        }
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(blobUrl);
+      }
+
+      document.querySelectorAll('[data-force-download-pdf]').forEach((link) => {
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+          forceDownload(link.href, link.getAttribute('download') || 'Brandon-Hann-Resume.pdf').catch(() => {
+            window.location.href = link.href;
+          });
+        });
+      });
+    })();
+
     (function () {
       const roles = [
         'Computer Science Student',

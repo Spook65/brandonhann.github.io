@@ -464,6 +464,7 @@
               class="button button-secondary"
               href="assets/resume/Brandon-Hann-Resume.pdf"
               download="Brandon-Hann-Resume.pdf"
+              data-force-download-pdf
             >
               Download PDF
             </a>
@@ -500,6 +501,31 @@
 
     <script>
       document.getElementById('year').textContent = new Date().getFullYear();
+
+      async function forceDownload(url, filename) {
+        const response = await fetch(url, { cache: 'no-store' });
+        if (!response.ok) {
+          throw new Error('Download failed');
+        }
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(blobUrl);
+      }
+
+      document.querySelectorAll('[data-force-download-pdf]').forEach((link) => {
+        link.addEventListener('click', (event) => {
+          event.preventDefault();
+          forceDownload(link.href, link.getAttribute('download') || 'Brandon-Hann-Resume.pdf').catch(() => {
+            window.location.href = link.href;
+          });
+        });
+      });
 
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
