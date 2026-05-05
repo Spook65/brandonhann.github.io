@@ -600,17 +600,17 @@
       top: 112px;
       align-self: start;
       width: 100%;
-      max-width: 320px;
+      max-width: 300px;
       margin-left: auto;
       z-index: 1;
     }
 
     .about-photo {
       width: 100%;
-      max-width: 320px;
-      aspect-ratio: 3 / 4;
+      max-width: 300px;
+      aspect-ratio: 2 / 3;
       object-fit: cover;
-      object-position: center 18%;
+      object-position: center 28%;
       display: block;
       margin: 0 auto;
       border-radius: var(--radius-lg);
@@ -2609,6 +2609,62 @@
         font-size: clamp(40px, 10vw, 64px);
       }
 
+      #navbar {
+        top: 12px;
+        width: calc(100% - 20px);
+        padding: 8px 12px;
+        border-radius: 24px;
+      }
+
+      #navbar:hover {
+        transform: translateX(-50%);
+      }
+
+      .nav-inner {
+        flex-wrap: nowrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .nav-left {
+        gap: 8px;
+        flex: 1 1 auto;
+      }
+
+      .nav-center {
+        display: none;
+      }
+
+      .nav-right {
+        flex: 0 0 auto;
+        margin-left: auto;
+        justify-content: flex-end;
+      }
+
+      .nav-brand {
+        gap: 8px;
+      }
+
+      .nav-avatar {
+        width: 34px;
+        height: 34px;
+        font-size: 0.72rem;
+      }
+
+      .nav-name {
+        font-size: 0.82rem;
+      }
+
+      .nav-subtitle {
+        display: none;
+      }
+
+      .nav-toggle {
+        padding: 8px 12px;
+        border-radius: 14px;
+        font-size: 11px;
+      }
+
       .projects-detail-list,
       .skills-grid,
       .contact-grid,
@@ -2653,30 +2709,8 @@
     }
 
     @media (max-width: 600px) {
-      .nav-inner {
-        flex-wrap: wrap;
-      }
-
       #navbar {
         top: 16px;
-        width: calc(100% - 32px);
-      }
-
-      .nav-center {
-        order: 3;
-        width: 100%;
-        justify-content: flex-start;
-        margin-left: 0;
-      }
-
-      .nav-right {
-        width: 100%;
-        justify-content: flex-start;
-        margin-left: 0;
-      }
-
-      .nav-subtitle {
-        display: block;
       }
 
       .hero-title {
