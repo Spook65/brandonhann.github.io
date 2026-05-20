@@ -9,7 +9,7 @@
     />
     <meta name="theme-color" content="#0d0d0d" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data: https://github-contributions-api.jogruber.de https://github-contributions.vercel.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src 'self' https://api.github.com https://github-contributions-api.jogruber.de https://github-contributions.vercel.app; frame-src 'self'; upgrade-insecure-requests" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data: https://github-contributions-api.jogruber.de https://github-contributions.vercel.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://cdn.jsdelivr.net; connect-src 'self' https://api.github.com https://github-contributions-api.jogruber.de https://github-contributions.vercel.app; frame-src 'self'; upgrade-insecure-requests" />
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=()" />
     <meta property="og:title" content="Brandon Hann | Resume" />
     <meta
@@ -502,44 +502,6 @@
       </footer>
     </div>
 
-    <script>
-      document.getElementById('year').textContent = new Date().getFullYear();
-
-      async function forceDownload(url, filename) {
-        const response = await fetch(url, { cache: 'no-store' });
-        if (!response.ok) {
-          throw new Error('Download failed');
-        }
-        const blob = await response.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = blobUrl;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        URL.revokeObjectURL(blobUrl);
-      }
-
-      document.querySelectorAll('[data-force-download-pdf]').forEach((link) => {
-        link.addEventListener('click', (event) => {
-          event.preventDefault();
-          forceDownload(link.href, link.getAttribute('download') || 'Brandon-Hann-Resume.pdf').catch(() => {
-            window.location.href = link.href;
-          });
-        });
-      });
-
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.15 });
-
-      document.querySelectorAll('[data-reveal]').forEach((el) => observer.observe(el));
-    </script>
-  </body>
+    <script defer src="assets/js/site.js"></script>
+</body>
 </html>
