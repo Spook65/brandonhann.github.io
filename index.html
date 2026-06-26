@@ -1203,6 +1203,19 @@
       color: inherit;
     }
 
+    .project-copy a {
+      color: var(--text);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(58, 160, 255, 0.38);
+      transition: color var(--transition), border-color var(--transition);
+    }
+
+    .project-copy a:hover,
+    .project-copy a:focus-visible {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
     .project-bullets {
       list-style: none;
       display: flex;
@@ -2927,6 +2940,15 @@
               <div class="project-bus-card-title">Pokémon Classifier</div>
               <div class="project-bus-card-desc">GPU-accelerated ML pipeline for classifying Pokémon card images</div>
             </button>
+
+            <button class="project-bus-card" type="button" data-project-target="project-mapetite" data-bus-card>
+              <div class="project-bus-card-top">
+                <span class="project-bus-card-label">PROJECT 04</span>
+                <span class="project-bus-card-chip" aria-hidden="true"></span>
+              </div>
+              <div class="project-bus-card-title">Mapetite</div>
+              <div class="project-bus-card-desc">Full-stack restaurant discovery MVP with map search and provider fallback</div>
+            </button>
           </div>
         </div>
       </div>
@@ -3073,6 +3095,51 @@
             <span class="project-tag">CUDA</span>
             <span class="project-tag">Torchvision</span>
             <span class="project-tag">Nsight Systems</span>
+          </div>
+        </article>
+
+        <article id="project-mapetite" class="project-card reveal">
+          <div class="project-card-top">
+            <span class="project-card-label">PROJECT 04</span>
+            <div class="project-card-squares" aria-hidden="true">
+              <span class="project-card-square gray"></span>
+              <span class="project-card-square accent"></span>
+              <span class="project-card-square orange"></span>
+            </div>
+          </div>
+
+          <h3 class="project-card-title">Mapetite Restaurant Discovery</h3>
+          <p class="project-metric">Full-stack MVP demo with a Vercel frontend, Render API backend, and provider fallback for restaurant discovery</p>
+
+          <div class="project-copy">
+            <p>Mapetite is a restaurant discovery MVP that pairs a React, TypeScript, and Vite frontend with a Node and Express backend. The app is designed to make searching, filtering, and saving places feel like a small but complete product demo instead of a throwaway prototype.</p>
+            <p>I structured the backend so it prefers Geoapify for primary place data and falls back to OpenStreetMap and Overpass when coverage needs a second source. That lets the app keep returning useful results even when one provider is limited or incomplete.</p>
+            <p>The frontend is deployed on <a href="https://mapetite-nine.vercel.app" target="_blank" rel="noreferrer">mapetite-nine.vercel.app</a> and the API is deployed on <a href="https://mapetite-y04j.onrender.com" target="_blank" rel="noreferrer">mapetite-y04j.onrender.com</a>, with a health endpoint at <a href="https://mapetite-y04j.onrender.com/health" target="_blank" rel="noreferrer">/health</a> for quick checks. I also added demo auth, favorites, caching, CORS handling, and security headers so the deployment behaves more like a real app.</p>
+          </div>
+
+          <ul class="project-bullets">
+            <li>Built the frontend in React, TypeScript, and Vite around a product-style restaurant search and discovery flow.</li>
+            <li>Paired a Node and Express API with Geoapify primary lookups and OpenStreetMap plus Overpass fallback data.</li>
+            <li>Added demo auth, favorites, TTL caching, and deployment hardening so the MVP is easy to try and easier to extend.</li>
+          </ul>
+
+          <div class="project-actions">
+            <a class="project-button" href="https://mapetite-nine.vercel.app" target="_blank" rel="noreferrer">Live Demo</a>
+            <a class="project-button" href="https://github.com/Spook65/Mapetite" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="project-button" href="#project-mapetite">Technical Details</a>
+          </div>
+
+          <div class="project-tags">
+            <span class="project-tag">React</span>
+            <span class="project-tag">TypeScript</span>
+            <span class="project-tag">Vite</span>
+            <span class="project-tag">Node.js</span>
+            <span class="project-tag">Express</span>
+            <span class="project-tag">Geoapify</span>
+            <span class="project-tag">OpenStreetMap</span>
+            <span class="project-tag">Overpass</span>
+            <span class="project-tag">Vercel</span>
+            <span class="project-tag">Render</span>
           </div>
         </article>
       </div>

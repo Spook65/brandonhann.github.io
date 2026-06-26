@@ -465,13 +465,13 @@
       revealObserver.observe(element);
     });
 
-    if (projectsBusVisual && projectsBusGraph && projectsBusNode && projectBusCards.length >= 3) {
+    if (projectsBusVisual && projectsBusGraph && projectsBusNode && projectBusCards.length >= 4) {
       const updateProjectsBusGraph = () => {
         if (window.innerWidth <= 1280) return;
 
         const containerRect = projectsBusVisual.getBoundingClientRect();
         const nodeRect = projectsBusNode.getBoundingClientRect();
-        const cardRects = projectBusCards.slice(0, 3).map((card) => card.getBoundingClientRect());
+        const cardRects = projectBusCards.slice(0, 4).map((card) => card.getBoundingClientRect());
 
         if (cardRects.some((rect) => rect.width === 0 || rect.height === 0)) return;
 
@@ -483,9 +483,12 @@
         const cardLeft = Math.min(...cardRects.map((rect) => relX(rect.left)));
         const cardRight = Math.max(...cardRects.map((rect) => relX(rect.right)));
         const cardMidYs = cardRects.map((rect) => relY(rect.top + (rect.height * 0.5)));
-        const topY = Math.min(...cardMidYs);
-        const midY = cardMidYs[1] ?? cardMidYs[0];
-        const bottomY = Math.max(...cardMidYs);
+        const firstY = cardMidYs[0];
+        const secondY = cardMidYs[1] ?? cardMidYs[0];
+        const thirdY = cardMidYs[2] ?? cardMidYs[1] ?? cardMidYs[0];
+        const fourthY = cardMidYs[3] ?? cardMidYs[2] ?? cardMidYs[1] ?? cardMidYs[0];
+        const topY = Math.min(firstY, secondY, thirdY, fourthY);
+        const bottomY = Math.max(firstY, secondY, thirdY, fourthY);
         const gap = Math.max(cardLeft - nodeRight, 180);
         const forkX = nodeRight + Math.min(gap * 0.48, 170);
         const branchX = Math.min(cardLeft + 14, cardRight - 40);
@@ -506,14 +509,16 @@
           </defs>
           <path class="bus-wire bus-wire-base" d="M ${nodeRight} ${nodeMidY} H ${forkX}" />
           <path class="bus-wire bus-wire-base" d="M ${forkX} ${topY} V ${bottomY}" />
-          <path class="bus-wire bus-wire-base" d="M ${forkX} ${topY} H ${branchX}" />
-          <path class="bus-wire bus-wire-base" d="M ${forkX} ${midY} H ${branchX}" />
-          <path class="bus-wire bus-wire-base" d="M ${forkX} ${bottomY} H ${branchX}" />
+          <path class="bus-wire bus-wire-base" d="M ${forkX} ${firstY} H ${branchX}" />
+          <path class="bus-wire bus-wire-base" d="M ${forkX} ${secondY} H ${branchX}" />
+          <path class="bus-wire bus-wire-base" d="M ${forkX} ${thirdY} H ${branchX}" />
+          <path class="bus-wire bus-wire-base" d="M ${forkX} ${fourthY} H ${branchX}" />
           <path class="bus-wire bus-wire-flow" d="M ${nodeRight} ${nodeMidY} H ${forkX}" />
           <path class="bus-wire bus-wire-flow" d="M ${forkX} ${topY} V ${bottomY}" />
-          <path class="bus-wire bus-wire-flow" d="M ${forkX} ${topY} H ${branchX}" />
-          <path class="bus-wire bus-wire-flow" d="M ${forkX} ${midY} H ${branchX}" />
-          <path class="bus-wire bus-wire-flow" d="M ${forkX} ${bottomY} H ${branchX}" />
+          <path class="bus-wire bus-wire-flow" d="M ${forkX} ${firstY} H ${branchX}" />
+          <path class="bus-wire bus-wire-flow" d="M ${forkX} ${secondY} H ${branchX}" />
+          <path class="bus-wire bus-wire-flow" d="M ${forkX} ${thirdY} H ${branchX}" />
+          <path class="bus-wire bus-wire-flow" d="M ${forkX} ${fourthY} H ${branchX}" />
         `;
       };
 
