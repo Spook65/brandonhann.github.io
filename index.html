@@ -2947,7 +2947,7 @@
                 <span class="project-bus-card-chip" aria-hidden="true"></span>
               </div>
               <div class="project-bus-card-title">Mapetite</div>
-              <div class="project-bus-card-desc">Full-stack restaurant discovery MVP with map search and provider fallback</div>
+              <div class="project-bus-card-desc">Full-stack restaurant discovery app focused on data honesty, location validation, search quality, map UX, and production reliability</div>
             </button>
           </div>
         </div>
@@ -3109,18 +3109,18 @@
           </div>
 
           <h3 class="project-card-title">Mapetite Restaurant Discovery</h3>
-          <p class="project-metric">Full-stack MVP demo with a Vercel frontend, Render API backend, and provider fallback for restaurant discovery</p>
+          <p class="project-metric">Full-stack restaurant discovery app focused on data honesty, location validation, search quality, map UX, and production reliability</p>
 
           <div class="project-copy">
-            <p>Mapetite is a restaurant discovery MVP that pairs a React, TypeScript, and Vite frontend with a Node and Express backend. The app is designed to make searching, filtering, and saving places feel like a small but complete product demo instead of a throwaway prototype.</p>
-            <p>I structured the backend so it prefers Geoapify for primary place data and falls back to OpenStreetMap and Overpass when coverage needs a second source. That lets the app keep returning useful results even when one provider is limited or incomplete.</p>
-            <p>The frontend is deployed on <a href="https://mapetite-nine.vercel.app" target="_blank" rel="noreferrer">mapetite-nine.vercel.app</a> and the API is deployed on <a href="https://mapetite-y04j.onrender.com" target="_blank" rel="noreferrer">mapetite-y04j.onrender.com</a>, with a health endpoint at <a href="https://mapetite-y04j.onrender.com/health" target="_blank" rel="noreferrer">/health</a> for quick checks. I also added demo auth, favorites, caching, CORS handling, and security headers so the deployment behaves more like a real app.</p>
+            <p>Mapetite is a full-stack restaurant discovery app built with React, TypeScript, Node, Express, MapLibre, and Geoapify. I focused on keeping the search experience honest and responsive, so the app surfaces validated places instead of quietly folding in ambiguous results.</p>
+            <p>The backend performs generated place validation server-side across 152k+ places in 223 countries. I also designed city-scope logic so nearby municipalities are not silently treated as the target city, which keeps search results accurate and easier to trust.</p>
+            <p>On the map side, MapLibre powers search and detail maps with a stable camera lifecycle, custom pins, popup behavior, and Google Maps direction links. I added demo auth, saved places, media fallbacks, caching, production health checks, honest loading states for Render cold starts, and automated tests for validation, filters, directions, hours parsing, and media/data helpers.</p>
           </div>
 
           <ul class="project-bullets">
-            <li>Built the frontend in React, TypeScript, and Vite around a product-style restaurant search and discovery flow.</li>
-            <li>Paired a Node and Express API with Geoapify primary lookups and OpenStreetMap plus Overpass fallback data.</li>
-            <li>Added demo auth, favorites, TTL caching, and deployment hardening so the MVP is easy to try and easier to extend.</li>
+            <li>Built the frontend in React and TypeScript around honest restaurant search, map UX, and production reliability.</li>
+            <li>Implemented backend-only generated place validation across 152k+ places in 223 countries while preserving fake and ambiguous search blocking.</li>
+            <li>Added city-scope handling, MapLibre maps, demo auth, saved places, caching, health checks, and automated tests.</li>
           </ul>
 
           <div class="project-actions">
