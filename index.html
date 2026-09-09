@@ -3,15 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Computer Science portfolio focused on systems engineering, security, AI ethics, and measurable performance work." />
-  <meta name="theme-color" content="#0d0d0d" />
+  <meta name="description" content="Brandon Hann's Computer Science portfolio featuring secure full-stack systems, AI evaluation, cybersecurity research, and server-authoritative game development." />
+  <meta name="theme-color" content="#05070a" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; img-src 'self' data: https://github-contributions-api.jogruber.de https://github-contributions.vercel.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' https://cdn.jsdelivr.net; connect-src 'self' https://api.github.com https://github-contributions-api.jogruber.de https://github-contributions.vercel.app; frame-src 'self'; upgrade-insecure-requests" />
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=()" />
-  <meta property="og:title" content="Brandon Hann | Systems, Security, and Performance Portfolio" />
-  <meta property="og:description" content="Computer Science portfolio focused on systems engineering, security, AI ethics, and measurable performance work." />
-  <meta property="og:image" content="assets/social/og-image.png" />
-  <title>Portfolio</title>
+  <meta property="og:title" content="Brandon Hann | Software, Security, and Responsible AI" />
+  <meta property="og:description" content="Secure full-stack systems, AI evaluation, cybersecurity research, and server-authoritative game development." />
+  <meta property="og:image" content="https://spook65.github.io/brandonhann.github.io/brandon-about.jpg" />
+  <meta property="og:url" content="https://spook65.github.io/brandonhann.github.io/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Brandon Hann" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Brandon Hann | Software, Security, and Responsible AI" />
+  <meta name="twitter:description" content="Secure full-stack systems, AI evaluation, cybersecurity research, and server-authoritative game development." />
+  <meta name="twitter:image" content="https://spook65.github.io/brandonhann.github.io/brandon-about.jpg" />
+  <title>Brandon Hann | Software, Security, and Responsible AI</title>
+  <link rel="canonical" href="https://spook65.github.io/brandonhann.github.io/" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -33,6 +42,10 @@
       --radius: 12px;
       --radius-lg: 20px;
       --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --accent-cyan: #6ad8ff;
+      --accent-warm: #ff9654;
+      --panel-glass: rgba(11, 15, 20, 0.84);
+      --shadow-card: 0 24px 70px rgba(0, 0, 0, 0.28);
     }
 
     *,
@@ -963,6 +976,7 @@
     }
 
     .project-bus-card-title {
+      display: block;
       font-family: var(--font-display);
       font-size: clamp(1.02rem, 1.08vw, 1.18rem);
       font-weight: 700;
@@ -973,6 +987,7 @@
     }
 
     .project-bus-card-desc {
+      display: block;
       font-family: var(--font-mono);
       font-size: 12px;
       font-weight: 400;
@@ -2743,6 +2758,172 @@
         display: none;
       }
     }
+
+    /* LEGACY REFRESH — visual hierarchy and resilient interaction states. */
+    ::selection {
+      color: #04111d;
+      background: var(--accent-cyan);
+    }
+
+    .hero-focus-card,
+    .hero-focus-tile,
+    .about-card,
+    .project-card,
+    .skill-card,
+    .recognition-card,
+    .contact-card,
+    .resume-inner {
+      background:
+        radial-gradient(circle at 100% 0%, rgba(58, 160, 255, 0.07), transparent 34%),
+        linear-gradient(145deg, rgba(16, 22, 29, 0.96), var(--panel-glass));
+      box-shadow: var(--shadow-card);
+    }
+
+    .project-card,
+    .skill-card,
+    .about-card,
+    .recognition-card,
+    .contact-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .resume-inner {
+      padding: clamp(28px, 4vw, 48px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-lg);
+    }
+
+    .project-card::before,
+    .skill-card::before,
+    .about-card::before,
+    .recognition-card::before,
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      pointer-events: none;
+      background: linear-gradient(90deg, transparent, rgba(106, 216, 255, 0.45), transparent);
+      opacity: 0.52;
+    }
+
+    .hero-copy-column > .hero-label,
+    .about-inner > .about-label,
+    .projects-inner > .projects-label,
+    .skills-inner > .skills-label,
+    .resume-inner > .resume-label,
+    .beyond-inner > .beyond-label,
+    .contact-inner > .contact-label {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: fit-content;
+    }
+
+    .hero-copy-column > .hero-label::after,
+    .about-inner > .about-label::after,
+    .projects-inner > .projects-label::after,
+    .skills-inner > .skills-label::after,
+    .resume-inner > .resume-label::after,
+    .beyond-inner > .beyond-label::after,
+    .contact-inner > .contact-label::after {
+      content: '';
+      width: 42px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+    }
+
+    .hero-title,
+    .about-title,
+    .projects-title,
+    .skills-title,
+    .resume-title,
+    .beyond-title,
+    .contact-title {
+      text-wrap: balance;
+    }
+
+    .project-button,
+    .resume-button,
+    .hero-button,
+    .hero-pill,
+    .nav-github,
+    .skill-chip {
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .project-button:hover,
+    .resume-button:hover,
+    .hero-button:hover,
+    .hero-pill:hover {
+      box-shadow: 0 10px 28px rgba(58, 160, 255, 0.14);
+    }
+
+    .project-card:hover,
+    .skill-card:hover,
+    .about-card:hover,
+    .recognition-card:hover,
+    .contact-card:hover {
+      border-color: rgba(106, 216, 255, 0.28);
+    }
+
+    .project-card-title,
+    .project-bus-card-title,
+    .skill-card-title {
+      text-wrap: balance;
+    }
+
+    @media (min-width: 1200px) {
+      .skills-grid {
+        grid-auto-rows: 1fr;
+      }
+
+      .skill-card {
+        min-height: 390px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .resume-inner {
+        padding: 24px;
+      }
+
+      .hero-copy-column > .hero-label::after,
+      .about-inner > .about-label::after,
+      .projects-inner > .projects-label::after,
+      .skills-inner > .skills-label::after,
+      .resume-inner > .resume-label::after,
+      .beyond-inner > .beyond-label::after,
+      .contact-inner > .contact-label::after {
+        width: 28px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .reveal,
+      .project-card.reveal,
+      h2.split-heading .split-word {
+        opacity: 1;
+        transform: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -2752,7 +2933,7 @@
   <div id="scroll-progress" aria-hidden="true"></div>
   <div id="cursor" aria-hidden="true"></div>
   <div id="cursor-ring" aria-hidden="true"></div>
-  <nav id="navbar">
+  <nav id="navbar" aria-label="Primary navigation">
     <div class="nav-inner">
       <div class="nav-left">
         <a class="nav-brand" href="#hero" aria-label="Go to hero section">
@@ -2791,7 +2972,7 @@
       </button>
     </div>
   </nav>
-  <div class="nav-mobile-overlay" id="mobile-nav-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Mobile navigation menu">
+  <div class="nav-mobile-overlay" id="mobile-nav-overlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Mobile navigation menu" inert>
     <nav class="nav-mobile-links" aria-label="Mobile primary">
       <a class="nav-mobile-link" href="#about" data-mobile-nav-link>About</a>
       <a class="nav-mobile-link" href="#projects" data-mobile-nav-link>Projects</a>
@@ -2820,8 +3001,8 @@
         <div class="hero-quick-links hero-reveal" style="--delay: 0.5s;">
           <a class="hero-pill" href="#project-cuda-mandelbrot">View Cura</a>
           <a class="hero-pill" href="#project-systems-grid">Explore THREATGRID</a>
-          <a class="hero-pill" href="#project-performance-lab">Open Pokémon Classifier</a>
-          <a class="hero-pill" href="#projects">Browse Projects</a>
+          <a class="hero-pill" href="#project-performance-lab">Enter ODDWORKS</a>
+          <a class="hero-pill" href="#project-mapetite">Try Mapetite</a>
         </div>
       </div>
 
@@ -2886,11 +3067,11 @@
       </div>
     </div>
   </section>
-  <section id="projects" role="region" aria-label="Selected work across product design, security, and GPU systems">
+  <section id="projects" role="region" aria-label="Selected work across product design, security, and trustworthy systems">
     <div class="projects-inner">
       <p class="projects-label">PROJECTS</p>
-      <h2 class="projects-title">Selected work across product design, security, and GPU systems</h2>
-      <p class="projects-copy">Selected projects focused on culinary discovery, cybersecurity visualization, and GPU-accelerated machine learning.</p>
+      <h2 class="projects-title">Selected work across product design, security, and trustworthy systems</h2>
+      <p class="projects-copy">Selected projects focused on honest data, secure client-server boundaries, responsible AI, and production-ready interfaces.</p>
 
       <div class="projects-bus reveal">
         <div class="projects-bus-visual">
@@ -2915,39 +3096,39 @@
 
           <div class="projects-bus-stack" data-bus-stack>
             <button class="project-bus-card" type="button" data-project-target="project-cuda-mandelbrot" data-bus-card>
-              <div class="project-bus-card-top">
+              <span class="project-bus-card-top">
                 <span class="project-bus-card-label">PROJECT 01</span>
                 <span class="project-bus-card-chip" aria-hidden="true"></span>
-              </div>
-              <div class="project-bus-card-title">Cura</div>
-              <div class="project-bus-card-desc">AI medical voice assistant for symptom triage and scheduling</div>
+              </span>
+              <span class="project-bus-card-title">Cura</span>
+              <span class="project-bus-card-desc">AI medical voice assistant for symptom triage and scheduling</span>
             </button>
 
             <button class="project-bus-card" type="button" data-project-target="project-systems-grid" data-bus-card>
-              <div class="project-bus-card-top">
+              <span class="project-bus-card-top">
                 <span class="project-bus-card-label">PROJECT 02</span>
                 <span class="project-bus-card-chip" aria-hidden="true"></span>
-              </div>
-              <div class="project-bus-card-title">THREATGRID</div>
-              <div class="project-bus-card-desc">Cybersecurity intelligence dashboard concept with analyst-guided threat response</div>
+              </span>
+              <span class="project-bus-card-title">THREATGRID</span>
+              <span class="project-bus-card-desc">Cybersecurity intelligence dashboard concept with analyst-guided threat response</span>
             </button>
 
             <button class="project-bus-card" type="button" data-project-target="project-performance-lab" data-bus-card>
-              <div class="project-bus-card-top">
+              <span class="project-bus-card-top">
                 <span class="project-bus-card-label">PROJECT 03</span>
                 <span class="project-bus-card-chip" aria-hidden="true"></span>
-              </div>
-              <div class="project-bus-card-title">Pokémon Classifier</div>
-              <div class="project-bus-card-desc">GPU-accelerated ML pipeline for classifying Pokémon card images</div>
+              </span>
+              <span class="project-bus-card-title">ODDWORKS</span>
+              <span class="project-bus-card-desc">Server-authoritative Roblox workshop game built with Luau and Rojo</span>
             </button>
 
             <button class="project-bus-card" type="button" data-project-target="project-mapetite" data-bus-card>
-              <div class="project-bus-card-top">
+              <span class="project-bus-card-top">
                 <span class="project-bus-card-label">PROJECT 04</span>
                 <span class="project-bus-card-chip" aria-hidden="true"></span>
-              </div>
-              <div class="project-bus-card-title">Mapetite</div>
-              <div class="project-bus-card-desc">Full-stack restaurant discovery app focused on data honesty, location validation, search quality, map UX, and production reliability</div>
+              </span>
+              <span class="project-bus-card-title">Mapetite</span>
+              <span class="project-bus-card-desc">Full-stack restaurant discovery app focused on data honesty, location validation, search quality, map UX, and production reliability</span>
             </button>
           </div>
         </div>
@@ -3069,32 +3250,33 @@
             </div>
           </div>
 
-          <h3 class="project-card-title">GPU-Accelerated Pokémon Card Classifier</h3>
-          <p class="project-metric">199.871 s → 66.714 s after GPU and DataLoader throughput tuning</p>
+          <h3 class="project-card-title">ODDWORKS</h3>
+          <p class="project-metric">Server-authoritative multiplayer systems with bounded requests, rate limits, snapshots, and rollback safeguards</p>
 
           <div class="project-copy">
-            <p>I built this classifier as an end-to-end machine learning pipeline for Pokémon card images, with the goal of making the data path and training behavior easier to improve rather than just easier to run.</p>
-            <p>The project uses PyTorch, Torchvision, and CUDA so the GPU does the heavy lifting while the CPU stays focused on orchestration, preprocessing, and input pipeline work.</p>
-            <p>I also used profiling tools to reduce data-loading overhead and keep the training loop centered on throughput instead of hidden stalls.</p>
+            <p>ODDWORKS is a multiplayer Roblox social collection and workshop game I am building with Luau, Roblox Studio, Rojo, and a Git-first workflow. The current vertical slice centers on collecting Scrap, crafting Oddlings, displaying them in a personal workshop, producing Hype, and unlocking the next recipe.</p>
+            <p>I split authoritative gameplay into focused server services for player state, workshop ownership, salvage, crafting, and state replication. The client handles presentation and requests actions, while the server owns currency, inventory, unlocks, recipes, proximity checks, and every state mutation that matters.</p>
+            <p>The implementation treats malformed or repeated requests as normal threat cases. Crafting validates bounded recipe identifiers, affordability, ownership, and request rate before committing state, and it refunds resources if a later ownership write fails so partial transactions do not corrupt the session.</p>
           </div>
 
           <ul class="project-bullets">
-            <li>Collected card images asynchronously and organized them into training, validation, and test splits.</li>
-            <li>Normalized noisy labels to keep the supervised dataset consistent.</li>
-            <li>Tuned the input pipeline and GPU execution path to improve throughput instead of just raw model code.</li>
+            <li>Built modular Luau services for player state, plot assignment, salvage collection, crafting, and client-safe state snapshots.</li>
+            <li>Implemented server-authoritative validation, proximity checks, rate limiting, explicit result codes, and transaction rollback.</li>
+            <li>Defined a multiplayer-compatible vertical slice and production contracts for security, art direction, monetization, and asset provenance.</li>
           </ul>
 
           <div class="project-actions">
-            <a class="project-button" href="https://github.com/Spook65/pokemon-card-classifier" target="_blank" rel="noreferrer">GitHub</a>
-            <a class="project-button" href="#project-performance-lab">Technical Details</a>
+            <a class="project-button" href="https://github.com/Spook65/Oddworks" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="project-button" href="https://github.com/Spook65/Oddworks/blob/main/docs/VERTICAL_SLICE_PLAN.md" target="_blank" rel="noreferrer">Technical Plan</a>
           </div>
 
           <div class="project-tags">
-            <span class="project-tag">Python</span>
-            <span class="project-tag">PyTorch</span>
-            <span class="project-tag">CUDA</span>
-            <span class="project-tag">Torchvision</span>
-            <span class="project-tag">Nsight Systems</span>
+            <span class="project-tag">Luau</span>
+            <span class="project-tag">Roblox Studio</span>
+            <span class="project-tag">Rojo</span>
+            <span class="project-tag">Client-server architecture</span>
+            <span class="project-tag">Secure validation</span>
+            <span class="project-tag">State replication</span>
           </div>
         </article>
 
@@ -3145,11 +3327,11 @@
       </div>
     </div>
   </section>
-  <section id="skills" role="region" aria-label="Core tools for systems, ML, and security work.">
+  <section id="skills" role="region" aria-label="Core tools for software, AI, and security work.">
     <div class="skills-inner">
       <p class="skills-label">SKILLS</p>
-      <h2 class="skills-title">Core tools for systems, ML, and security work.</h2>
-      <p class="skills-copy">I focus on tools that help me measure behavior, tighten bottlenecks, and build software that holds up under real-world load.</p>
+      <h2 class="skills-title">Core tools for software, AI, and security work.</h2>
+      <p class="skills-copy">I use these tools to validate data, secure system boundaries, evaluate model behavior, and ship software that stays understandable under real-world use.</p>
 
       <div class="skills-grid">
         <article class="skill-card reveal">
@@ -3158,6 +3340,7 @@
             <li class="skill-chip">Python</li>
             <li class="skill-chip">JavaScript</li>
             <li class="skill-chip">TypeScript</li>
+            <li class="skill-chip">Luau</li>
             <li class="skill-chip">C++</li>
             <li class="skill-chip">Java</li>
             <li class="skill-chip">React</li>
@@ -3169,43 +3352,42 @@
         </article>
 
         <article class="skill-card reveal">
-          <div class="skill-card-title">Systems / Performance</div>
-          <ul class="skill-chip-list" aria-label="Systems and performance tools">
-            <li class="skill-chip">Parallel Computing</li>
+          <div class="skill-card-title">Systems / Reliability</div>
+          <ul class="skill-chip-list" aria-label="Systems and reliability tools">
+            <li class="skill-chip">Server authority</li>
+            <li class="skill-chip">State replication</li>
+            <li class="skill-chip">Input validation</li>
+            <li class="skill-chip">Rate limiting</li>
+            <li class="skill-chip">Rollback logic</li>
             <li class="skill-chip">Profiling</li>
             <li class="skill-chip">Benchmarking</li>
-            <li class="skill-chip">CUDA (foundational)</li>
-            <li class="skill-chip">GPU Computing (conceptual)</li>
-            <li class="skill-chip">Performance Optimization</li>
-            <li class="skill-chip">Memory & Runtime Analysis</li>
           </ul>
         </article>
 
         <article class="skill-card reveal">
           <div class="skill-card-title">AI / Machine Learning</div>
           <ul class="skill-chip-list" aria-label="Machine learning and data tools">
-            <li class="skill-chip">PyTorch</li>
             <li class="skill-chip">scikit-learn</li>
             <li class="skill-chip">NumPy</li>
             <li class="skill-chip">pandas</li>
-            <li class="skill-chip">Model Evaluation</li>
-            <li class="skill-chip">Data pipelines</li>
-            <li class="skill-chip">Featuring Engineering</li>
+            <li class="skill-chip">AI evaluation</li>
+            <li class="skill-chip">Data quality</li>
+            <li class="skill-chip">Research verification</li>
             <li class="skill-chip">AI Ethics</li>
             <li class="skill-chip">Privacy</li>
             <li class="skill-chip">Fairness</li>
-            <li class="skill-chip">Responsible AI Systems</li>
+            <li class="skill-chip">Responsible AI</li>
           </ul>
         </article>
 
         <article class="skill-card reveal">
           <div class="skill-card-title">Security / Cybersecurity</div>
-          <ul class="skill-chip-list" aria-label="Multiplayer and runtime tools">
+          <ul class="skill-chip-list" aria-label="Security and cybersecurity skills">
             <li class="skill-chip">Secure Coding Practices</li>
             <li class="skill-chip">API Security</li>
             <li class="skill-chip">Threat Awareness</li>
-            <li class="skill-chip">Basic Penetration Concepts</li>
-            <li class="skill-chip">AI Safety & Compliance</li>
+            <li class="skill-chip">Client trust boundaries</li>
+            <li class="skill-chip">AI Safety &amp; Compliance</li>
           </ul>
         </article>
 
@@ -3214,10 +3396,13 @@
           <ul class="skill-chip-list" aria-label="Supporting tools">
             <li class="skill-chip">Git</li>
             <li class="skill-chip">GitHub</li>
-            <li class="skill-chip">Github Actions</li>
-            <li class="skill-chip">Debugging & Testing</li>
-            <li class="skill-chip">Agile Development</li>
-            <li class="skill-chip">Version Control Workflows</li>
+            <li class="skill-chip">GitHub Actions</li>
+            <li class="skill-chip">Roblox Studio</li>
+            <li class="skill-chip">Rojo</li>
+            <li class="skill-chip">MapLibre</li>
+            <li class="skill-chip">Vite</li>
+            <li class="skill-chip">Debugging &amp; Testing</li>
+            <li class="skill-chip">Full-stack development</li>
           </ul>
         </article>
       </div>

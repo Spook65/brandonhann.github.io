@@ -22,7 +22,7 @@
     document.body.appendChild(link);
     link.click();
     link.remove();
-    URL.revokeObjectURL(blobUrl);
+    window.setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
   }
 
   function setupLoadedState() {
@@ -263,6 +263,7 @@
       if (!navToggle || !mobileNavOverlay) return;
       mobileNavOverlay.classList.remove('open');
       mobileNavOverlay.setAttribute('aria-hidden', 'true');
+      mobileNavOverlay.inert = true;
       navToggle.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
     };
@@ -271,6 +272,7 @@
       if (!navToggle || !mobileNavOverlay) return;
       mobileNavOverlay.classList.add('open');
       mobileNavOverlay.setAttribute('aria-hidden', 'false');
+      mobileNavOverlay.inert = false;
       navToggle.setAttribute('aria-expanded', 'true');
       document.body.style.overflow = 'hidden';
     };
@@ -333,7 +335,7 @@
       if (!sections.length || !navbar) return;
 
       const navbarHeight = navbar.getBoundingClientRect().height;
-      const anchorY = Math.min(Math.max(window.innerHeight * 0.33, navbarHeight + 12), window.innerHeight * 0.5);
+      const anchorY = Math.min(Math.max(window.innerHeight * 0.2, navbarHeight + 12), window.innerHeight * 0.35);
       const viewportY = window.scrollY + anchorY;
       const reachedPageBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
 
