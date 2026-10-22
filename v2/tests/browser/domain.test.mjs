@@ -4,7 +4,7 @@ import { chromium } from 'playwright';
 
 const site = process.env.PORTFOLIO_PREVIEW_URL ?? 'http://127.0.0.1:4173/brandonhann.github.io/';
 
-test('entrance, dialogue, relic, domain destinations, and direct links work', async () => {
+test('entrance, dialogue, connected domain destinations, and direct links work', async () => {
   const browser = await chromium.launch();
   try {
     for (const width of [390, 1440]) {
@@ -17,9 +17,9 @@ test('entrance, dialogue, relic, domain destinations, and direct links work', as
       await page.getByRole('button', { name: 'Continue →' }).click();
       assert.ok(await page.getByText(/I’m Brandon. I build things/).isVisible());
       await page.getByRole('button', { name: 'Skip dialogue' }).click();
-      await page.getByRole('button', { name: /Activate the engraved relic/ }).click();
       await page.getByRole('heading', { name: /The Builder’s Domain/ }).waitFor();
       await page.getByRole('button', { name: /Project Archives/ }).click();
+      assert.equal(await page.locator('#core [data-route="archives"] path').last().getAttribute('stroke'), '#e5a95d');
       const archive = await page.locator('#destination-panel').innerText();
       for (const name of ['Cura', 'Mapetite', 'ODDWORKS']) assert.ok(archive.includes(name));
       await page.getByRole('button', { name: /Signal/ }).click();
@@ -41,7 +41,7 @@ test('skip and reduced motion reveal content without animation', async () => {
     await page.getByRole('button', { name: /Return to Guardian/ }).click();
     await page.getByRole('button', { name: /Enter through the Guardian/ }).click();
     assert.ok(await page.getByRole('heading', { name: /The human inside/ }).isVisible());
-    await page.getByRole('button', { name: /Activate the engraved relic/ }).click();
+    await page.getByRole('button', { name: 'Skip dialogue' }).click();
     assert.ok(await page.getByRole('heading', { name: /The Builder’s Domain/ }).isVisible());
     await page.close();
   } finally { await browser.close(); }

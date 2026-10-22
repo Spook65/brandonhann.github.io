@@ -85,24 +85,38 @@
 }
 
 .guardianScene {
-  background: radial-gradient(circle at 50% 30%, #69513a, #11191a 70%);
+  --mouth-shift: -19vh;
+  background: #080f13;
 }
 
 .sceneHidden {
   display: none;
 }
 
-.guardianArt,
-.chamberArt {
+.coreArt {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
 }
 
-.guardianArt {
-  object-position: center 47%;
+.guardianCamera {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 69%;
+  will-change: transform, opacity;
+}
+
+.layeredGuardian {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.layeredGuardian svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .guardianShade {
@@ -127,8 +141,8 @@
   position: absolute;
   z-index: 3;
   left: clamp(1.25rem, 5vw, 5.5rem);
-  bottom: clamp(7rem, 14vh, 11rem);
-  width: min(36vw, 35rem);
+  bottom: clamp(6rem, 12vh, 9rem);
+  width: min(30vw, 31rem);
 }
 
 .kicker {
@@ -165,7 +179,7 @@
 .heroTitle {
   margin: 0;
   color: var(--color-ivory);
-  font-size: clamp(4.1rem, 7vw, 8.3rem);
+  font-size: clamp(3.8rem, 6.2vw, 7.2rem);
   line-height: 0.95;
   text-shadow: 0 3px 25px #000;
 }
@@ -182,50 +196,29 @@
 .mouthControl {
   position: absolute;
   z-index: 5;
-  top: 55%;
+  top: 69%;
   left: 50%;
   display: grid;
   justify-items: center;
   transform: translate(-50%, -50%);
 }
 
-.mouthVoid {
-  position: absolute;
-  inset: -2rem -2.8rem auto;
-  width: 15rem;
-  height: 12rem;
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse at center,
-    #050708 12%,
-    rgba(5, 7, 8, 0.95) 47%,
-    transparent 73%
-  );
-  opacity: 0.65;
-  pointer-events: none;
-  transition:
-    transform 0.45s,
-    opacity 0.45s;
-}
-
 .enterButton {
   position: relative;
   display: grid;
   place-items: center;
-  width: 9.4rem;
-  height: 7.2rem;
-  padding: 1rem;
+  min-width: 8rem;
+  min-height: 3rem;
+  padding: 0.5rem 1.2rem;
   border: 1px solid rgba(245, 212, 163, 0.8);
-  border-radius: 50%;
+  border-radius: 0.35rem;
   background: rgba(7, 10, 11, 0.78);
   color: var(--color-ivory);
   cursor: pointer;
   font-size: 1.18rem;
   font-weight: 700;
   line-height: 1.1;
-  box-shadow:
-    0 0 0 0.55rem rgba(10, 14, 15, 0.35),
-    0 0 35px #050607;
+  box-shadow: 0 0 18px #050607;
   transition:
     transform 0.2s,
     background 0.2s,
@@ -233,7 +226,7 @@
 }
 
 .enterButton span {
-  display: block;
+  display: inline;
   color: var(--color-amber);
 }
 
@@ -241,9 +234,7 @@
 .enterButton:focus-visible {
   transform: scale(1.04);
   background: #352719;
-  box-shadow:
-    0 0 0 0.55rem rgba(233, 173, 99, 0.2),
-    0 0 48px #050607;
+  box-shadow: 0 0 0 0.25rem rgba(233, 173, 99, 0.2);
 }
 
 .enterButton:disabled {
@@ -251,7 +242,7 @@
 }
 
 .mouthCaption {
-  margin-top: 1.4rem;
+  margin-top: 0.55rem;
   max-width: 14rem;
   color: #f6e7c9;
   font-size: 0.82rem;
@@ -289,76 +280,13 @@
   color: var(--color-cyan);
 }
 
-.guardianEntering .mouthVoid {
-  animation: mouthOpen 1.05s ease-in forwards;
-}
-
-.guardianEntering .guardianArt {
-  animation: guardianApproach 1.05s ease-in forwards;
-}
-
-.guardianEntering .enterButton,
-.guardianEntering .heroCopy,
-.guardianEntering .heroBottom {
-  animation: fadeAway 0.5s ease-in forwards;
-}
-
-@keyframes mouthOpen {
-  0% {
-    transform: scale(1, 0.35);
-    opacity: 0.3;
-  }
-  40% {
-    transform: scale(1.35, 1);
-    opacity: 0.95;
-  }
-  100% {
-    transform: scale(13);
-    opacity: 1;
-  }
-}
-
-@keyframes guardianApproach {
-  to {
-    transform: scale(1.09);
-  }
-}
-
-@keyframes fadeAway {
-  to {
-    opacity: 0;
-  }
-}
-
 .chamberScene {
   display: none;
-  background: radial-gradient(circle at 50% 25%, #745b3e, #101719 68%);
-}
-
-.chamberVisible,
-.chamberEntering {
-  display: block;
-}
-
-.chamberEntering {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  clip-path: ellipse(0 0 at 50% 55%);
-  animation: portalReveal 1.05s ease-out forwards;
+  background: #0b1115;
 }
 
 .chamberVisible {
-  clip-path: none;
-}
-
-.chamberPicture {
-  position: absolute;
-  inset: 0;
-}
-
-.chamberArt {
-  object-position: center center;
+  display: block;
 }
 
 .chamberShade {
@@ -367,113 +295,22 @@
   background:
     linear-gradient(
       90deg,
-      rgba(7, 10, 12, 0.82),
-      rgba(7, 10, 12, 0.14) 44%,
-      rgba(7, 10, 12, 0.68)
+      rgba(7, 10, 12, 0.72),
+      rgba(7, 10, 12, 0.03) 45%,
+      rgba(7, 10, 12, 0.44)
     ),
-    linear-gradient(0deg, rgba(7, 10, 12, 0.78), transparent 55%);
-  transition: background 0.6s;
+    linear-gradient(0deg, rgba(7, 10, 12, 0.36), transparent 55%);
 }
 
 .domainAwake .chamberShade {
   background:
     linear-gradient(
       90deg,
-      rgba(7, 10, 12, 0.84),
-      rgba(7, 10, 12, 0.52) 50%,
-      rgba(7, 10, 12, 0.88)
+      rgba(7, 10, 12, 0.56),
+      rgba(7, 10, 12, 0.02) 50%,
+      rgba(7, 10, 12, 0.58)
     ),
-    linear-gradient(0deg, rgba(7, 10, 12, 0.88), rgba(7, 10, 12, 0.15) 78%);
-}
-
-@keyframes portalReveal {
-  0% {
-    clip-path: ellipse(0 0 at 50% 55%);
-  }
-  28% {
-    clip-path: ellipse(8% 4% at 50% 55%);
-  }
-  100% {
-    clip-path: ellipse(150% 150% at 50% 55%);
-  }
-}
-
-.seams {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  pointer-events: none;
-  filter: drop-shadow(0 0 9px var(--color-cyan));
-  transition: opacity 0.5s;
-}
-
-.seams path {
-  fill: none;
-  stroke: var(--color-cyan);
-  stroke-width: 2;
-  stroke-dasharray: 110 140;
-  stroke-opacity: 0.72;
-}
-
-.awakening .seams {
-  animation: lightSeams 0.82s ease-in forwards;
-}
-
-.domainAwake .seams {
-  opacity: 0.36;
-}
-
-@keyframes lightSeams {
-  0% {
-    opacity: 0;
-    clip-path: inset(100% 0 0);
-  }
-  35% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 0.4;
-    clip-path: inset(0);
-  }
-}
-
-.humanGround {
-  position: absolute;
-  z-index: 2;
-  left: 50%;
-  bottom: 4%;
-  width: min(25vw, 22rem);
-  height: 3.5rem;
-  border-radius: 50%;
-  background: #050708;
-  filter: blur(16px);
-  transform: translateX(-50%);
-}
-
-.humanArt {
-  position: absolute;
-  z-index: 2;
-  left: 50%;
-  bottom: 5%;
-  width: clamp(10rem, 17vw, 16rem);
-  max-height: 52%;
-  object-fit: contain;
-  transform: translateX(-50%);
-  filter: sepia(0.17) brightness(0.8) drop-shadow(0 14px 16px #050607);
-  transition:
-    transform 0.8s,
-    filter 0.8s;
-}
-
-.awakening .humanArt {
-  transform: translateX(-50%) scale(1.035);
-  filter: sepia(0.25) brightness(1.04) drop-shadow(0 10px 28px #050607);
-}
-
-.domainAwake .humanArt {
-  filter: sepia(0.12) brightness(0.88) drop-shadow(0 10px 20px #050607);
+    linear-gradient(0deg, rgba(7, 10, 12, 0.46), rgba(7, 10, 12, 0.04) 78%);
 }
 
 .humanIntro {
@@ -523,8 +360,7 @@
   flex-wrap: wrap;
 }
 
-.dialogueActions button,
-.awakeningCopy button {
+.dialogueActions button {
   border: 0;
   background: none;
   color: var(--color-cyan);
@@ -542,75 +378,6 @@
   text-decoration: none;
 }
 
-.humanPrompt {
-  max-width: 28rem;
-  padding: 1rem 1.3rem;
-  border-left: 2px solid var(--color-amber);
-  background: rgba(8, 12, 13, 0.82);
-  font-size: 1.2rem;
-}
-
-.relic {
-  position: absolute;
-  z-index: 5;
-  right: clamp(1.25rem, 9vw, 9rem);
-  bottom: clamp(3rem, 12vh, 8rem);
-  display: grid;
-  justify-items: center;
-  gap: 0.3rem;
-  width: 10rem;
-  min-height: 11rem;
-  padding: 1rem;
-  border: 1px solid #d6b478;
-  border-radius: 5rem 5rem 0.8rem 0.8rem;
-  background: linear-gradient(145deg, #594b35, #181f20 55%, #403626);
-  box-shadow:
-    inset 0 0 0 4px #171c1d,
-    inset 0 0 0 5px #987448,
-    0 10px 35px #030506;
-  color: var(--color-ivory);
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.relic:hover,
-.relic:focus-visible {
-  box-shadow:
-    0 0 0 5px rgba(233, 173, 99, 0.18),
-    0 0 40px rgba(233, 173, 99, 0.4),
-    inset 0 0 0 4px #171c1d;
-}
-
-.relicMark {
-  display: grid;
-  place-items: center;
-  width: 4rem;
-  height: 4rem;
-  border: 1px solid #d9b979;
-  border-radius: 50%;
-  color: var(--color-amber);
-  font-family: var(--font-display);
-  font-size: 3rem;
-  line-height: 1;
-}
-
-.awakeningCopy {
-  position: absolute;
-  z-index: 8;
-  inset: 0;
-  display: grid;
-  place-content: center;
-  justify-items: center;
-  gap: 1rem;
-  background: radial-gradient(
-    circle,
-    rgba(146, 104, 50, 0.2),
-    rgba(6, 12, 14, 0.7)
-  );
-  color: var(--color-ivory);
-  font: 600 clamp(2rem, 5vw, 4rem) var(--font-display);
-  text-align: center;
-}
 
 .domainInterface {
   position: relative;
@@ -644,13 +411,14 @@
 
 .domainLayout {
   display: grid;
-  grid-template-columns: minmax(16rem, 0.8fr) minmax(20rem, 1.2fr);
+  grid-template-columns: minmax(15rem, 19rem) minmax(5rem, 1fr) minmax(21rem, 30rem);
   gap: clamp(1rem, 2vw, 2rem);
   align-items: start;
 }
 
 .destinationList {
   display: grid;
+  grid-column: 1;
   gap: 0.45rem;
 }
 
@@ -708,6 +476,7 @@
 }
 
 .destinationPanel {
+  grid-column: 3;
   min-width: 0;
   min-height: 27rem;
   max-height: 33rem;
@@ -920,6 +689,9 @@
     grid-template-columns: minmax(14rem, 0.8fr) minmax(16rem, 1.2fr);
   }
   .destinationPanel {
+    grid-column: 2;
+  }
+  .destinationPanel {
     max-height: 35rem;
   }
 }
@@ -941,10 +713,11 @@
     padding: 0.25rem 0;
   }
   .guardianScene {
+    --mouth-shift: -10vh;
     min-height: max(100svh, 44rem);
   }
-  .guardianArt {
-    object-position: 50% center;
+  .guardianCamera {
+    transform-origin: 50% 60%;
   }
   .guardianShade {
     background:
@@ -959,11 +732,11 @@
   .heroCopy {
     left: 1.2rem;
     right: 1.2rem;
-    bottom: 6.3rem;
+    bottom: 4.5rem;
     width: auto;
   }
   .heroTitle {
-    font-size: clamp(3.8rem, 15vw, 5.7rem);
+    font-size: clamp(3.5rem, 13vw, 4.8rem);
   }
   .heroLead {
     max-width: 19rem;
@@ -979,16 +752,11 @@
     width: 1rem;
   }
   .mouthControl {
-    top: 50%;
-  }
-  .mouthVoid {
-    width: 11rem;
-    height: 8rem;
-    inset: -1.2rem -2rem auto;
+    top: 60%;
   }
   .enterButton {
-    width: 7.2rem;
-    height: 5.8rem;
+    min-width: 7.2rem;
+    min-height: 3rem;
     font-size: 1rem;
   }
   .mouthCaption {
@@ -1021,18 +789,9 @@
       rgba(7, 10, 12, 0.35)
     );
   }
-  .humanArt {
-    width: clamp(8rem, 30vw, 11rem);
-    bottom: 43%;
-    max-height: 32%;
-  }
-  .humanGround {
-    bottom: 42%;
-    width: 9rem;
-  }
   .humanIntro {
     margin: 0 1.2rem;
-    padding-top: clamp(17rem, 39vh, 22rem);
+    padding-top: 7rem;
     max-width: none;
   }
   .humanIntro h2 {
@@ -1044,23 +803,6 @@
   }
   .dialogue p {
     font-size: 1.12rem;
-  }
-  .relic {
-    right: 1.1rem;
-    bottom: 1.4rem;
-    width: 7.4rem;
-    min-height: 7.8rem;
-    padding: 0.5rem;
-    font-size: 0.86rem;
-  }
-  .relicMark {
-    width: 3.2rem;
-    height: 3.2rem;
-    font-size: 2.4rem;
-  }
-  .humanPrompt {
-    max-width: calc(100% - 8.5rem);
-    font-size: 1rem;
   }
   .domainInterface {
     width: min(100% - 2rem, 36rem);
@@ -1074,6 +816,10 @@
   }
   .domainLayout {
     display: block;
+  }
+  .destinationList,
+  .destinationPanel {
+    grid-column: auto;
   }
   .destinationList {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1132,9 +878,6 @@
   .dialogueActions {
     gap: 0.7rem;
   }
-  .relic {
-    width: 6.8rem;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1143,9 +886,6 @@
   *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
-  }
-  .chamberEntering {
-    clip-path: none;
   }
   .destinationList button:hover {
     transform: none;

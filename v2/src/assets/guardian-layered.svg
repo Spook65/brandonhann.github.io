@@ -1,0 +1,42 @@
+<svg viewBox="0 0 900 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Original hinged guardian concept" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="backGlow"><stop stop-color="#48534a"/><stop offset=".5" stop-color="#18292b"/><stop offset="1" stop-color="#060c0f"/></radialGradient>
+      <linearGradient id="shell" x2="1" y2="1"><stop stop-color="#46545a"/><stop offset=".35" stop-color="#182329"/><stop offset=".7" stop-color="#26343a"/><stop offset="1" stop-color="#0b1318"/></linearGradient>
+      <linearGradient id="jaw" y2="1" x2=".6"><stop stop-color="#536066"/><stop offset=".4" stop-color="#202b30"/><stop offset="1" stop-color="#0b141a"/></linearGradient>
+      <radialGradient id="eye"><stop stop-color="#ffe2a2"/><stop offset=".34" stop-color="#e5a95d"/><stop offset="1" stop-color="#744520"/></radialGradient>
+      <filter id="glow"><feGaussianBlur stdDeviation="9"/></filter>
+      <pattern id="hatch" width="11" height="11" patternUnits="userSpaceOnUse" patternTransform="rotate(28)"><path d="M0 0V11" stroke="#a6bbb8" stroke-opacity=".10" stroke-width="2"/></pattern>
+    </defs>
+    <rect width="900" height="900" fill="url(#backGlow)"/>
+    <g opacity=".4" stroke="#75bdc5" stroke-width="2" fill="none"><path d="M90 900V170L212 98M810 900V170L688 98M120 740l130-92M780 740L650 648"/><path d="M65 900V560M835 900V560" stroke-dasharray="6 13"/></g>
+    <path d="M30 900q80-210 230-230h380q150 20 230 230" fill="#0b151b" stroke="#4b5555" stroke-width="8"/>
+    <g data-layer="upper-face">
+    <path d="M165 215Q175 58 450 23q275 35 285 192l-26 310q-40 106-130 152H321q-90-46-130-152z" fill="#071015" stroke="#616963" stroke-width="10"/>
+    <path d="M217 247Q250 86 450 69q200 17 233 178l-22 232-74 82H313l-74-82z" fill="url(#shell)" stroke="#8c8978" stroke-width="5"/>
+    <path d="M217 247Q250 86 450 69q200 17 233 178l-22 232-74 82H313l-74-82z" fill="url(#hatch)"/>
+    <path d="M289 134 450 66l161 68-41 98H330z" fill="#344147" stroke="#81908c" stroke-width="5"/>
+    <path d="M345 159 450 115l105 44-22 39H367z" fill="#111d23" stroke="#9a8f72" stroke-width="3"/>
+    <path d="M450 99v347M336 210 251 313l19 153M564 210l85 103-19 153" stroke="#75bdc5" stroke-opacity=".7" stroke-width="5" fill="none"/>
+    <path d="M259 306q65-45 146-10l-26 59-103-4zM641 306q-65-45-146-10l26 59 103-4z" fill="#071014" stroke="#82908c" stroke-width="6"/>
+    <ellipse cx="337" cy="326" rx="46" ry="15" fill="url(#eye)" filter="url(#glow)" opacity=".8"/><ellipse cx="563" cy="326" rx="46" ry="15" fill="url(#eye)" filter="url(#glow)" opacity=".8"/>
+    <path d="M289 329q49-20 95 0l-17 14h-61zM611 329q-49-20-95 0l17 14h61z" fill="url(#eye)"/>
+    <path d="M325 330h24M551 330h24" stroke="#071014" stroke-width="5"/>
+    <path d="M405 342 450 293l45 49-12 97-33 30-33-30z" fill="#2e3c40" stroke="#8b958c" stroke-width="4"/>
+    <path d="M398 453q52 28 104 0l-14 37h-76z" fill="#10191d" stroke="#778583" stroke-width="4"/>
+    <path d="M277 495q173-43 346 0l19 45q-176 35-384 0z" fill="#2a363b" stroke="#a59a80" stroke-width="5"/>
+    <path d="M297 527q153-19 306 0" fill="none" stroke="#d9c5a1" stroke-width="6"/>
+    <g data-layer="upper-teeth" fill="#ddd5bf"><path d="M313 531h26l-9 28zM353 527h26l-9 31zM393 525h26l-9 34zM433 523h34l-17 37zM481 525h26l-9 34zM521 527h26l-9 31zM561 531h26l-9 28z"/></g>
+    </g>
+    <g data-layer="mouth-cavity"><path d="M269 545q181-44 362 0l-15 162q-166 100-332 0z" fill="#020608" stroke="#6b6658" stroke-width="5"/><path d="M330 595q120-55 240 0l-26 85q-94 32-188 0z" fill="#132128"/><path d="M363 617q87-35 174 0" fill="none" stroke="#e5a95d" stroke-opacity=".5" stroke-width="4"/></g>
+    <g data-layer="left-rod"><line x1="255" y1="510" x2="285" y2="605" stroke="#0a1317" stroke-width="25"/><line x1="255" y1="510" x2="285" y2="605" stroke="#9c9073" stroke-width="7"/></g>
+    <g data-layer="right-rod"><line x1="645" y1="510" x2="615" y2="605" stroke="#0a1317" stroke-width="25"/><line x1="645" y1="510" x2="615" y2="605" stroke="#9c9073" stroke-width="7"/></g>
+    <g data-layer="lower-jaw">
+      <path d="M274 542q176 40 352 0l-22 154q-52 87-154 119-102-32-154-119z" fill="url(#jaw)" stroke="#a59a80" stroke-width="7"/>
+      <path d="M289 551q161 43 322 0M318 682q132 78 264 0" fill="none" stroke="#678d8f" stroke-opacity=".8" stroke-width="4"/>
+      <path d="M345 607 450 655l105-48-23 96-82 48-82-48z" fill="#16252b" stroke="#8e978b" stroke-width="4"/>
+      <path d="M450 665v70" stroke="#e5a95d" stroke-width="4"/>
+      <g data-layer="lower-teeth" fill="#d4c7ab"><path d="M319 550h27l-13-24zM359 560h27l-13-27zM399 568h27l-13-30zM437 571h27l-13-34zM477 568h27l-13-30zM517 560h27l-13-27zM557 550h27l-13-24z"/></g>
+    </g>
+    <g data-layer="hinge-sockets"><circle cx="255" cy="510" r="38" fill="#111c21" stroke="#9d8d69" stroke-width="8"/><circle cx="645" cy="510" r="38" fill="#111c21" stroke="#9d8d69" stroke-width="8"/><circle cx="255" cy="510" r="15" fill="#e5a95d"/><circle cx="645" cy="510" r="15" fill="#e5a95d"/><g data-layer="left-hinge-pin"><path d="M255 479v14" stroke="#d9c7a8" stroke-width="5"/></g><g data-layer="right-hinge-pin"><path d="M645 479v14" stroke="#d9c7a8" stroke-width="5"/></g></g>
+    <g data-layer="scale-figure" fill="#03080a"><circle cx="450" cy="859" r="7"/><path d="M446 866h8l9 24h-6l-7-14-7 14h-6z"/></g>
+  </svg>

@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import guardianArt from "./assets/guardian-encounter.webp";
-import chamberArt from "./assets/human-core-chamber.webp";
-import mobileChamberArt from "./assets/human-core-chamber-mobile.webp";
-import humanArt from "./assets/human-silhouette.webp";
+import { EntranceJourney, JOURNEY_MS } from "./EntranceJourney";
+import { NeuralCore } from "./NeuralCore";
 import {
   destinations,
   profile,
@@ -12,6 +10,7 @@ import {
 } from "./data/domain";
 import { projects } from "./data/projects";
 import { legacyAnchors } from "./data/legacyAnchors";
+import { LayeredGuardian } from "./LayeredGuardian";
 import styles from "./App.module.css";
 
 const base = import.meta.env.BASE_URL;
@@ -20,7 +19,7 @@ const dialogue = [
   "I’m Brandon. I build things, break things, and figure out why they broke.",
   "There’s more to this place than meets the eye. Want to see?",
 ] as const;
-type Scene = "guardian" | "entering" | "human" | "awakening" | "domain";
+type Scene = "guardian" | "entering" | "human" | "domain";
 
 function Out({ href, children }: { href: string; children: React.ReactNode }) {
   return (
@@ -141,14 +140,13 @@ function DomainPanel({ selected }: { selected: DestinationId }) {
 function App() {
   const [scene, setScene] = useState<Scene>("guardian");
   const [line, setLine] = useState(0);
-  const [dialogueDone, setDialogueDone] = useState(false);
   const [selected, setSelected] = useState<DestinationId>("quest");
-  const [guardianFailed, setGuardianFailed] = useState(false);
-  const [chamberFailed, setChamberFailed] = useState(false);
+  const [jawProgress, setJawProgress] = useState(0);
+  const [jawAlert, setJawAlert] = useState(false);
+  const [journeyElapsed, setJourneyElapsed] = useState(0);
   const enterRef = useRef<HTMLButtonElement>(null);
   const humanTitleRef = useRef<HTMLHeadingElement>(null);
   const domainTitleRef = useRef<HTMLHeadingElement>(null);
-  const relicRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const navigateHash = () => {
@@ -165,23 +163,29 @@ function App() {
     return () => window.removeEventListener("hashchange", navigateHash);
   }, []);
   useEffect(() => {
-    if (scene !== "entering" && scene !== "awakening") return;
-    const next: Scene = scene === "entering" ? "human" : "domain";
-    const timer = window.setTimeout(
-      () => setScene(next),
-      scene === "entering" ? 1050 : 820,
-    );
+    if (scene !== "entering") return;
+    let frame = 0;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const elapsed = Math.min(JOURNEY_MS, now - start);
+      setJourneyElapsed(elapsed);
+      const jaw = Math.min(1, Math.max(0, (elapsed - 100) / 660));
+      setJawProgress(1 - (1 - jaw) ** 3);
+      if (elapsed >= JOURNEY_MS) setScene("human");
+      else frame = window.requestAnimationFrame(tick);
+    };
+    frame = window.requestAnimationFrame(tick);
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const onMotionChange = () => {
-      if (motion.matches) setScene(next);
+      if (motion.matches) setScene("human");
     };
     const onVisibility = () => {
-      if (document.hidden) setScene(next);
+      if (document.hidden) setScene("human");
     };
     motion.addEventListener("change", onMotionChange);
     document.addEventListener("visibilitychange", onVisibility);
     return () => {
-      window.clearTimeout(timer);
+      window.cancelAnimationFrame(frame);
       motion.removeEventListener("change", onMotionChange);
       document.removeEventListener("visibilitychange", onVisibility);
     };
@@ -190,31 +194,35 @@ function App() {
     if (scene === "human") humanTitleRef.current?.focus();
     if (scene === "domain") domainTitleRef.current?.focus();
   }, [scene]);
-  useEffect(() => {
-    if (dialogueDone && scene === "human") relicRef.current?.focus();
-  }, [dialogueDone, scene]);
-
   const reduced = () =>
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const enter = () => {
-    if (scene === "guardian") setScene(reduced() ? "human" : "entering");
+    if (scene === "guardian") {
+      setJawAlert(false);
+      setScene(reduced() ? "human" : "entering");
+    }
   };
-  const awaken = () => setScene(reduced() ? "domain" : "awakening");
   const skip = () => setScene("domain");
   const returnHome = () => {
     setScene("guardian");
+    setJawProgress(0);
+    setJourneyElapsed(0);
+    setJawAlert(false);
     setLine(0);
-    setDialogueDone(false);
     window.scrollTo({ top: 0, behavior: "instant" });
     window.requestAnimationFrame(() => enterRef.current?.focus());
   };
   const continueDialogue = () => {
     if (line < dialogue.length - 1) setLine(line + 1);
-    else setDialogueDone(true);
+    else setScene("domain");
   };
   const guardianVisible = scene === "guardian" || scene === "entering";
   const chamberVisible = !guardianVisible;
   const domainVisible = scene === "domain";
+  const approach = Math.min(1, Math.max(0, (journeyElapsed - 760) / 690));
+  const cameraEase = approach * approach * (3 - 2 * approach);
+  const guardianFade = 1 - Math.min(1, Math.max(0, (journeyElapsed - 1280) / 580));
+  const copyFade = 1 - Math.min(1, Math.max(0, (journeyElapsed - 610) / 280));
 
   return (
     <>
@@ -248,23 +256,26 @@ function App() {
             <div
               className={[
                 styles.guardianScene,
-                scene === "entering" ? styles.guardianEntering : "",
                 !guardianVisible ? styles.sceneHidden : "",
               ].join(" ")}
               aria-hidden={!guardianVisible}
               inert={!guardianVisible}
             >
-              {!guardianFailed && (
-                <img
-                  className={styles.guardianArt}
-                  src={guardianArt}
-                  alt=""
-                  fetchPriority="high"
-                  onError={() => setGuardianFailed(true)}
+              <div
+                className={styles.guardianCamera}
+                style={{
+                  opacity: scene === "entering" ? guardianFade : 1,
+                  transform: `translateY(calc(var(--mouth-shift) * ${cameraEase})) scale(${1 + 2.4 * cameraEase})`,
+                }}
+              >
+                <LayeredGuardian
+                  className={styles.layeredGuardian}
+                  progress={jawProgress}
+                  alert={jawAlert && scene === "guardian"}
                 />
-              )}
+              </div>
               <div className={styles.guardianShade} aria-hidden="true" />
-              <div className={styles.heroCopy}>
+              <div className={styles.heroCopy} style={{ opacity: scene === "entering" ? copyFade : 1 }}>
                 <p className={styles.kicker}>
                   The Builder’s Logbook <span>/ 001</span>
                 </p>
@@ -278,13 +289,16 @@ function App() {
                   technology and people.
                 </p>
               </div>
-              <div className={styles.mouthControl}>
-                <div className={styles.mouthVoid} aria-hidden="true" />
+              <div className={styles.mouthControl} style={{ opacity: scene === "entering" ? copyFade : 1 }}>
                 <button
                   ref={enterRef}
                   className={styles.enterButton}
                   type="button"
                   onClick={enter}
+                  onMouseEnter={() => setJawAlert(true)}
+                  onMouseLeave={() => setJawAlert(false)}
+                  onFocus={() => setJawAlert(true)}
+                  onBlur={() => setJawAlert(false)}
                   disabled={scene === "entering"}
                   aria-label="Enter through the Guardian’s mouth"
                 >
@@ -294,6 +308,7 @@ function App() {
                   A passage into the person behind the work
                 </span>
               </div>
+              {scene === "entering" && <EntranceJourney elapsed={journeyElapsed} />}
               <div className={styles.heroBottom}>
                 <button
                   className={styles.textButton}
@@ -309,46 +324,14 @@ function App() {
               id="core"
               className={[
                 styles.chamberScene,
-                scene === "entering" ? styles.chamberEntering : "",
                 chamberVisible ? styles.chamberVisible : "",
-                scene === "awakening" ? styles.awakening : "",
                 domainVisible ? styles.domainAwake : "",
               ].join(" ")}
               aria-hidden={!chamberVisible}
               inert={!chamberVisible}
             >
-              {!chamberFailed && (
-                <picture className={styles.chamberPicture}>
-                  <source
-                    media="(max-width: 600px)"
-                    srcSet={mobileChamberArt}
-                  />
-                  <img
-                    className={styles.chamberArt}
-                    src={chamberArt}
-                    alt=""
-                    onError={() => setChamberFailed(true)}
-                  />
-                </picture>
-              )}
+              <NeuralCore className={styles.coreArt} selected={domainVisible ? selected : undefined} />
               <div className={styles.chamberShade} aria-hidden="true" />
-              <svg
-                className={styles.seams}
-                viewBox="0 0 1440 900"
-                preserveAspectRatio="none"
-                aria-hidden="true"
-              >
-                <path d="M0 640 380 590 620 730 720 490 820 730 1090 570 1440 650M720 490 720 90M380 590 210 340M1090 570 1250 300" />
-              </svg>
-              <div className={styles.humanGround} aria-hidden="true" />
-              <img
-                className={styles.humanArt}
-                src={humanArt}
-                alt=""
-                onError={(event) => {
-                  event.currentTarget.hidden = true;
-                }}
-              />
               {scene === "human" && (
                 <div className={styles.humanIntro}>
                   <p className={styles.kicker}>
@@ -359,54 +342,23 @@ function App() {
                     <br />
                     <em>inside.</em>
                   </h2>
-                  {!dialogueDone ? (
-                    <div
-                      className={styles.dialogue}
-                      aria-label="A note from Brandon"
-                    >
-                      <p aria-live="polite">“{dialogue[line]}”</p>
-                      <div className={styles.dialogueActions}>
-                        <button type="button" onClick={continueDialogue}>
-                          {line === dialogue.length - 1
-                            ? "Show me"
-                            : "Continue"}{" "}
-                          →
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setDialogueDone(true)}
-                        >
-                          Skip dialogue
-                        </button>
-                      </div>
+                  <div
+                    className={styles.dialogue}
+                    aria-label="A note from Brandon"
+                  >
+                    <p aria-live="polite">“{dialogue[line]}”</p>
+                    <div className={styles.dialogueActions}>
+                      <button type="button" onClick={continueDialogue}>
+                        {line === dialogue.length - 1
+                          ? "Show me"
+                          : "Continue"}{" "}
+                        →
+                      </button>
+                      <button type="button" onClick={skip}>
+                        Skip dialogue
+                      </button>
                     </div>
-                  ) : (
-                    <p className={styles.humanPrompt}>
-                      There’s something in this room. Try the engraved relic.
-                    </p>
-                  )}
-                </div>
-              )}
-              {scene === "human" && (
-                <button
-                  ref={relicRef}
-                  className={styles.relic}
-                  type="button"
-                  onClick={awaken}
-                  aria-label="Activate the engraved relic and reveal the Builder’s Domain"
-                >
-                  <span className={styles.relicMark} aria-hidden="true">
-                    ⌁
-                  </span>
-                  <span>Activate relic</span>
-                </button>
-              )}
-              {scene === "awakening" && (
-                <div className={styles.awakeningCopy} role="status">
-                  <span>The domain is waking.</span>
-                  <button type="button" onClick={skip}>
-                    Skip transition
-                  </button>
+                  </div>
                 </div>
               )}
               {domainVisible && (
