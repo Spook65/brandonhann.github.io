@@ -1,12 +1,16 @@
 :root {
   color-scheme: dark;
-  --color-page: #0a0b0d;
-  --color-surface: #141519;
-  --color-text: #f2f0ea;
-  --color-muted: #aaaab0;
-  --color-accent: #40cfff;
-  --color-border: #45464b;
-  --font-body: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-detail: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --content-width: 66rem;
+  --color-page: #0c1012;
+  --color-surface: #181b1b;
+  --color-text: #f4eddd;
+  --color-ivory: #f4eddd;
+  --color-muted: #c9c0af;
+  --color-accent: #94d1cd;
+  --color-cyan: #94d1cd;
+  --color-amber: #e9ad63;
+  --color-border: #706754;
+  --font-body: 'Source Sans 3 Variable', 'Source Sans 3', system-ui, sans-serif;
+  --font-display: 'Fraunces Variable', Fraunces, Georgia, serif;
+  --font-detail: 'Source Sans 3 Variable', 'Source Sans 3', system-ui, sans-serif;
+  --content-width: 72rem;
 }

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { chromium } from 'playwright';
 
-const site = 'http://127.0.0.1:4173/brandonhann.github.io/';
+const site = process.env.PORTFOLIO_PREVIEW_URL ?? 'http://127.0.0.1:4173/brandonhann.github.io/';
 
 test('production preview works at the GitHub Pages subpath across widths', async () => {
   const browser = await chromium.launch();

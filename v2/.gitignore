@@ -1,0 +1,7 @@
+# Local visual review outputs; keep storyboard source and notes.
+artifacts/**/*.png
+artifacts/**/*.jpg
+artifacts/**/*.jpeg
+artifacts/**/*.webp
+artifacts/**/*.mp4
+artifacts/**/*.webm

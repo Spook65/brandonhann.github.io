@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Builder's Domain — Creative Reset Study</title>
+  <style>
+    :root { color-scheme: dark; --ink:#090e11; --stone:#182126; --bone:#eee6d5; --amber:#e5a95d; --cyan:#75bdc5; font-family: Georgia, serif; }
+    * { box-sizing:border-box; } body { margin:0; background:var(--ink); color:var(--bone); }
+    button,input { font:inherit; } button:focus-visible,input:focus-visible { outline:3px solid var(--cyan); outline-offset:3px; }
+    a { color:var(--cyan); } .page { width:min(100% - 2rem,1500px); margin:auto; padding:2rem 0 5rem; }
+    .eyebrow { color:var(--amber); font:700 .82rem/1.2 system-ui,sans-serif; letter-spacing:.12em; text-transform:uppercase; }
+    h1 { max-width:18ch; margin:.35rem 0 1rem; font-size:clamp(2.5rem,5vw,5.6rem); line-height:1.02; letter-spacing:-.06em; }
+    .intro { max-width:68ch; color:#c9c8bf; font:1.12rem/1.55 system-ui,sans-serif; }
+    .proof { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(20rem,.8fr); gap:1.3rem; align-items:stretch; margin:2rem 0 3rem; }
+    .proofArt { position:relative; min-height:34rem; overflow:hidden; border:1px solid #66675c; background:radial-gradient(circle at 50% 20%,#27363a,#070d10 70%); }
+    .proofArt svg,.frameArt svg { display:block; width:100%; height:100%; }
+    .proofControls { padding:clamp(1.4rem,3vw,2.5rem); border:1px solid #66675c; background:#11191d; font:1rem/1.5 system-ui,sans-serif; }
+    .proofControls h2 { margin:.2rem 0 1rem; font:600 clamp(1.8rem,3vw,3rem)/1.08 Georgia,serif; }
+    .proofControls p { color:#c9c8bf; } .controlRow { display:flex; flex-wrap:wrap; gap:.7rem; margin:1.3rem 0; }
+    .controlRow button { padding:.7rem 1rem; border:1px solid var(--amber); background:#392a1f; color:var(--bone); cursor:pointer; }
+    .controlRow button:hover { background:#60432a; } label { display:block; font-weight:700; } input[type=range] { width:100%; accent-color:var(--amber); }
+    .readout { display:flex; justify-content:space-between; color:var(--amber); font-size:.85rem; }
+    .layerList { padding-left:1.3rem; color:#c9c8bf; } .layerList li { margin:.35rem 0; }
+    .frames { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; }
+    .frame { min-width:0; border:1px solid #555e5b; background:#11191d; }
+    .frameArt { position:relative; height:clamp(16rem,28vw,28rem); overflow:hidden; background:#0b1216; }
+    .frameArt::after { content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(0deg,#081014c9,transparent 45%); }
+    .frameCopy { padding:1.15rem 1.25rem 1.4rem; min-height:10.8rem; }
+    .frameCopy strong { color:var(--amber); font:700 .75rem system-ui,sans-serif; letter-spacing:.12em; }
+    .frameCopy h3 { margin:.35rem 0 .45rem; font-size:1.6rem; line-height:1.1; }
+    .frameCopy p { margin:0; color:#c9c8bf; font: .93rem/1.48 system-ui,sans-serif; }
+    .overlayLabel { position:absolute; z-index:2; left:1rem; top:1rem; max-width:60%; color:var(--bone); font:600 clamp(1rem,2vw,1.8rem)/1.08 Georgia,serif; text-shadow:0 2px 12px #000; }
+    .overlayLabel small { display:block; margin-top:.4rem; color:var(--cyan); font:700 .68rem/1.3 system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
+    .frame:nth-child(4) .frameArt { background:#030709; }
+    .projectNote { position:absolute; z-index:2; right:1rem; bottom:1rem; width:50%; padding:.65rem .8rem; border-left:2px solid var(--cyan); background:#091217e8; color:var(--bone); font: .75rem/1.35 system-ui,sans-serif; }
+    .projectNote strong { display:block; color:var(--amber); }
+    .identityPhoto { position:absolute; z-index:2; right:1rem; bottom:1rem; display:flex; align-items:center; gap:.55rem; padding:.4rem .65rem .4rem .4rem; border:1px solid #86785e; background:#091217e8; color:var(--bone); font:700 .75rem/1.2 system-ui,sans-serif; }
+    .identityPhoto img { display:block; width:2.8rem; height:2.8rem; object-fit:cover; object-position:center 30%; filter:saturate(.65); }
+    .mobileSection { margin-top:3rem; } .mobilePair { display:flex; flex-wrap:wrap; gap:1rem; }
+    .mobileMock { position:relative; width:390px; height:844px; max-width:100%; overflow:hidden; border:1px solid #656c63; background:#0a1115; }
+    .mobileMock svg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .mobileMock .mobileNav { position:absolute; z-index:2; top:0; left:0; right:0; padding:1rem; display:flex; justify-content:space-between; background:#080e11e8; font:700 .82rem system-ui,sans-serif; }
+    .mobileMock .mobileCopy { position:absolute; z-index:2; left:1rem; right:1rem; bottom:1.2rem; padding:1rem; border:1px solid #b39269; background:#0c1519e8; }
+    .mobileCopy h3 { margin:0 0 .3rem; font-size:2rem; line-height:1.02; } .mobileCopy p { margin:0; font:.92rem/1.4 system-ui,sans-serif; }
+    .mobileCopy .mobileCTA { display:inline-block; margin-top:.8rem; padding:.5rem .8rem; border:1px solid var(--amber); color:var(--bone); font:700 .85rem system-ui,sans-serif; }
+    .mobileMock.core svg { opacity:.88; } .mobileMock.core .mobileCopy { bottom:1.2rem; }
+    .note { margin-top:1rem; max-width:75ch; color:#c9c8bf; font: .95rem/1.5 system-ui,sans-serif; }
+    @media(max-width:900px) { .proof { grid-template-columns:1fr; } .frames { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    @media(max-width:620px) { .page { width:min(100% - 1.2rem,35rem); } .frames { grid-template-columns:1fr; } .frameArt { height:24rem; } .proofArt { min-height:24rem; } }
+    @media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; scroll-behavior:auto!important; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <p class="eyebrow">Preproduction / isolated from the V2 app</p>
+    <h1>The guardian is a door. The person inside is the map.</h1>
+    <p class="intro">A six-shot storyboard for an original, monumental guardian and a human-operated neural control center. The artwork below is a vector construction study: it proves the jaw mechanics and framing, not final production illustration.</p>
+
+    <section class="proof" aria-labelledby="proof-title">
+      <div class="proofArt" id="jaw-proof-art" aria-label="Interactive layered guardian jaw study"></div>
+      <div class="proofControls">
+        <p class="eyebrow">Mechanics proof</p><h2 id="proof-title">A real opening jaw</h2>
+        <p>The upper face, stationary mouth cavity, lower jaw, hinge sockets, and telescoping side linkages are separate SVG artwork groups. The chin travels 104 art units and foreshortens as it pitches open; the linkages stay connected. The opening is visible without a circular mask.</p>
+        <label for="jawRange">Jaw aperture <output id="jawValue">0%</output></label>
+        <input id="jawRange" type="range" min="0" max="100" value="0" />
+        <div class="readout"><span>closed</span><span>articulated</span><span>open</span></div>
+        <div class="controlRow"><button type="button" id="playJaw">Open jaw</button><button type="button" id="closeJaw">Close jaw</button></div>
+        <ol class="layerList"><li>Unmoving head shell and upper teeth</li><li>Dark oral chamber behind the plates</li><li>Independent jaw plate and lower teeth</li><li>Two hinge sockets, rotating pins, and telescoping linkages</li></ol>
+        <p>Fallback: if custom painted layers later fail to align at mobile crop, retain this SVG proof as the mechanical guide while art is revised. Do not revert to an iris portal.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="story-title"><p class="eyebrow">Sequence / 2–3 seconds to the Inner Core</p><h2 id="story-title">Six deliberate frames</h2><div class="frames">
+      <article class="frame"><div class="frameArt" data-guardian="0"><div class="overlayLabel">Brandon Hann<small>Enter / Projects / Résumé always available</small></div></div><div class="frameCopy"><strong>01 / 0 ms</strong><h3>Encounter</h3><p>The face consumes the screen. A human-scale figure and narrow structural rails establish impossible scale. The mouth itself is the accessible entrance.</p></div></article>
+      <article class="frame"><div class="frameArt" data-guardian="0.12"><div class="overlayLabel">It noticed you.<small>Pointer, focus, or touch</small></div></div><div class="frameCopy"><strong>02 / 120 ms</strong><h3>Recognition</h3><p>The amber eyes tighten; cheek conduits answer in cyan. The mouth seam separates by a few pixels while the conventional navigation stays still.</p></div></article>
+      <article class="frame"><div class="frameArt" data-guardian="0.68"><div class="overlayLabel">The passage opens.<small>Jaw and rods move as one assembly</small></div></div><div class="frameCopy"><strong>03 / 480 ms</strong><h3>Articulation</h3><p>The jaw descends from two visible hinge sockets. Upper teeth remain fixed, lower teeth travel with the chin, and the stationary cavity appears between them.</p></div></article>
+      <article class="frame"><div class="frameArt" data-tunnel><div class="overlayLabel">Into the signal.<small>Short forward cut, not an iris wipe</small></div></div><div class="frameCopy"><strong>04 / 900 ms</strong><h3>Crossing</h3><p>With the jaw fully open, the camera advances along the cavity's dark perspective rails. The exterior drops out through depth and occlusion.</p></div></article>
+      <article class="frame"><div class="frameArt" data-core="idle"><div class="overlayLabel">The human operator.<small>One quiet line of personal dialogue</small></div><div class="identityPhoto"><img src="../../public/brandon-about.jpg" alt="Brandon Hann, from the existing public portfolio" /><span>Brandon / source portrait</span></div></div><div class="frameCopy"><strong>05 / 1.55 s</strong><h3>Inner Core</h3><p>Brandon stands at a real control desk, lit by amber monitors. The room is a neural workshop: cables, connection paths, physical panels, and restrained annotations.</p></div></article>
+      <article class="frame"><div class="frameArt" data-core="selected"><div class="overlayLabel">Follow a connection.<small>SecureAgent Lab / Main Quest</small></div><div class="projectNote"><strong>SecureAgent Lab</strong>Offline experimental gateway for AI-agent tool actions. Active development.</div></div><div class="frameCopy"><strong>06 / visitor input</strong><h3>Project connection</h3><p>Selection lights one route from Brandon to a project node. A semantic HTML panel opens with verified summary and links; other routes remain available.</p></div></article>
+    </div></section>
+
+    <section class="mobileSection" aria-labelledby="mobile-title"><p class="eyebrow">Responsive composition study</p><h2 id="mobile-title">390px mobile frames</h2><div class="mobilePair">
+      <div class="mobileMock" id="mobileGuardian"><div class="mobileNav"><span>bh.</span><span>Projects　Résumé　Menu</span></div><div class="mobileCopy"><h3>Brandon Hann</h3><p>The guardian fills the width; the mouth remains within thumb reach.</p><span class="mobileCTA">Enter through the mouth ↓</span></div></div>
+      <div class="mobileMock core" id="mobileCore"><div class="mobileNav"><span>bh.</span><span>Projects　Résumé　Menu</span></div><div class="mobileCopy"><h3>The Inner Core</h3><p>The operator remains central. A selected connection opens a readable panel below the scene.</p><span class="mobileCTA">SecureAgent Lab →</span></div></div>
+    </div><p class="note">Mobile navigation stays conventional; connected nodes become a stacked list below the illustrated operator. The jaw remains the same art assembly at both sizes, with a tighter crop and shorter camera move.</p></section>
+  </main>
+
+  <template id="guardian-template"><svg viewBox="0 0 900 900" role="img" aria-label="Original hinged guardian concept" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="backGlow"><stop stop-color="#48534a"/><stop offset=".5" stop-color="#18292b"/><stop offset="1" stop-color="#060c0f"/></radialGradient>
+      <linearGradient id="shell" x2="1" y2="1"><stop stop-color="#46545a"/><stop offset=".35" stop-color="#182329"/><stop offset=".7" stop-color="#26343a"/><stop offset="1" stop-color="#0b1318"/></linearGradient>
+      <linearGradient id="jaw" y2="1" x2=".6"><stop stop-color="#536066"/><stop offset=".4" stop-color="#202b30"/><stop offset="1" stop-color="#0b141a"/></linearGradient>
+      <radialGradient id="eye"><stop stop-color="#ffe2a2"/><stop offset=".34" stop-color="#e5a95d"/><stop offset="1" stop-color="#744520"/></radialGradient>
+      <filter id="glow"><feGaussianBlur stdDeviation="9"/></filter>
+      <pattern id="hatch" width="11" height="11" patternUnits="userSpaceOnUse" patternTransform="rotate(28)"><path d="M0 0V11" stroke="#a6bbb8" stroke-opacity=".10" stroke-width="2"/></pattern>
+    </defs>
+    <rect width="900" height="900" fill="url(#backGlow)"/>
+    <g opacity=".4" stroke="#75bdc5" stroke-width="2" fill="none"><path d="M90 900V170L212 98M810 900V170L688 98M120 740l130-92M780 740L650 648"/><path d="M65 900V560M835 900V560" stroke-dasharray="6 13"/></g>
+    <path d="M30 900q80-210 230-230h380q150 20 230 230" fill="#0b151b" stroke="#4b5555" stroke-width="8"/>
+    <g data-layer="upper-face">
+    <path d="M165 215Q175 58 450 23q275 35 285 192l-26 310q-40 106-130 152H321q-90-46-130-152z" fill="#071015" stroke="#616963" stroke-width="10"/>
+    <path d="M217 247Q250 86 450 69q200 17 233 178l-22 232-74 82H313l-74-82z" fill="url(#shell)" stroke="#8c8978" stroke-width="5"/>
+    <path d="M217 247Q250 86 450 69q200 17 233 178l-22 232-74 82H313l-74-82z" fill="url(#hatch)"/>
+    <path d="M289 134 450 66l161 68-41 98H330z" fill="#344147" stroke="#81908c" stroke-width="5"/>
+    <path d="M345 159 450 115l105 44-22 39H367z" fill="#111d23" stroke="#9a8f72" stroke-width="3"/>
+    <path d="M450 99v347M336 210 251 313l19 153M564 210l85 103-19 153" stroke="#75bdc5" stroke-opacity=".7" stroke-width="5" fill="none"/>
+    <path d="M259 306q65-45 146-10l-26 59-103-4zM641 306q-65-45-146-10l26 59 103-4z" fill="#071014" stroke="#82908c" stroke-width="6"/>
+    <ellipse cx="337" cy="326" rx="46" ry="15" fill="url(#eye)" filter="url(#glow)" opacity=".8"/><ellipse cx="563" cy="326" rx="46" ry="15" fill="url(#eye)" filter="url(#glow)" opacity=".8"/>
+    <path d="M289 329q49-20 95 0l-17 14h-61zM611 329q-49-20-95 0l17 14h61z" fill="url(#eye)"/>
+    <path d="M325 330h24M551 330h24" stroke="#071014" stroke-width="5"/>
+    <path d="M405 342 450 293l45 49-12 97-33 30-33-30z" fill="#2e3c40" stroke="#8b958c" stroke-width="4"/>
+    <path d="M398 453q52 28 104 0l-14 37h-76z" fill="#10191d" stroke="#778583" stroke-width="4"/>
+    <path d="M277 495q173-43 346 0l19 45q-176 35-384 0z" fill="#2a363b" stroke="#a59a80" stroke-width="5"/>
+    <path d="M297 527q153-19 306 0" fill="none" stroke="#d9c5a1" stroke-width="6"/>
+    <g data-layer="upper-teeth" fill="#ddd5bf"><path d="M313 531h26l-9 28zM353 527h26l-9 31zM393 525h26l-9 34zM433 523h34l-17 37zM481 525h26l-9 34zM521 527h26l-9 31zM561 531h26l-9 28z"/></g>
+    </g>
+    <g data-layer="mouth-cavity"><path d="M269 545q181-44 362 0l-15 162q-166 100-332 0z" fill="#020608" stroke="#6b6658" stroke-width="5"/><path d="M330 595q120-55 240 0l-26 85q-94 32-188 0z" fill="#132128"/><path d="M363 617q87-35 174 0" fill="none" stroke="#e5a95d" stroke-opacity=".5" stroke-width="4"/></g>
+    <g data-layer="left-rod"><line x1="255" y1="510" x2="285" y2="605" stroke="#0a1317" stroke-width="25"/><line x1="255" y1="510" x2="285" y2="605" stroke="#9c9073" stroke-width="7"/></g>
+    <g data-layer="right-rod"><line x1="645" y1="510" x2="615" y2="605" stroke="#0a1317" stroke-width="25"/><line x1="645" y1="510" x2="615" y2="605" stroke="#9c9073" stroke-width="7"/></g>
+    <g data-layer="lower-jaw">
+      <path d="M274 542q176 40 352 0l-22 154q-52 87-154 119-102-32-154-119z" fill="url(#jaw)" stroke="#a59a80" stroke-width="7"/>
+      <path d="M289 551q161 43 322 0M318 682q132 78 264 0" fill="none" stroke="#678d8f" stroke-opacity=".8" stroke-width="4"/>
+      <path d="M345 607 450 655l105-48-23 96-82 48-82-48z" fill="#16252b" stroke="#8e978b" stroke-width="4"/>
+      <path d="M450 665v70" stroke="#e5a95d" stroke-width="4"/>
+      <g data-layer="lower-teeth" fill="#d4c7ab"><path d="M319 550h27l-13-24zM359 560h27l-13-27zM399 568h27l-13-30zM437 571h27l-13-34zM477 568h27l-13-30zM517 560h27l-13-27zM557 550h27l-13-24z"/></g>
+    </g>
+    <g data-layer="hinge-sockets"><circle cx="255" cy="510" r="38" fill="#111c21" stroke="#9d8d69" stroke-width="8"/><circle cx="645" cy="510" r="38" fill="#111c21" stroke="#9d8d69" stroke-width="8"/><circle cx="255" cy="510" r="15" fill="#e5a95d"/><circle cx="645" cy="510" r="15" fill="#e5a95d"/><g data-layer="left-hinge-pin"><path d="M255 479v14" stroke="#d9c7a8" stroke-width="5"/></g><g data-layer="right-hinge-pin"><path d="M645 479v14" stroke="#d9c7a8" stroke-width="5"/></g></g>
+    <g data-layer="scale-figure" fill="#03080a"><circle cx="450" cy="859" r="7"/><path d="M446 866h8l9 24h-6l-7-14-7 14h-6z"/></g>
+  </svg></template>
+
+  <template id="tunnel-template"><svg viewBox="0 0 900 900" role="img" aria-label="Perspective passage through the guardian's open mouth" xmlns="http://www.w3.org/2000/svg">
+    <defs><radialGradient id="tunnelBack"><stop stop-color="#142328"/><stop offset=".5" stop-color="#071116"/><stop offset="1" stop-color="#020507"/></radialGradient><linearGradient id="tunnelRail"><stop stop-color="#e5a95d"/><stop offset=".55" stop-color="#75bdc5"/><stop offset="1" stop-color="#0b292f"/></linearGradient></defs>
+    <rect width="900" height="900" fill="url(#tunnelBack)"/>
+    <path d="M0 0 900 0 635 390 265 390zM0 900 900 900 610 530 290 530z" fill="#111a1e" stroke="#8b896f" stroke-width="12"/>
+    <path d="M0 0 340 390M900 0 560 390M0 900 350 530M900 900 550 530" stroke="url(#tunnelRail)" stroke-width="8" fill="none"/>
+    <path d="M0 170 310 415M900 170 590 415M0 730 320 505M900 730 580 505" stroke="#75bdc5" stroke-opacity=".45" stroke-width="4" fill="none"/>
+    <path d="M310 415q140-70 280 0l-40 90q-100 65-200 0z" fill="#020608" stroke="#425f62" stroke-width="7"/>
+    <g fill="#d6c9a9"><path d="M75 220h45l-20 80zM190 285h35l-16 64zM300 350h28l-12 48zM780 220h45l-20 80zM675 285h35l-16 64zM572 350h28l-12 48z"/><path d="M75 680h45l-20-80zM190 615h35l-16-64zM300 550h28l-12-48zM780 680h45l-20-80zM675 615h35l-16-64zM572 550h28l-12-48z"/></g>
+    <path d="M450 450v190" stroke="#e5a95d" stroke-opacity=".35" stroke-width="3" stroke-dasharray="12 16"/>
+  </svg></template>
+
+  <template id="core-template"><svg viewBox="0 0 900 900" role="img" aria-label="Original neural Inner Core concept" xmlns="http://www.w3.org/2000/svg">
+    <defs><radialGradient id="coreBack"><stop stop-color="#20353b"/><stop offset=".55" stop-color="#0c1a20"/><stop offset="1" stop-color="#050a0d"/></radialGradient><filter id="coreGlow"><feGaussianBlur stdDeviation="9"/></filter></defs>
+    <rect width="900" height="900" fill="url(#coreBack)"/>
+    <g fill="none" stroke="#4f7176" stroke-width="5" opacity=".7"><path d="M80 0v900M820 0v900M130 0v900M770 0v900"/><path d="M0 780h900M0 850h900M100 460q350-290 700 0M170 445q280-205 560 0"/><path d="M250 70q200 140 400 0" stroke-dasharray="10 17"/></g>
+    <g opacity=".7" fill="none" stroke="#75bdc5" stroke-width="3"><path d="M450 610 235 430 135 270M450 610 665 430 765 270M450 610 245 720M450 610 655 720"/><path d="M235 430 165 540M665 430 735 540" stroke-dasharray="8 12"/></g>
+    <g class="projectLine" fill="none" stroke="#e5a95d" stroke-width="8" opacity="0"><path d="M450 610 665 430 765 270"/><circle cx="765" cy="270" r="55"/></g>
+    <g fill="#0a1519" stroke="#5d888a" stroke-width="7"><circle cx="135" cy="270" r="58"/><circle cx="765" cy="270" r="58"/><circle cx="165" cy="540" r="42"/><circle cx="735" cy="540" r="42"/><circle cx="245" cy="720" r="39"/><circle cx="655" cy="720" r="39"/></g>
+    <g fill="#e5a95d"><circle cx="135" cy="270" r="12"/><circle cx="765" cy="270" r="12"/><circle cx="165" cy="540" r="9"/><circle cx="735" cy="540" r="9"/></g>
+    <path d="M250 760q200-135 400 0l80 140H170z" fill="#0b1418" stroke="#698082" stroke-width="8"/>
+    <path d="M335 696q115-55 230 0l-25 86H360z" fill="#142a30" stroke="#e5a95d" stroke-width="6"/>
+    <path d="M360 702q90-35 180 0" fill="none" stroke="#75bdc5" stroke-width="6"/>
+    <g data-layer="operator"><ellipse cx="450" cy="783" rx="70" ry="15" fill="#020607" filter="url(#coreGlow)"/><path d="M388 620q62-28 124 0l35 121-34 33-18-101-12 124h-22l-11-117-11 117h-22l-12-124-18 101-34-33z" fill="#242f32" stroke="#a5a092" stroke-width="6"/><circle cx="450" cy="579" r="40" fill="#b69673" stroke="#2c3230" stroke-width="8"/><path d="M411 573q4-58 46-45 33 5 34 48-21-30-80-3" fill="#10171a"/><path d="M382 631q-55 45-42 97M518 631q55 45 42 97" fill="none" stroke="#b69673" stroke-width="17"/></g>
+    <g stroke="#e5a95d" stroke-width="4" fill="none" opacity=".65"><path d="M218 130h110v50M682 130H572v50M218 865h110v-40M682 865H572v-40"/></g>
+  </svg></template>
+
+  <script>
+    const guardianTemplate = document.getElementById('guardian-template');
+    const coreTemplate = document.getElementById('core-template');
+    function addGuardian(host, progress) {
+      const art = guardianTemplate.content.firstElementChild.cloneNode(true);
+      host.prepend(art); setJaw(art, progress); return art;
+    }
+    function setJaw(art, progress) {
+      const p = Math.max(0, Math.min(1, Number(progress)));
+      const drop = 104 * p;
+      const pitch = (1-.13*p).toFixed(3);
+      art.querySelector('[data-layer="lower-jaw"]').setAttribute('transform', `translate(0 ${drop.toFixed(1)}) translate(0 542) scale(1 ${pitch}) translate(0 -542)`);
+      art.querySelectorAll('[data-layer="left-rod"] line').forEach(line => line.setAttribute('y2', String(605 + drop)));
+      art.querySelectorAll('[data-layer="right-rod"] line').forEach(line => line.setAttribute('y2', String(605 + drop)));
+      art.querySelector('[data-layer="left-hinge-pin"]').setAttribute('transform', `rotate(${(-35*p).toFixed(1)} 255 510)`);
+      art.querySelector('[data-layer="right-hinge-pin"]').setAttribute('transform', `rotate(${(35*p).toFixed(1)} 645 510)`);
+      art.querySelector('[data-layer="mouth-cavity"]').style.opacity = String(.65 + .35*p);
+      art.querySelectorAll('ellipse[filter="url(#glow)"]').forEach(eye => eye.setAttribute('opacity', String(.55+.45*p)));
+    }
+    function addCore(host, selected=false) {
+      const art=coreTemplate.content.firstElementChild.cloneNode(true); host.prepend(art);
+      if(selected) art.querySelector('.projectLine').setAttribute('opacity','1');
+    }
+    document.querySelectorAll('[data-guardian]').forEach(host => addGuardian(host, host.dataset.guardian));
+    document.querySelectorAll('[data-tunnel]').forEach(host => host.prepend(document.getElementById('tunnel-template').content.firstElementChild.cloneNode(true)));
+    document.querySelectorAll('[data-core]').forEach(host => addCore(host, host.dataset.core==='selected'));
+    const proof = addGuardian(document.getElementById('jaw-proof-art'), 0);
+    addGuardian(document.getElementById('mobileGuardian'), 0).setAttribute('preserveAspectRatio','xMidYMid slice');
+    const mobileCore = coreTemplate.content.firstElementChild.cloneNode(true);
+    mobileCore.setAttribute('preserveAspectRatio','xMidYMid slice');
+    mobileCore.querySelector('.projectLine').setAttribute('opacity','1');
+    document.getElementById('mobileCore').prepend(mobileCore);
+    const range=document.getElementById('jawRange'), value=document.getElementById('jawValue');
+    function update(p) { setJaw(proof,p); range.value=String(Math.round(p*100)); value.value=`${range.value}%`; }
+    range.addEventListener('input',()=>update(Number(range.value)/100));
+    let animation;
+    function animate(target) {
+      cancelAnimationFrame(animation);
+      const start=Number(range.value)/100, began=performance.now(), duration=620;
+      if(matchMedia('(prefers-reduced-motion: reduce)').matches) { update(target); return; }
+      const tick=now=>{ const t=Math.min(1,(now-began)/duration), eased=1-Math.pow(1-t,3); update(start+(target-start)*eased); if(t<1)animation=requestAnimationFrame(tick); };
+      animation=requestAnimationFrame(tick);
+    }
+    document.getElementById('playJaw').addEventListener('click',()=>animate(1));
+    document.getElementById('closeJaw').addEventListener('click',()=>animate(0));
+  </script>
+</body></html>
