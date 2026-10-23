@@ -82,9 +82,9 @@ test('pointer response and destination focus remain spatial and accessible', asy
     const right = await stage.evaluate((node) => node.style.getPropertyValue('--look-x'));
     assert.ok(Number.parseFloat(left) < 0 && Number.parseFloat(right) > 0);
     await page.getByRole('button', { name: /Skip introduction/i }).click();
-    await page.getByRole('button', { name: /Project Archives/i }).focus();
+    await page.locator('[aria-label="Domain destinations"] button').filter({ hasText: 'Project Archives' }).focus();
     assert.equal(await page.locator('#core').getAttribute('data-active-route'), 'archives');
-    assert.equal(await page.locator('[data-route="archives"]').getAttribute('data-active'), 'true');
+    assert.equal(await page.locator('#core svg [data-route="archives"]').getAttribute('data-state'), 'preview');
     await page.close();
   } finally {
     await browser.close();

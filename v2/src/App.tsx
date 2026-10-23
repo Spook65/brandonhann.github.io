@@ -29,20 +29,31 @@ function Out({ href, children }: { href: string; children: React.ReactNode }) {
   );
 }
 
-function DomainPanel({ selected }: { selected: DestinationId }) {
+function DomainPanel({ selected }: { selected: DestinationId | null }) {
   switch (selected) {
+    case null:
+      return (
+        <>
+          <p className={styles.status}>Operator online</p>
+          <h3>Choose a connection.</h3>
+          <p>Six paths lead from the operator to Brandon’s work and story.</p>
+        </>
+      );
     case "quest":
       return (
         <>
           <p className={styles.status}>{secureAgent.status}</p>
           <h3>{secureAgent.name}</h3>
           <p>{secureAgent.summary}</p>
-          <div className={styles.inset}>
-            <strong>Current objective</strong>
-            <p>{secureAgent.objective}</p>
-          </div>
-          <p className={styles.fine}>{secureAgent.reviewed}</p>
-          <p className={styles.fine}>{secureAgent.scope}</p>
+          <details className={styles.questDetails}>
+            <summary>Build notes and reviewed evidence</summary>
+            <div className={styles.inset}>
+              <strong>Current objective</strong>
+              <p>{secureAgent.objective}</p>
+            </div>
+            <p className={styles.fine}>{secureAgent.reviewed}</p>
+            <p className={styles.fine}>{secureAgent.scope}</p>
+          </details>
         </>
       );
     case "archives":
@@ -140,8 +151,9 @@ function DomainPanel({ selected }: { selected: DestinationId }) {
 function App() {
   const [scene, setScene] = useState<Scene>("guardian");
   const [line, setLine] = useState(0);
-  const [selected, setSelected] = useState<DestinationId>("quest");
+  const [selected, setSelected] = useState<DestinationId | null>(null);
   const [preview, setPreview] = useState<DestinationId | null>(null);
+  const [operatorOpen, setOperatorOpen] = useState(false);
   const [jawProgress, setJawProgress] = useState(0);
   const [jawAlert, setJawAlert] = useState(false);
   const [breachElapsed, setBreachElapsed] = useState(0);
@@ -265,6 +277,9 @@ function App() {
     setBreachElapsed(0);
     setJawAlert(false);
     setLine(0);
+    setPreview(null);
+    setOperatorOpen(false);
+    setSelected(null);
     window.scrollTo({ top: 0, behavior: "instant" });
     window.requestAnimationFrame(() => enterRef.current?.focus());
   };
@@ -394,7 +409,11 @@ function App() {
               aria-hidden={!chamberVisible}
               inert={!chamberVisible}
             >
-              <NeuralCore className={styles.coreArt} selected={domainVisible ? preview ?? selected : undefined} />
+              <NeuralCore
+                className={styles.coreArt}
+                selected={domainVisible ? selected : undefined}
+                preview={domainVisible ? preview : null}
+              />
               <div className={styles.chamberShade} aria-hidden="true" />
               {scene === "human" && (
                 <div className={styles.humanIntro}>
@@ -443,6 +462,47 @@ function App() {
                     </p>
                   </div>
                   <div className={styles.domainLayout}>
+                    <div className={styles.connectionField} role="group" aria-label="Operator and neural connections">
+                      <button
+                        type="button"
+                        className={styles.operatorButton}
+                        aria-expanded={operatorOpen}
+                        aria-controls="operator-status"
+                        onClick={() => setOperatorOpen((open) => !open)}
+                      >
+                        <span className={styles.operatorMark} aria-hidden="true">◎</span>
+                        Operator status
+                      </button>
+                      <div className={styles.connectionPins} role="group" aria-label="Spatial destination connections">
+                        {destinations.map((item) => (
+                          <button
+                            type="button"
+                            key={item.id}
+                            className={styles.connectionPin}
+                            data-route={item.id}
+                            data-state={selected === item.id ? "selected" : preview === item.id ? "preview" : "inactive"}
+                            aria-label={`Open ${item.label} connection`}
+                            aria-pressed={selected === item.id}
+                            aria-controls="destination-panel"
+                            onClick={() => setSelected(item.id)}
+                            onPointerEnter={() => setPreview(item.id)}
+                            onPointerLeave={() => setPreview(null)}
+                            onFocus={() => setPreview(item.id)}
+                            onBlur={() => setPreview(null)}
+                          >
+                            {item.number}
+                          </button>
+                        ))}
+                      </div>
+                      <section id="operator-status" className={styles.operatorStatus} aria-label="Operator status" hidden={!operatorOpen}>
+                          <strong>System status</strong>
+                          <p>Brandon Hann · Builder and operator</p>
+                          <p>Main Quest: {secureAgent.name} · {secureAgent.status}</p>
+                          <button type="button" onClick={() => { setSelected("quest"); setOperatorOpen(false); }}>
+                            Follow Main Quest →
+                          </button>
+                      </section>
+                    </div>
                     <div
                       className={styles.destinationList}
                       role="group"
@@ -477,10 +537,10 @@ function App() {
                       ))}
                     </div>
                     <section
-                      className={styles.destinationPanel}
+                      className={`${styles.destinationPanel} ${selected === null ? styles.destinationPanelIdle : ""}`}
                       id="destination-panel"
                       aria-live="polite"
-                      aria-label={`${destinations.find((item) => item.id === selected)?.label} details`}
+                      aria-label={selected === null ? "Connection details" : `${destinations.find((item) => item.id === selected)?.label} details`}
                     >
                       <DomainPanel selected={selected} />
                     </section>

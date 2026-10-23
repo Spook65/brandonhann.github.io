@@ -3,22 +3,24 @@ import type { DestinationId } from "./data/domain";
 import operatorConcept from "./assets/operator-core-concept.jpg";
 import styles from "./NeuralCore.module.css";
 
-const routes: Record<DestinationId, string> = {
-  quest: "M716 650 C857 574 969 457 1125 292 S1293 177 1415 126",
-  archives: "M716 650 C583 570 474 429 298 270 S158 177 30 114",
-  arsenal: "M716 650 C561 671 381 638 154 530 L-20 505",
-  chronicles: "M716 650 C889 686 1084 642 1274 539 L1460 497",
-  profile: "M716 650 C627 482 589 306 654 116 L679 -20",
-  signal: "M716 650 C803 465 844 277 787 106 L773 -20",
+const routes: Record<DestinationId, { path: string; end: [number, number] }> = {
+  quest: { path: "M716 650 C784 621 778 518 846 461", end: [846, 461] },
+  archives: { path: "M716 650 C633 602 551 486 438 461", end: [438, 461] },
+  arsenal: { path: "M716 650 C590 685 492 597 390 611", end: [390, 611] },
+  chronicles: { path: "M716 650 C769 713 817 699 850 635", end: [850, 635] },
+  profile: { path: "M716 650 C627 578 622 493 555 415", end: [555, 415] },
+  signal: { path: "M716 650 C732 571 746 491 714 415", end: [714, 415] },
 };
 
 /** Illustrated operator backdrop with real SVG route highlights above it. */
 export const NeuralCore = memo(function NeuralCore({
   className,
   selected,
+  preview,
 }: {
   className?: string;
-  selected?: DestinationId;
+  selected?: DestinationId | null;
+  preview?: DestinationId | null;
 }) {
   return (
     <svg
@@ -40,15 +42,18 @@ export const NeuralCore = memo(function NeuralCore({
         preserveAspectRatio="xMidYMid slice"
       />
       <g fill="none" strokeLinecap="round">
-        {Object.entries(routes).map(([route, d]) => {
-          const active = selected === route;
+        {(Object.entries(routes) as [DestinationId, (typeof routes)[DestinationId]][]).map(([route, { path, end }]) => {
+          const state = selected === route ? "selected" : preview === route ? "preview" : "inactive";
           return (
-            <g key={route} data-route={route} data-active={active} className={styles.route}>
-              <path d={d} stroke="#09090a" strokeOpacity={active ? ".76" : ".46"} strokeWidth={active ? "15" : "10"} />
-              <path d={d} stroke={active ? "#e5a95d" : "#82b9b7"} strokeOpacity={active ? ".9" : ".28"} strokeWidth={active ? "4.5" : "2.3"} />
+            <g key={route} data-route={route} data-state={state} data-active={state !== "inactive"} className={styles.route}>
+              <path className={styles.routeAura} d={path} />
+              <path className={styles.routeBed} d={path} />
+              <path className={styles.routeLight} d={path} pathLength={100} />
+              <ellipse className={styles.routeNode} cx={end[0]} cy={end[1]} rx="6" ry="4" />
             </g>
           );
         })}
+        <circle className={styles.origin} cx="716" cy="650" r="6" />
       </g>
     </svg>
   );

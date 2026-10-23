@@ -18,11 +18,11 @@ test('entrance, dialogue, connected domain destinations, and direct links work',
       assert.ok(await page.getByText(/I’m Brandon. I build things/).isVisible());
       await page.getByRole('button', { name: 'Skip dialogue' }).click();
       await page.getByRole('heading', { name: /The Builder’s Domain/ }).waitFor();
-      await page.getByRole('button', { name: /Project Archives/ }).click();
-      assert.equal(await page.locator('#core [data-route="archives"] path').last().getAttribute('stroke'), '#e5a95d');
+      await page.locator('[aria-label="Domain destinations"] button').filter({ hasText: 'Project Archives' }).click();
+      assert.equal(await page.locator('#core svg [data-route="archives"]').getAttribute('data-state'), 'selected');
       const archive = await page.locator('#destination-panel').innerText();
       for (const name of ['Cura', 'Mapetite', 'ODDWORKS']) assert.ok(archive.includes(name));
-      await page.getByRole('button', { name: /Signal/ }).click();
+      await page.locator('[aria-label="Domain destinations"] button').filter({ hasText: 'Signal' }).click();
       assert.ok(await page.locator('#destination-panel a[href$="resume.html"]').isVisible());
       const layout = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, scroll: document.documentElement.scrollWidth }));
       assert.ok(layout.scroll <= layout.viewport + 1, `horizontal overflow at ${width}px`);

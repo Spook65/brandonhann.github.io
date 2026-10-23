@@ -9,11 +9,67 @@
 }
 
 .route {
-  transition: filter 240ms ease, opacity 240ms ease;
+  color: #81c3c3;
+  opacity: .22;
+  transition: filter 240ms ease, opacity 240ms ease, color 240ms ease;
 }
 
-.route[data-active="true"] {
-  filter: drop-shadow(0 0 7px rgba(231, 172, 91, .72));
+.routeAura {
+  stroke: currentColor;
+  stroke-width: 14;
+  opacity: 0;
+  filter: blur(5px);
+}
+
+.routeBed {
+  stroke: #070b0d;
+  stroke-width: 7;
+  opacity: .7;
+}
+
+.routeLight {
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+
+.routeNode {
+  fill: #161e20;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.route[data-state="selected"] {
+  color: #efb36c;
+  opacity: .82;
+  filter: drop-shadow(0 0 5px rgba(231, 172, 91, .42));
+}
+
+.route[data-state="selected"] .routeAura { opacity: .14; }
+
+.route[data-state="preview"] {
+  color: #a7e1dc;
+  opacity: 1;
+  filter: drop-shadow(0 0 7px rgba(127, 219, 216, .65));
+}
+
+.route[data-state="preview"] .routeAura { opacity: .22; }
+
+.route[data-state="preview"] .routeLight {
+  stroke-width: 3;
+  stroke-dasharray: 18 5;
+  animation: signalTravel 1.25s linear infinite;
+}
+
+.origin {
+  fill: #e6ab72;
+  stroke: #291a1d;
+  stroke-width: 3;
+  opacity: .75;
+  filter: drop-shadow(0 0 5px rgba(235, 168, 103, .5));
+}
+
+@keyframes signalTravel {
+  to { stroke-dashoffset: -23; }
 }
 
 @keyframes coreBreath {
@@ -24,6 +80,7 @@
 @media (prefers-reduced-motion: reduce) {
   .backdrop { animation: none; }
   .route { transition: none; }
+  .routeLight { animation: none !important; }
 }
 
 :global([data-tab-hidden="true"]) .backdrop {
