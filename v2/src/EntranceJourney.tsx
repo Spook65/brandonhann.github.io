@@ -21,29 +21,36 @@ const ease = (value: number) => {
 
 const ringDepths = [-260, -1040, -1820, -2600, -3380, -4160];
 
-const PassageRing = memo(function PassageRing({ index }: { index: number }) {
+const folds = [
+  {
+    shapes: "M0 0H302Q255 103 239 216Q266 344 176 474Q176 596 105 700H0ZM1000 0H701Q749 106 785 213Q749 340 828 468Q835 595 909 700H1000ZM290 0H712Q654 55 505 82Q368 89 290 0ZM105 700Q338 584 513 625Q698 579 909 700Z",
+    edge: "M302 0Q255 103 239 216Q266 344 176 474Q176 596 105 700M701 0Q749 106 785 213Q749 340 828 468Q835 595 909 700M290 0Q368 89 505 82Q654 55 712 0M105 700Q338 584 513 625Q698 579 909 700",
+    vein: "M65 108Q207 161 183 272Q197 361 129 508M946 89Q825 188 843 281Q815 388 893 523M155 661Q357 602 495 646",
+  },
+  {
+    shapes: "M0 0H337Q286 114 255 209Q274 374 183 454Q200 580 131 700H0ZM1000 0H671Q743 115 765 228Q731 331 851 455Q819 591 882 700H1000ZM329 0H674Q638 74 481 94Q374 72 329 0ZM131 700Q362 601 481 641Q693 592 882 700Z",
+    edge: "M337 0Q286 114 255 209Q274 374 183 454Q200 580 131 700M671 0Q743 115 765 228Q731 331 851 455Q819 591 882 700M329 0Q374 72 481 94Q638 74 674 0M131 700Q362 601 481 641Q693 592 882 700",
+    vein: "M80 127Q244 181 207 292Q226 396 147 511M910 83Q795 171 802 290Q850 401 873 505M199 647Q352 603 470 651",
+  },
+] as const;
+
+const OrganicFold = memo(function OrganicFold({ index }: { index: number }) {
+  const fold = folds[index % folds.length];
+  const gradientId = `organic-fold-${index}`;
   return (
     <svg viewBox="0 0 1000 700" preserveAspectRatio="none" aria-hidden="true">
-      <path
-        d="M40 52Q500-65 960 52L1010 286Q1036 355 1010 414L960 648Q500 765 40 648L-10 414Q-36 355-10 286z M167 166Q500 77 833 166L854 289Q870 350 854 411L833 534Q500 623 167 534L146 411Q130 350 146 289z"
-        fill="#26363b"
-        fillRule="evenodd"
-        stroke="#73817c"
-        strokeWidth="11"
-      />
-      <path d="M52 62Q500-35 948 62M52 638Q500 735 948 638" fill="none" stroke="#a48769" strokeWidth="9" />
-      <path d="M65 136q110 34 134 133l-9 160q-37 106-125 135M935 136q-110 34-134 133l9 160q37 106 125 135" fill="none" stroke="#101b21" strokeWidth="50" />
-      <path d="M68 137q110 34 134 133l-9 160q-37 106-125 135M932 137q-110 34-134 133l9 160q37 106 125 135" fill="none" stroke="#75bdc5" strokeOpacity=".72" strokeWidth="6" />
-      <path d="M200 173q300-76 600 0M200 527q300 76 600 0" fill="none" stroke="#ba7f63" strokeOpacity=".58" strokeWidth="8" />
-      <path d="M327 142v29M500 120v31M673 142v29M327 558v-29M500 580v-31M673 558v-29" stroke="#d4ab76" strokeWidth="12" />
-      <path d="M190 290h-48M190 410h-48M810 290h48M810 410h48" stroke="#dc986b" strokeWidth="7" />
-      <path d="M70 70 170 170M930 70 830 170M70 630 170 530M930 630 830 530" stroke="#56777a" strokeWidth="8" opacity=".65" />
-      <path d="M88 345h90M822 345h90" stroke="#e5a95d" strokeWidth="5" />
-      <path d="M84 355h92M824 355h92" stroke="#572f2b" strokeWidth="20" opacity=".75" />
-      <path d="M170 170Q500 80 830 170M170 530Q500 620 830 530" fill="none" stroke="#080e13" strokeWidth="18" />
-      <path d="M170 170Q500 80 830 170M170 530Q500 620 830 530" fill="none" stroke="#a28170" strokeOpacity=".58" strokeWidth="3" strokeDasharray="16 21" />
-      <circle cx="500" cy="148" r="13" fill={index % 2 ? "#75bdc5" : "#e5a95d"} />
-      <circle cx="500" cy="552" r="13" fill={index % 2 ? "#75bdc5" : "#e5a95d"} />
+      <defs>
+        <linearGradient id={gradientId} x2=".7" y2="1">
+          <stop stopColor="#4d3035" />
+          <stop offset=".42" stopColor="#2a2024" />
+          <stop offset="1" stopColor="#110e12" />
+        </linearGradient>
+      </defs>
+      <path d={fold.shapes} fill={`url(#${gradientId})`} stroke="#0f0b0f" strokeWidth="18" />
+      <path d={fold.edge} fill="none" stroke="#130a0f" strokeWidth="27" />
+      <path d={fold.edge} fill="none" stroke="#805657" strokeWidth="5" strokeOpacity=".6" />
+      <path d={fold.vein} fill="none" stroke="#0b1114" strokeWidth="19" strokeLinecap="round" />
+      <path d={fold.vein} fill="none" stroke="#7aa6a1" strokeWidth="3" strokeOpacity=".7" strokeLinecap="round" />
     </svg>
   );
 });
@@ -62,10 +69,11 @@ export function EntranceJourney({ elapsed }: { elapsed: number }) {
         data-testid="mouth-passage"
         style={{ opacity: tunnelOpacity, visibility: elapsed < 1160 || elapsed > 4250 ? "hidden" : "visible" }}
       >
-        <div className={styles.wall} style={{ transform: `translate3d(${-cameraBend * 0.22}px, 0, 0)` }} />
-        <div className={styles.strandLeft} style={{ transform: `translate3d(${-cameraBend * 0.7}px, ${travel * 130}px, 0)` }} />
-        <div className={styles.strandRight} style={{ transform: `translate3d(${-cameraBend * 0.3}px, ${-travel * 105}px, 0)` }} />
-        <div className={styles.depth}>
+        <div className={styles.wall} style={{ transform: `translate3d(${-cameraBend * 0.22}px, 0, 0) scale(${1 + 0.22 * travel})` }}>
+          <div className={styles.wallDrift} />
+        </div>
+        <div className={styles.depthGimbal} data-testid="tunnel-gimbal">
+          <div className={styles.depth}>
           {ringDepths.map((depth, index) => {
             const z = depth + travel * 5000;
             const x = (index - 3.5) * 22 - cameraBend;
@@ -73,7 +81,7 @@ export function EntranceJourney({ elapsed }: { elapsed: number }) {
             const visible = z < 420 && z > -4700;
             return (
               <div
-                className={styles.ring}
+                className={styles.fold}
                 data-depth={index}
                 key={depth}
                 style={{
@@ -82,10 +90,13 @@ export function EntranceJourney({ elapsed }: { elapsed: number }) {
                   visibility: visible ? "visible" : "hidden",
                 }}
               >
-                <PassageRing index={index} />
+                <div className={styles.foldAmbient} style={{ animationDelay: `${-index * 0.72}s`, animationDuration: `${3.4 + index * 0.55}s` }}>
+                  <OrganicFold index={index} />
+                </div>
               </div>
             );
           })}
+          </div>
         </div>
         <div className={styles.shadow} style={{ opacity: 0.14 + 0.18 * Math.sin(travel * Math.PI * 4) ** 2 }} />
       </div>

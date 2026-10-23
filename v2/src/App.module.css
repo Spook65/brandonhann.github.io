@@ -85,8 +85,8 @@
 }
 
 .guardianScene {
-  --mouth-shift: -19vh;
-  background: #080f13;
+  --mouth-shift: -23vh;
+  background: #0b090c;
 }
 
 .sceneHidden {
@@ -98,12 +98,21 @@
   inset: 0;
   width: 100%;
   height: 100%;
+  transform: translate3d(calc(var(--route-x, 0px) + var(--core-look-x, 0px)), calc(var(--route-y, 0px) + var(--core-look-y, 0px)), 0) scale(1.025);
+  transition: transform 240ms ease-out;
 }
+
+.chamberScene[data-active-route="quest"] { --route-x: 5px; --route-y: -3px; }
+.chamberScene[data-active-route="archives"] { --route-x: -8px; --route-y: -3px; }
+.chamberScene[data-active-route="arsenal"] { --route-x: -7px; --route-y: 3px; }
+.chamberScene[data-active-route="chronicles"] { --route-x: 8px; --route-y: 3px; }
+.chamberScene[data-active-route="profile"] { --route-x: -2px; --route-y: -7px; }
+.chamberScene[data-active-route="signal"] { --route-x: 3px; --route-y: -7px; }
 
 .guardianCamera {
   position: absolute;
   inset: 0;
-  transform-origin: 50% 69%;
+  transform-origin: 69% 73%;
   will-change: transform, opacity;
 }
 
@@ -115,8 +124,17 @@
 
 .layeredGuardian svg {
   display: block;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: -5%;
+  right: 5%;
+  width: auto;
+  height: 125%;
+  transform: translate3d(var(--look-x, 0px), var(--look-y, 0px), 0);
+  transition: transform 180ms ease-out, filter 180ms ease-out;
+}
+
+.guardianScene[data-attentive="true"] .layeredGuardian svg {
+  filter: brightness(1.07);
 }
 
 .guardianShade {
@@ -125,16 +143,18 @@
   background:
     linear-gradient(
       90deg,
-      rgba(7, 9, 10, 0.82),
-      rgba(7, 9, 10, 0.18) 42%,
+      rgba(9, 7, 9, 0.88),
+      rgba(9, 7, 9, 0.12) 45%,
       transparent 75%
     ),
     linear-gradient(
       0deg,
-      rgba(7, 9, 10, 0.87),
+      rgba(9, 7, 9, 0.83),
       transparent 37%,
       rgba(7, 9, 10, 0.14)
     );
+  transform: translate3d(var(--shade-look-x, 0px), var(--shade-look-y, 0px), 0) scale(1.015);
+  transition: transform 220ms ease-out;
 }
 
 .heroCopy {
@@ -196,11 +216,12 @@
 .mouthControl {
   position: absolute;
   z-index: 5;
-  top: 69%;
-  left: 50%;
+  top: 73%;
+  left: 69%;
   display: grid;
   justify-items: center;
-  transform: translate(-50%, -50%);
+  transform: translate(calc(-50% + var(--look-x, 0px)), calc(-50% + var(--look-y, 0px)));
+  transition: transform 180ms ease-out;
 }
 
 .enterButton {
@@ -300,6 +321,8 @@
       rgba(7, 10, 12, 0.44)
     ),
     linear-gradient(0deg, rgba(7, 10, 12, 0.36), transparent 55%);
+  transform: translate3d(var(--shade-look-x, 0px), var(--shade-look-y, 0px), 0) scale(1.015);
+  transition: transform 240ms ease-out;
 }
 
 .domainAwake .chamberShade {
@@ -376,6 +399,14 @@
   background: #392918;
   color: var(--color-ivory);
   text-decoration: none;
+}
+
+.conceptNote {
+  max-width: 32rem;
+  margin: 0.8rem 0 0;
+  color: #d6c4b7;
+  font-size: 0.82rem;
+  text-shadow: 0 2px 8px #000;
 }
 
 
@@ -713,11 +744,18 @@
     padding: 0.25rem 0;
   }
   .guardianScene {
-    --mouth-shift: -10vh;
+    --mouth-shift: -13vh;
     min-height: max(100svh, 44rem);
   }
   .guardianCamera {
-    transform-origin: 50% 60%;
+    transform-origin: 50% 71%;
+  }
+  .layeredGuardian svg {
+    top: 14%;
+    right: auto;
+    left: 50%;
+    height: 90%;
+    transform: translateX(-50%) translate3d(var(--look-x, 0px), var(--look-y, 0px), 0);
   }
   .guardianShade {
     background:
@@ -732,11 +770,12 @@
   .heroCopy {
     left: 1.2rem;
     right: 1.2rem;
-    bottom: 4.5rem;
+    top: 6.2rem;
+    bottom: auto;
     width: auto;
   }
   .heroTitle {
-    font-size: clamp(3.5rem, 13vw, 4.8rem);
+    font-size: clamp(3.3rem, 12vw, 4.5rem);
   }
   .heroLead {
     max-width: 19rem;
@@ -752,7 +791,8 @@
     width: 1rem;
   }
   .mouthControl {
-    top: 60%;
+    top: 71%;
+    left: 50%;
   }
   .enterButton {
     min-width: 7.2rem;
@@ -790,15 +830,21 @@
     );
   }
   .humanIntro {
-    margin: 0 1.2rem;
-    padding-top: 7rem;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0;
+    padding: 5.9rem 1.2rem 1.4rem;
     max-width: none;
   }
   .humanIntro h2 {
-    font-size: clamp(3.1rem, 11vw, 4.5rem);
+    font-size: clamp(2.8rem, 10vw, 3.8rem);
   }
   .dialogue {
-    margin-top: 1rem;
+    width: 100%;
+    margin-top: auto;
     padding: 1rem;
   }
   .dialogue p {
@@ -890,4 +936,17 @@
   .destinationList button:hover {
     transform: none;
   }
+  .coreArt,
+  .guardianShade,
+  .chamberShade,
+  .layeredGuardian svg {
+    transform: none;
+  }
+  .mouthControl {
+    transform: translate(-50%, -50%);
+  }
+}
+
+@media (max-width: 600px) and (prefers-reduced-motion: reduce) {
+  .layeredGuardian svg { transform: translateX(-50%); }
 }

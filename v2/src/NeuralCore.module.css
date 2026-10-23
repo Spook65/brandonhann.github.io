@@ -1,0 +1,31 @@
+.core {
+  overflow: hidden;
+}
+
+.backdrop {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: coreBreath 8s ease-in-out infinite alternate;
+}
+
+.route {
+  transition: filter 240ms ease, opacity 240ms ease;
+}
+
+.route[data-active="true"] {
+  filter: drop-shadow(0 0 7px rgba(231, 172, 91, .72));
+}
+
+@keyframes coreBreath {
+  from { transform: scale(1.008) translateY(2px); filter: brightness(.94); }
+  to { transform: scale(1.022) translateY(-3px); filter: brightness(1.06); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop { animation: none; }
+  .route { transition: none; }
+}
+
+:global([data-tab-hidden="true"]) .backdrop {
+  animation-play-state: paused;
+}

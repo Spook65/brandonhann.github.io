@@ -141,12 +141,59 @@ function App() {
   const [scene, setScene] = useState<Scene>("guardian");
   const [line, setLine] = useState(0);
   const [selected, setSelected] = useState<DestinationId>("quest");
+  const [preview, setPreview] = useState<DestinationId | null>(null);
   const [jawProgress, setJawProgress] = useState(0);
   const [jawAlert, setJawAlert] = useState(false);
   const [journeyElapsed, setJourneyElapsed] = useState(0);
   const enterRef = useRef<HTMLButtonElement>(null);
   const humanTitleRef = useRef<HTMLHeadingElement>(null);
   const domainTitleRef = useRef<HTMLHeadingElement>(null);
+  const stageRef = useRef<HTMLElement>(null);
+  const spatialFrame = useRef(0);
+  const pendingPointer = useRef({ x: 0, y: 0 });
+
+  const paintPointer = () => {
+    spatialFrame.current = 0;
+    const stage = stageRef.current;
+    if (!stage) return;
+    const { x, y } = pendingPointer.current;
+    stage.style.setProperty("--look-x", `${(x * 8).toFixed(2)}px`);
+    stage.style.setProperty("--look-y", `${(y * 6).toFixed(2)}px`);
+    stage.style.setProperty("--camera-yaw", `${(x * 2.2).toFixed(2)}deg`);
+    stage.style.setProperty("--camera-pitch", `${(-y * 1.5).toFixed(2)}deg`);
+    stage.style.setProperty("--core-look-x", `${(-x * 4).toFixed(2)}px`);
+    stage.style.setProperty("--core-look-y", `${(-y * 3).toFixed(2)}px`);
+    stage.style.setProperty("--shade-look-x", `${(x * 2).toFixed(2)}px`);
+    stage.style.setProperty("--shade-look-y", `${(y * 1.5).toFixed(2)}px`);
+  };
+  const onSpatialMove = (event: React.PointerEvent<HTMLElement>) => {
+    if (event.pointerType === "touch" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    pendingPointer.current = {
+      x: Math.max(-1, Math.min(1, ((event.clientX - rect.left) / rect.width - 0.5) * 2)),
+      y: Math.max(-1, Math.min(1, ((event.clientY - rect.top) / rect.height - 0.5) * 2)),
+    };
+    if (!spatialFrame.current) spatialFrame.current = window.requestAnimationFrame(paintPointer);
+  };
+  const resetSpatial = () => {
+    pendingPointer.current = { x: 0, y: 0 };
+    if (!spatialFrame.current) spatialFrame.current = window.requestAnimationFrame(paintPointer);
+  };
+  useEffect(() => {
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onMotionChange = () => { if (motion.matches) resetSpatial(); };
+    const onVisibility = () => {
+      stageRef.current?.setAttribute("data-tab-hidden", String(document.hidden));
+      if (document.hidden) resetSpatial();
+    };
+    motion.addEventListener("change", onMotionChange);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      window.cancelAnimationFrame(spatialFrame.current);
+      motion.removeEventListener("change", onMotionChange);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, []);
 
   useEffect(() => {
     const navigateHash = () => {
@@ -223,6 +270,7 @@ function App() {
   const cameraEase = approach * approach * (3 - 2 * approach);
   const guardianFade = 1 - Math.min(1, Math.max(0, (journeyElapsed - 1280) / 580));
   const copyFade = 1 - Math.min(1, Math.max(0, (journeyElapsed - 610) / 280));
+  const controlFade = 1 - Math.min(1, Math.max(0, (journeyElapsed - 70) / 240));
 
   return (
     <>
@@ -250,14 +298,18 @@ function App() {
         <main id="main-content">
           <section
             id="hero"
+            ref={stageRef}
             className={styles.stage}
             aria-label="The Builder’s Domain entrance and hub"
+            onPointerMove={onSpatialMove}
+            onPointerLeave={resetSpatial}
           >
             <div
               className={[
                 styles.guardianScene,
                 !guardianVisible ? styles.sceneHidden : "",
               ].join(" ")}
+              data-attentive={jawAlert && scene === "guardian"}
               aria-hidden={!guardianVisible}
               inert={!guardianVisible}
             >
@@ -289,7 +341,7 @@ function App() {
                   technology and people.
                 </p>
               </div>
-              <div className={styles.mouthControl} style={{ opacity: scene === "entering" ? copyFade : 1 }}>
+              <div className={styles.mouthControl} style={{ opacity: scene === "entering" ? controlFade : 1 }}>
                 <button
                   ref={enterRef}
                   className={styles.enterButton}
@@ -322,6 +374,7 @@ function App() {
             </div>
             <div
               id="core"
+              data-active-route={domainVisible ? preview ?? selected : undefined}
               className={[
                 styles.chamberScene,
                 chamberVisible ? styles.chamberVisible : "",
@@ -330,7 +383,7 @@ function App() {
               aria-hidden={!chamberVisible}
               inert={!chamberVisible}
             >
-              <NeuralCore className={styles.coreArt} selected={domainVisible ? selected : undefined} />
+              <NeuralCore className={styles.coreArt} selected={domainVisible ? preview ?? selected : undefined} />
               <div className={styles.chamberShade} aria-hidden="true" />
               {scene === "human" && (
                 <div className={styles.humanIntro}>
@@ -359,6 +412,9 @@ function App() {
                       </button>
                     </div>
                   </div>
+                  <p className={styles.conceptNote}>
+                    The illustrated operator is a fictional placeholder, not a portrait.
+                  </p>
                 </div>
               )}
               {domainVisible && (
@@ -393,6 +449,10 @@ function App() {
                           aria-pressed={selected === item.id}
                           aria-controls="destination-panel"
                           onClick={() => setSelected(item.id)}
+                          onPointerEnter={() => setPreview(item.id)}
+                          onPointerLeave={() => setPreview(null)}
+                          onFocus={() => setPreview(item.id)}
+                          onBlur={() => setPreview(null)}
                         >
                           <span className={styles.destinationNumber}>
                             {item.number}
