@@ -6,6 +6,7 @@ type Props = {
   className: string;
   progress: number;
   alert: boolean;
+  aperture?: number;
 };
 
 const clamp = (value: number) => Math.max(0, Math.min(1, value));
@@ -15,8 +16,10 @@ export const LayeredGuardian = memo(function LayeredGuardian({
   className,
   progress,
   alert,
+  aperture = 0,
 }: Props) {
   const p = clamp(progress || (alert ? 0.045 : 0));
+  const opening = clamp(aperture);
   const lift = 155 * (1 - p);
   const leftEnd = 1000 - lift;
   const rightEnd = 1012 - lift;
@@ -64,9 +67,18 @@ export const LayeredGuardian = memo(function LayeredGuardian({
             <stop offset=".5" stopColor="#6f3038" stopOpacity="0" />
             <stop offset="1" stopColor="#10080d" stopOpacity=".9" />
           </linearGradient>
+          <radialGradient id="inner-light">
+            <stop stopColor="#dda967" stopOpacity=".7" />
+            <stop offset=".38" stopColor="#964d39" stopOpacity=".22" />
+            <stop offset="1" stopColor="#31151b" stopOpacity="0" />
+          </radialGradient>
+          <mask id="guardian-background-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1024" height="1536">
+            <rect width="1024" height="1536" fill="white" />
+            <path d="M202 897Q515 835 822 898L846 1190Q688 1359 516 1368Q323 1353 181 1190Z" fill="black" opacity={opening} />
+          </mask>
         </defs>
-        <rect width="1024" height="1536" fill="url(#guardian-back)" />
-        <g data-layer="mouth-cavity">
+        <rect width="1024" height="1536" fill="url(#guardian-back)" mask="url(#guardian-background-mask)" />
+        <g data-layer="mouth-cavity" opacity={1 - opening}>
           <path
             d="M202 897Q515 835 822 898L846 1190Q688 1359 516 1368Q323 1353 181 1190Z"
             fill="#16080c"
@@ -87,6 +99,7 @@ export const LayeredGuardian = memo(function LayeredGuardian({
             fill="url(#cavity-edge)"
             opacity={0.45 + 0.25 * p}
           />
+          <ellipse cx="512" cy="1082" rx="195" ry="78" fill="url(#inner-light)" opacity={Math.max(0, (p - 0.2) * 0.8)} />
         </g>
         <g data-layer="side-tissue">
           <path d={leftTissue} fill="#3a1820" stroke="#130a0d" strokeWidth="16" />

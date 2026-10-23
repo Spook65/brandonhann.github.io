@@ -58,7 +58,8 @@ test('keyboard, touch, and missing artwork retain usable controls and content', 
     await keyboard.close();
 
     const touch = await browser.newPage({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, reducedMotion: 'reduce' });
-    await touch.route('**/*.webp', (route) => route.abort());
+    await touch.route('**/assets/guardian-organic-sheet-*.png', (route) => route.abort());
+    await touch.route('**/assets/operator-core-concept-*.jpg', (route) => route.abort());
     await touch.goto(site);
     await touch.getByRole('button', { name: /Skip introduction/ }).tap();
     assert.ok(await touch.getByRole('heading', { name: /The Builder’s Domain/ }).isVisible());

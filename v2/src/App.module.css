@@ -85,6 +85,7 @@
 }
 
 .guardianScene {
+  --mouth-x-shift: -19vw;
   --mouth-shift: -23vh;
   background: #0b090c;
 }
@@ -744,7 +745,8 @@
     padding: 0.25rem 0;
   }
   .guardianScene {
-    --mouth-shift: -13vh;
+    --mouth-x-shift: 0vw;
+    --mouth-shift: -21vh;
     min-height: max(100svh, 44rem);
   }
   .guardianCamera {

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { EntranceJourney, JOURNEY_MS } from "./EntranceJourney";
+import { BREACH_MS, BreachTransition } from "./BreachTransition";
 import { NeuralCore } from "./NeuralCore";
 import {
   destinations,
@@ -144,7 +144,7 @@ function App() {
   const [preview, setPreview] = useState<DestinationId | null>(null);
   const [jawProgress, setJawProgress] = useState(0);
   const [jawAlert, setJawAlert] = useState(false);
-  const [journeyElapsed, setJourneyElapsed] = useState(0);
+  const [breachElapsed, setBreachElapsed] = useState(0);
   const enterRef = useRef<HTMLButtonElement>(null);
   const humanTitleRef = useRef<HTMLHeadingElement>(null);
   const domainTitleRef = useRef<HTMLHeadingElement>(null);
@@ -199,7 +199,16 @@ function App() {
     const navigateHash = () => {
       const id = decodeURIComponent(window.location.hash.slice(1));
       if (id === "domain") setScene("domain");
-      if (id === "core") setScene("human");
+      else if (id === "core") setScene("human");
+      else if (id === "hero") {
+        setScene("guardian");
+        setJawProgress(0);
+        setBreachElapsed(0);
+      } else if (id) {
+        setScene((current) => current === "entering" ? "guardian" : current);
+        setJawProgress(0);
+        setBreachElapsed(0);
+      }
       if (id)
         window.requestAnimationFrame(() =>
           document.getElementById(id)?.scrollIntoView(),
@@ -214,11 +223,11 @@ function App() {
     let frame = 0;
     const start = performance.now();
     const tick = (now: number) => {
-      const elapsed = Math.min(JOURNEY_MS, now - start);
-      setJourneyElapsed(elapsed);
-      const jaw = Math.min(1, Math.max(0, (elapsed - 100) / 660));
+      const elapsed = Math.min(BREACH_MS, now - start);
+      setBreachElapsed(elapsed);
+      const jaw = Math.min(1, Math.max(0, (elapsed - 90) / 560));
       setJawProgress(1 - (1 - jaw) ** 3);
-      if (elapsed >= JOURNEY_MS) setScene("human");
+      if (elapsed >= BREACH_MS) setScene("human");
       else frame = window.requestAnimationFrame(tick);
     };
     frame = window.requestAnimationFrame(tick);
@@ -253,7 +262,7 @@ function App() {
   const returnHome = () => {
     setScene("guardian");
     setJawProgress(0);
-    setJourneyElapsed(0);
+    setBreachElapsed(0);
     setJawAlert(false);
     setLine(0);
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -266,11 +275,12 @@ function App() {
   const guardianVisible = scene === "guardian" || scene === "entering";
   const chamberVisible = !guardianVisible;
   const domainVisible = scene === "domain";
-  const approach = Math.min(1, Math.max(0, (journeyElapsed - 760) / 690));
+  const approach = Math.min(1, Math.max(0, (breachElapsed - 540) / 810));
   const cameraEase = approach * approach * (3 - 2 * approach);
-  const guardianFade = 1 - Math.min(1, Math.max(0, (journeyElapsed - 1280) / 580));
-  const copyFade = 1 - Math.min(1, Math.max(0, (journeyElapsed - 610) / 280));
-  const controlFade = 1 - Math.min(1, Math.max(0, (journeyElapsed - 70) / 240));
+  const aperture = Math.min(1, Math.max(0, (breachElapsed - 830) / 440));
+  const guardianFade = 1 - Math.min(1, Math.max(0, (breachElapsed - 1330) / 250));
+  const copyFade = 1 - Math.min(1, Math.max(0, (breachElapsed - 440) / 260));
+  const controlFade = 1 - Math.min(1, Math.max(0, (breachElapsed - 70) / 230));
 
   return (
     <>
@@ -313,20 +323,22 @@ function App() {
               aria-hidden={!guardianVisible}
               inert={!guardianVisible}
             >
+              {scene === "entering" && <BreachTransition elapsed={breachElapsed} />}
               <div
                 className={styles.guardianCamera}
                 style={{
                   opacity: scene === "entering" ? guardianFade : 1,
-                  transform: `translateY(calc(var(--mouth-shift) * ${cameraEase})) scale(${1 + 2.4 * cameraEase})`,
+                  transform: `translateX(calc(var(--mouth-x-shift) * ${cameraEase})) translateY(calc(var(--mouth-shift) * ${cameraEase})) scale(${1 + 4.5 * cameraEase})`,
                 }}
               >
                 <LayeredGuardian
                   className={styles.layeredGuardian}
                   progress={jawProgress}
                   alert={jawAlert && scene === "guardian"}
+                  aperture={aperture}
                 />
               </div>
-              <div className={styles.guardianShade} aria-hidden="true" />
+              <div className={styles.guardianShade} style={{ opacity: 1 - aperture * 0.45 }} aria-hidden="true" />
               <div className={styles.heroCopy} style={{ opacity: scene === "entering" ? copyFade : 1 }}>
                 <p className={styles.kicker}>
                   The Builder’s Logbook <span>/ 001</span>
@@ -360,7 +372,6 @@ function App() {
                   A passage into the person behind the work
                 </span>
               </div>
-              {scene === "entering" && <EntranceJourney elapsed={journeyElapsed} />}
               <div className={styles.heroBottom}>
                 <button
                   className={styles.textButton}
