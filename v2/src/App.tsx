@@ -154,6 +154,8 @@ function App() {
   const [selected, setSelected] = useState<DestinationId | null>(null);
   const [preview, setPreview] = useState<DestinationId | null>(null);
   const [operatorOpen, setOperatorOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [panelRevealVersion, setPanelRevealVersion] = useState(0);
   const [jawProgress, setJawProgress] = useState(0);
   const [jawAlert, setJawAlert] = useState(false);
   const [breachElapsed, setBreachElapsed] = useState(0);
@@ -161,6 +163,10 @@ function App() {
   const humanTitleRef = useRef<HTMLHeadingElement>(null);
   const domainTitleRef = useRef<HTMLHeadingElement>(null);
   const stageRef = useRef<HTMLElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
+  const mobileNavRef = useRef<HTMLElement>(null);
+  const mobileMenuButtonRef = useRef<HTMLButtonElement>(null);
+  const pendingPanelReveal = useRef(false);
   const spatialFrame = useRef(0);
   const pendingPointer = useRef({ x: 0, y: 0 });
 
@@ -210,6 +216,14 @@ function App() {
   useEffect(() => {
     const navigateHash = () => {
       const id = decodeURIComponent(window.location.hash.slice(1));
+      const destination = destinations.find((item) => `domain-${item.id}` === id);
+      if (destination) {
+        pendingPanelReveal.current = true;
+        setPanelRevealVersion((version) => version + 1);
+        setSelected(destination.id);
+        setScene("domain");
+        return;
+      }
       if (id === "domain") setScene("domain");
       else if (id === "core") setScene("human");
       else if (id === "hero") {
@@ -228,8 +242,44 @@ function App() {
     };
     navigateHash();
     window.addEventListener("hashchange", navigateHash);
-    return () => window.removeEventListener("hashchange", navigateHash);
+    window.addEventListener("popstate", navigateHash);
+    return () => {
+      window.removeEventListener("hashchange", navigateHash);
+      window.removeEventListener("popstate", navigateHash);
+    };
   }, []);
+  useEffect(() => {
+    if (scene !== "domain" || !selected || !pendingPanelReveal.current) return;
+    pendingPanelReveal.current = false;
+    if (!window.matchMedia("(max-width: 600px)").matches) return;
+    const frame = window.requestAnimationFrame(() => {
+      const panel = panelRef.current;
+      if (!panel) return;
+      panel.scrollIntoView({
+        block: "start",
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+      });
+      panel.focus({ preventScroll: true });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [scene, selected, panelRevealVersion]);
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const dismiss = (event: PointerEvent) => {
+      if (!mobileNavRef.current?.contains(event.target as Node)) setMobileMenuOpen(false);
+    };
+    const onEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setMobileMenuOpen(false);
+      mobileMenuButtonRef.current?.focus();
+    };
+    document.addEventListener("pointerdown", dismiss);
+    document.addEventListener("keydown", onEscape);
+    return () => {
+      document.removeEventListener("pointerdown", dismiss);
+      document.removeEventListener("keydown", onEscape);
+    };
+  }, [mobileMenuOpen]);
   useEffect(() => {
     if (scene !== "entering") return;
     let frame = 0;
@@ -271,6 +321,13 @@ function App() {
     }
   };
   const skip = () => setScene("domain");
+  const activateDestination = (id: DestinationId) => {
+    pendingPanelReveal.current = true;
+    setPanelRevealVersion((version) => version + 1);
+    setSelected(id);
+    const hash = `#domain-${id}`;
+    if (window.location.hash !== hash) window.history.pushState(null, "", hash);
+  };
   const returnHome = () => {
     setScene("guardian");
     setJawProgress(0);
@@ -318,6 +375,24 @@ function App() {
             <a href="#skills">Skills</a>
             <a href={base + "resume.html"}>Résumé</a>
             <a href="#contact">Contact</a>
+          </nav>
+          <nav ref={mobileNavRef} className={styles.mobileNav} aria-label="Mobile navigation">
+            <a href="#projects" onClick={() => setMobileMenuOpen(false)}>Projects</a>
+            <a href={base + "resume.html"}>Résumé</a>
+            <button
+              ref={mobileMenuButtonRef}
+              type="button"
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-secondary-navigation"
+              onClick={() => setMobileMenuOpen((open) => !open)}
+            >
+              Menu <span aria-hidden="true">▾</span>
+            </button>
+            <div id="mobile-secondary-navigation" className={styles.mobileMenu} hidden={!mobileMenuOpen}>
+              <a href="#about" onClick={() => setMobileMenuOpen(false)}>About</a>
+              <a href="#skills" onClick={() => setMobileMenuOpen(false)}>Skills</a>
+              <a href="#contact" onClick={() => setMobileMenuOpen(false)}>Contact</a>
+            </div>
           </nav>
         </header>
         <main id="main-content">
@@ -484,7 +559,7 @@ function App() {
                             aria-label={`Open ${item.label} connection`}
                             aria-pressed={selected === item.id}
                             aria-controls="destination-panel"
-                            onClick={() => setSelected(item.id)}
+                            onClick={() => activateDestination(item.id)}
                             onPointerEnter={() => setPreview(item.id)}
                             onPointerLeave={() => setPreview(null)}
                             onFocus={() => setPreview(item.id)}
@@ -498,7 +573,7 @@ function App() {
                           <strong>System status</strong>
                           <p>Brandon Hann · Builder and operator</p>
                           <p>Main Quest: {secureAgent.name} · {secureAgent.status}</p>
-                          <button type="button" onClick={() => { setSelected("quest"); setOperatorOpen(false); }}>
+                          <button type="button" onClick={() => { activateDestination("quest"); setOperatorOpen(false); }}>
                             Follow Main Quest →
                           </button>
                       </section>
@@ -519,7 +594,7 @@ function App() {
                           key={item.id}
                           aria-pressed={selected === item.id}
                           aria-controls="destination-panel"
-                          onClick={() => setSelected(item.id)}
+                          onClick={() => activateDestination(item.id)}
                           onPointerEnter={() => setPreview(item.id)}
                           onPointerLeave={() => setPreview(null)}
                           onFocus={() => setPreview(item.id)}
@@ -537,8 +612,10 @@ function App() {
                       ))}
                     </div>
                     <section
+                      ref={panelRef}
                       className={`${styles.destinationPanel} ${selected === null ? styles.destinationPanelIdle : ""}`}
                       id="destination-panel"
+                      tabIndex={-1}
                       aria-live="polite"
                       aria-label={selected === null ? "Connection details" : `${destinations.find((item) => item.id === selected)?.label} details`}
                     >
