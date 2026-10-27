@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { chromium } from 'playwright';
 
-const site = process.env.PORTFOLIO_PREVIEW_URL ?? 'http://127.0.0.1:4173/brandonhann.github.io/';
+const site = `${process.env.PORTFOLIO_PREVIEW_URL ?? 'http://127.0.0.1:4173/brandonhann.github.io/'}?experience=guardian`;
 const enterName = 'Enter through the Guardian’s mouth';
 
 test('the articulated jaw opens before a short crossing into the operator Core', async () => {
@@ -41,6 +41,7 @@ test('activation-to-Core duration stays within the fast breach target', async ()
   try {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
     await page.goto(site);
+    await page.getByRole('button', { name: enterName }).waitFor();
     const duration = await page.evaluate(async () => {
       const enter = document.querySelector('button[aria-label="Enter through the Guardian’s mouth"]');
       if (!(enter instanceof HTMLButtonElement)) throw new Error('Enter button missing');
@@ -73,6 +74,7 @@ test('pointer response and destination focus remain spatial and accessible', asy
   try {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
     await page.goto(site);
+    await page.getByRole('button', { name: enterName }).waitFor();
     const stage = page.locator('#hero');
     await page.mouse.move(100, 320);
     await page.waitForTimeout(50);
@@ -137,7 +139,7 @@ test('route change cancels entrance; Back and return permit repeated entry', asy
     await page.getByRole('button', { name: enterName }).click();
     await page.waitForTimeout(240);
     await page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link', { name: 'Projects' }).click();
-    await page.waitForURL('**/#projects');
+    await page.waitForURL('**/?experience=guardian#projects');
     await page.waitForTimeout(1700);
     assert.equal(await page.getByTestId('breach-core').count(), 0);
     assert.ok(await page.getByRole('heading', { name: 'Projects', exact: true }).isVisible());

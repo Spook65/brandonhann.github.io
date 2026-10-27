@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { chromium } from 'playwright';
 
-const site = process.env.PORTFOLIO_PREVIEW_URL ?? 'http://127.0.0.1:4173/brandonhann.github.io/';
+const site = `${process.env.PORTFOLIO_PREVIEW_URL ?? 'http://127.0.0.1:4173/brandonhann.github.io/'}?experience=guardian`;
 
 test('entrance, dialogue, connected domain destinations, and direct links work', async () => {
   const browser = await chromium.launch();
@@ -10,6 +10,7 @@ test('entrance, dialogue, connected domain destinations, and direct links work',
     for (const width of [390, 1440]) {
       const page = await browser.newPage({ viewport: { width, height: 900 } });
       await page.goto(site);
+      await page.getByRole('button', { name: /Enter through the Guardian/ }).waitFor();
       assert.ok(await page.getByRole('link', { name: 'Projects', exact: true }).isVisible());
       assert.ok(await page.getByRole('link', { name: 'Résumé', exact: true }).isVisible());
       await page.getByRole('button', { name: /Enter through the Guardian/ }).click();

@@ -1,0 +1,37 @@
+.patch {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  min-height: 64px;
+  padding: .15rem .35rem;
+  border: 0;
+  background: transparent;
+  color: var(--color-ivory);
+  font-size: .78rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: left;
+  cursor: pointer;
+}
+
+.patch svg {
+  width: 62px;
+  height: 62px;
+  flex: none;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 6px 0 #0008);
+}
+
+.patch span { max-width: 3.8rem; }
+
+.patch[data-pose="wave"] svg { transform: rotate(-7deg) translateY(-3px); }
+.patch[data-pose="inspect"] svg { transform: translateY(-3px) scale(1.08); }
+.patch:focus-visible { outline: 2px solid var(--color-cyan); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .patch svg { transition: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .patch svg { transition: transform .2s ease; }
+}

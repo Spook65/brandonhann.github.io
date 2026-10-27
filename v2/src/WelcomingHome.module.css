@@ -1,0 +1,132 @@
+.skipLink { position: fixed; top: -5rem; left: 1rem; z-index: 100; padding: .7rem 1rem; background: var(--color-ivory); color: #101716; }
+.skipLink:focus { top: .75rem; }
+
+.header { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 4.5rem; padding: .7rem clamp(1.5rem, 4.5vw, 4.5rem); border-bottom: 1px solid #f4eddd30; background: #101716f2; backdrop-filter: blur(12px); }
+.brand { flex: none; color: var(--color-ivory); font: 650 1.8rem/1 var(--font-display); letter-spacing: -.04em; text-decoration: none; }
+.brand span { color: var(--color-amber); }
+.desktopNav { display: flex; align-items: center; gap: clamp(1rem, 2.5vw, 2.5rem); }
+.desktopNav a { position: relative; display: inline-flex; align-items: center; min-height: 44px; color: var(--color-ivory); font-weight: 700; text-decoration: none; }
+.desktopNav a::after { content: ''; position: absolute; bottom: 4px; left: 0; width: 0; height: 2px; background: var(--color-amber); transition: width .18s ease; }
+.desktopNav a:is(:hover, :focus-visible)::after { width: 100%; }
+.mobileNav { display: none; }
+
+.hero { position: relative; display: grid; grid-template-columns: minmax(0, 1.13fr) minmax(18rem, .8fr); align-items: center; gap: clamp(2rem, 5vw, 6rem); min-height: min(52rem, calc(100svh - 4.5rem)); padding: 4rem clamp(1.5rem, 6vw, 6rem) 6.5rem; overflow: hidden; background: #101716; }
+.hero::before { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: .18; background-image: radial-gradient(#706b5e .7px, transparent .7px); background-size: 18px 18px; mask-image: linear-gradient(90deg, transparent 12%, #000 100%); }
+.heroCopy, .portraitArea { position: relative; z-index: 1; }
+.eyebrow { margin: 0 0 1.15rem; color: var(--color-cyan); font-size: .82rem; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; }
+.eyebrow::before { content: '—'; margin-right: .75rem; color: var(--color-amber); }
+.hero h1 { margin: 0; color: var(--color-ivory); font: 600 clamp(5rem, 8.3vw, 8.5rem)/.94 var(--font-display); letter-spacing: -.06em; }
+.hero h1 em { color: var(--color-amber); font-weight: 450; }
+.lead { max-width: 35rem; margin: 2rem 0 1.25rem; color: var(--color-ivory); font-size: clamp(1.3rem, 1.7vw, 1.55rem); font-weight: 600; line-height: 1.4; }
+.intro { max-width: 35rem; margin: 0; color: var(--color-muted); font-size: 1.1rem; line-height: 1.52; }
+.heroActions { display: flex; flex-wrap: wrap; align-items: center; gap: .7rem 1.8rem; margin-top: 2rem; }
+.primaryAction { display: inline-flex; align-items: center; justify-content: space-between; gap: 1.8rem; min-height: 48px; padding: .7rem 1.2rem; background: var(--color-amber); color: #181713; font-weight: 750; text-decoration: none; transition: background .18s, transform .18s; }
+.primaryAction:is(:hover, :focus-visible) { background: #f5c88d; transform: translateY(-2px); }
+.textAction { display: inline-flex; align-items: center; min-height: 44px; border-bottom: 1px solid var(--color-cyan); color: var(--color-ivory); font-weight: 750; text-decoration: none; }
+.textAction:is(:hover, :focus-visible) { color: var(--color-cyan); }
+.now { margin: 1.6rem 0 0; color: var(--color-cyan); font-size: .92rem; }
+.portraitArea { width: min(100%, 27.5rem); justify-self: center; margin-bottom: 2rem; transform: rotate(2deg); }
+.photoFrame { position: relative; padding: .75rem .75rem 1rem; background: #eee7d8; box-shadow: .95rem 1rem 0 #05090875; }
+.photoFrame::before { content: ''; position: absolute; z-index: 2; top: -.7rem; left: 39%; width: 4.5rem; height: 1.3rem; transform: rotate(-5deg); background: #e6ab62bd; }
+.photoFrame img { display: block; width: 100%; aspect-ratio: 4 / 4.7; object-fit: cover; object-position: center 32%; filter: saturate(.83) contrast(1.04); }
+.photoCaption { display: flex; justify-content: space-between; gap: 1rem; padding: .75rem .3rem 0; color: #3a3834; font-size: .85rem; font-weight: 700; }
+.portraitFallback { display: grid; place-items: center; min-height: 24rem; padding: 1.5rem; background: #ddd1ba; color: #3a3834; text-align: center; }
+.portraitArea > :last-child { position: absolute; right: 0; bottom: -5.2rem; transform: rotate(-2deg); }
+
+.projects { padding: 5.5rem clamp(1.5rem, 6vw, 6rem) 6.5rem; border-top: 1px solid #f4eddd30; background: #101716; scroll-margin-top: 5rem; }
+.sectionHeading { display: flex; align-items: end; justify-content: space-between; gap: 2rem; margin-bottom: 1.7rem; }
+.sectionHeading h2 { margin: 0; font: 520 clamp(3.2rem, 5vw, 5rem)/1 var(--font-display); letter-spacing: -.04em; }
+.sectionHeading > p { max-width: 20rem; margin: 0; color: var(--color-muted); font-size: 1rem; line-height: 1.5; }
+.projectHelp { margin: 0 0 1.6rem; color: var(--color-muted); font-size: .95rem; }
+.explorer { display: grid; grid-template-columns: minmax(17rem, .9fr) minmax(20rem, 1fr); gap: clamp(2rem, 4vw, 5rem); align-items: start; }
+.projectList { border-top: 1px solid var(--color-border); }
+.projectItem { position: relative; }
+.projectButton { position: relative; display: grid; grid-template-columns: 2.25rem minmax(0, 1fr) 1.5rem; align-items: center; gap: .85rem; width: 100%; min-height: 7.4rem; padding: 1.15rem .4rem; border: 0; border-bottom: 1px solid var(--color-border); background: transparent; color: var(--color-ivory); text-align: left; cursor: pointer; transition: background .18s ease, padding-left .18s ease; }
+.projectButton:is(:hover, :focus-visible), .projectButton[data-preview="true"] { padding-left: .8rem; background: #26302bc4; }
+.projectButton[data-selected="true"]::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--color-amber); }
+.projectIndex { align-self: start; color: var(--color-amber); font-size: .86rem; font-weight: 750; }
+.projectName strong { display: block; font: 520 clamp(1.8rem, 2.5vw, 2.5rem)/1.1 var(--font-display); }
+.projectName small { display: block; margin-top: .4rem; color: var(--color-cyan); font-size: .82rem; font-weight: 750; line-height: 1.35; }
+.projectArrow { color: var(--color-amber); font-size: 1.5rem; transition: transform .18s ease; }
+.projectButton:is(:hover, :focus-visible) .projectArrow { transform: translate(3px, -3px); }
+.projectPreview { min-width: 0; border: 1px solid #857963; background: #192220; scroll-margin-top: 5rem; }
+.previewVisual { position: relative; display: flex; min-height: 13.5rem; flex-direction: column; justify-content: space-between; padding: 1.2rem; border-bottom: 1px solid #857963; background: #252d2a; }
+.previewTag { color: var(--color-cyan); font-size: .8rem; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
+.previewPlaceholder { align-self: center; padding: .45rem .75rem; border: 1px dashed #d0c4af; color: #e1d8c7; font-size: .95rem; text-align: center; }
+.previewContent { padding: clamp(1.5rem, 2.4vw, 2.3rem); }
+.previewStatus { margin: 0 0 .8rem; color: var(--color-amber); font-size: .93rem; font-weight: 750; }
+.previewContent h3 { margin: 0 0 .85rem; font: 520 clamp(2.5rem, 3vw, 3.6rem)/1.08 var(--font-display); }
+.previewContent > p:not(.previewStatus) { max-width: 32rem; margin: 0; color: var(--color-ivory); font-size: 1.15rem; line-height: 1.48; }
+.previewLinks { display: flex; flex-wrap: wrap; gap: .65rem 1.5rem; margin-top: 1.4rem; }
+.previewLinks a { display: inline-flex; align-items: center; min-height: 44px; color: var(--color-cyan); font-weight: 750; text-underline-offset: .28rem; }
+.previewContent .noDemo { margin-top: 1.2rem !important; color: var(--color-muted) !important; font-size: .93rem !important; }
+.selectionAnnouncement { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.anchor { position: absolute; width: 1px; height: 1px; scroll-margin-top: 5rem; }
+
+.quickLinks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(2rem, 4vw, 5rem); padding: 4.5rem clamp(1.5rem, 6vw, 6rem); border-top: 1px solid #f4eddd30; background: #101716; }
+.quickLinks section { position: relative; min-width: 0; scroll-margin-top: 5rem; }
+.quickLinks h2 { margin: 0 0 1rem; font: 520 clamp(1.9rem, 2.6vw, 2.8rem)/1.1 var(--font-display); }
+.quickLinks p:last-child { margin: 0; color: var(--color-muted); }
+.contactLinks { display: flex; flex-wrap: wrap; gap: .5rem 1.2rem; }
+.contactLinks a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
+.innerInvitation { display: flex; align-items: end; justify-content: space-between; gap: 2rem; padding: 3.8rem clamp(1.5rem, 6vw, 6rem); background: #291d20; }
+.innerInvitation h2 { margin: 0 0 .8rem; font: 520 clamp(2.7rem, 4vw, 4.8rem)/1.05 var(--font-display); }
+.innerInvitation p:last-child { max-width: 38rem; margin: 0; color: #e0d0c7; font-size: 1.1rem; }
+.innerInvitation a { display: inline-flex; align-items: center; justify-content: space-between; gap: 1.5rem; min-height: 48px; padding: .7rem 1.2rem; border: 1px solid var(--color-amber); color: var(--color-ivory); font-weight: 750; text-decoration: none; white-space: nowrap; }
+.innerInvitation a:is(:hover, :focus-visible) { background: #604036; }
+.footer { padding: 1.8rem clamp(1.5rem, 6vw, 6rem); border-top: 1px solid #f4eddd30; background: #101716; color: var(--color-muted); font-size: .9rem; }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: minmax(0, 1fr) minmax(14rem, .75fr); }
+  .hero h1 { font-size: clamp(4.5rem, 8.4vw, 7rem); }
+  .explorer { gap: 2rem; }
+  .quickLinks { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 700px) {
+  .header { min-height: 4.3rem; padding: .55rem .7rem; gap: .4rem; }
+  .brand { font-size: 1.55rem; }
+  .desktopNav { display: none; }
+  .mobileNav { position: relative; display: flex; align-items: center; gap: .12rem; }
+  .mobileNav > a, .mobileNav > button, .mobileMenu a { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding: .4rem .45rem; color: var(--color-ivory); font-size: .98rem; font-weight: 700; text-decoration: none; white-space: nowrap; }
+  .mobileNav > button { gap: .2rem; border: 1px solid var(--color-border); background: #f4eddd12; cursor: pointer; }
+  .mobileMenu { position: absolute; top: calc(100% + .4rem); right: 0; z-index: 55; display: grid; min-width: 11rem; padding: .4rem; border: 1px solid var(--color-border); background: #192220; box-shadow: 0 12px 28px #0008; }
+  .mobileMenu[hidden] { display: none; }
+  .mobileMenu a { justify-content: flex-start; padding-inline: .8rem; }
+  .hero { display: block; min-height: 0; padding: 3.3rem 1.5rem 6.8rem; }
+  .hero h1 { font-size: clamp(3.8rem, 16vw, 5rem); }
+  .lead { margin-top: 1.5rem; font-size: 1.28rem; }
+  .intro { font-size: 1.03rem; }
+  .heroActions { gap: .6rem 1.3rem; margin-top: 1.5rem; }
+  .now { margin-top: 1.1rem; }
+  .portraitArea { width: min(75%, 20rem); margin: 3rem 1rem 0 auto; }
+  .photoFrame { padding: .5rem .5rem .75rem; }
+  .photoFrame img { aspect-ratio: 4 / 3.2; object-position: center 35%; }
+  .photoCaption { padding-top: .5rem; font-size: .65rem; }
+  .portraitFallback { min-height: 10rem; }
+  .portraitArea > :last-child { bottom: -4rem; }
+  .projects { padding: 4rem 1.5rem 5rem; }
+  .sectionHeading { display: block; }
+  .sectionHeading h2 { font-size: 3.2rem; }
+  .sectionHeading > p { margin-top: .8rem; }
+  .explorer { display: block; }
+  .projectButton { min-height: 6.3rem; }
+  .projectPreview { margin-top: 1.5rem; }
+  .previewVisual { min-height: 9rem; }
+  .quickLinks { display: block; padding: 3rem 1.5rem; }
+  .quickLinks section + section { margin-top: 2.5rem; }
+  .innerInvitation { display: block; padding: 3rem 1.5rem; }
+  .innerInvitation a { margin-top: 1.5rem; white-space: normal; }
+  .footer { padding: 1.5rem; }
+}
+
+@media (max-width: 360px) {
+  .mobileNav > a, .mobileNav > button { padding-inline: .32rem; font-size: .92rem; }
+  .portraitArea { width: 78%; }
+  .hero h1 { font-size: 3.75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desktopNav a::after, .primaryAction, .projectButton, .projectArrow { transition: none; }
+  .primaryAction:is(:hover, :focus-visible), .projectButton:is(:hover, :focus-visible) .projectArrow { transform: none; }
+}

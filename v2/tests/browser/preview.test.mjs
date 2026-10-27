@@ -11,7 +11,7 @@ test('production preview works at the GitHub Pages subpath across widths', async
       const page = await browser.newPage({ viewport: { width, height: 800 }, reducedMotion: 'reduce' });
       const response = await page.goto(site);
       assert.equal(response?.status(), 200);
-      await page.getByRole('heading', { name: 'Brandon Hann', level: 1 }).waitFor();
+      await page.getByRole('heading', { name: /Hey, I’m Brandon\./, level: 1 }).waitFor();
 
       const layout = await page.evaluate(() => ({
         viewport: document.documentElement.clientWidth,
@@ -23,7 +23,7 @@ test('production preview works at the GitHub Pages subpath across widths', async
         })),
       }));
       assert.ok(layout.scroll <= layout.viewport + 1, `horizontal overflow at ${width}px: ${layout.scroll} > ${layout.viewport}`);
-      assert.ok(layout.sections.length >= 6);
+      assert.ok(layout.sections.length >= 5);
       assert.ok(layout.sections.every((section) => section.opacity === '1' && section.visibility === 'visible'));
       await page.close();
     }
@@ -39,8 +39,7 @@ test('direct legacy hash navigation and static assets work', async () => {
     await page.goto(`${site}#project-cuda-mandelbrot`);
     await page.getByRole('heading', { name: 'Cura' }).waitFor();
     assert.ok(await page.locator('#project-cuda-mandelbrot').count());
-    const top = await page.locator('#project-cuda-mandelbrot').evaluate((element) => element.getBoundingClientRect().top);
-    assert.ok(top >= 0 && top < 80, `legacy anchor top is ${top}`);
+    assert.equal(await page.getByRole('button', { name: /Cura/ }).getAttribute('aria-pressed'), 'true');
 
     for (const path of ['favicon.svg', 'brandon-about.jpg', 'assets/resume/Brandon-Hann-Resume.pdf']) {
       const response = await page.request.get(`${site}${path}`);

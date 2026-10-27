@@ -40,4 +40,6 @@ test('built app excludes legacy effects and libraries', () => {
   for (const legacyToken of ['THREE.WebGLRenderer', 'cursor-spotlight', 'cursor-ring', 'setupHeroTypewriter', 'setupProjectsBusGraph']) {
     assert.equal(bundle.includes(legacyToken), false, `${legacyToken} leaked into the app`);
   }
+  assert.match(bundle, /GuardianExperience-[^"']+\.js/);
+  assert.equal(bundle.includes('guardian-organic-sheet'), false, 'Guardian artwork leaked into the default entry bundle');
 });
