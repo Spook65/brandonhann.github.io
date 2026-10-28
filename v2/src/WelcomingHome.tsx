@@ -3,17 +3,20 @@ import { profile, secureAgent, skillGroups } from './data/domain';
 import { legacyAnchors } from './data/legacyAnchors';
 import { projects } from './data/projects';
 import { Patch, type PatchPose } from './Patch';
+import { ProjectVisual } from './ProjectVisual';
+import type { VisualProjectId } from './visualModel';
+import '@fontsource-variable/inter/wght.css';
+import '@fontsource-variable/jetbrains-mono/wght.css';
 import styles from './WelcomingHome.module.css';
 
 const base = import.meta.env.BASE_URL;
 
 type ShowcaseItem = {
-  id: string;
+  id: VisualProjectId;
   name: string;
   status: string;
   summary: string;
   links: readonly { label: string; href: string }[];
-  imageNote: string;
 };
 
 const showcase: readonly ShowcaseItem[] = [
@@ -23,7 +26,6 @@ const showcase: readonly ShowcaseItem[] = [
     status: project.status,
     summary: project.summary,
     links: project.links,
-    imageNote: 'Project screenshot pending approval',
   })),
   {
     id: 'project-secureagent',
@@ -31,12 +33,13 @@ const showcase: readonly ShowcaseItem[] = [
     status: secureAgent.status,
     summary: secureAgent.summary,
     links: [],
-    imageNote: 'No public demo or project image',
   },
 ];
 
-function projectFromHash() {
-  const hash = decodeURIComponent(window.location.hash.slice(1));
+function projectFromHash(): VisualProjectId {
+  let hash: string;
+  try { hash = decodeURIComponent(window.location.hash.slice(1)); }
+  catch { return 'project-cura'; }
   if (hash === legacyAnchors.cura) return 'project-cura';
   if (hash === legacyAnchors.oddworks) return 'project-oddworks';
   return showcase.find((item) => item.id === hash)?.id ?? 'project-cura';
@@ -65,15 +68,18 @@ export function WelcomingHome() {
 
   useEffect(() => {
     const syncHash = () => {
-      const hash = decodeURIComponent(window.location.hash.slice(1));
+      let hash: string;
+      try { hash = decodeURIComponent(window.location.hash.slice(1)); }
+      catch { return; }
       if (!hash) {
         setSelectedId('project-cura');
         setPreviewId(null);
         return;
       }
       const mapped = hash === legacyAnchors.cura ? 'project-cura' : hash === legacyAnchors.oddworks ? 'project-oddworks' : hash;
-      if (!showcase.some((item) => item.id === mapped)) return;
-      setSelectedId(mapped);
+      const match = showcase.find((item) => item.id === mapped);
+      if (!match) return;
+      setSelectedId(match.id);
       setPreviewId(null);
       pendingReveal.current = true;
       setRevealVersion((version) => version + 1);
@@ -119,7 +125,7 @@ export function WelcomingHome() {
     };
   }, [mobileMenuOpen]);
 
-  const chooseProject = (id: string) => {
+  const chooseProject = (id: VisualProjectId) => {
     setSelectedId(id);
     setPreviewId(null);
     reactPatch('inspect');
@@ -131,7 +137,7 @@ export function WelcomingHome() {
   const shown = showcase.find((item) => item.id === previewId) ?? showcase.find((item) => item.id === selectedId) ?? showcase[0];
 
   return (
-    <>
+    <div className={styles.welcome}>
       <a className={styles.skipLink} href="#main-content">Skip to content</a>
       <header className={styles.header}>
         <a className={styles.brand} href={base} aria-label="Brandon Hann, homepage">bh<span>.</span></a>
@@ -163,6 +169,7 @@ export function WelcomingHome() {
             <p className={styles.now}>Currently building: SecureAgent Lab · active development</p>
           </div>
           <div className={styles.portraitArea}>
+            <ProjectVisual projectId={shown.id} hero />
             <div className={styles.photoFrame}>
               {portraitFailed ? <div className={styles.portraitFallback}>Brandon’s portrait is temporarily unavailable.</div> : <img src={base + 'brandon-about.jpg'} alt="Brandon Hann in a casual portrait" onError={() => setPortraitFailed(true)} />}
               <div className={styles.photoCaption}><span>Brandon, outside the editor</span><span>bh / 2026</span></div>
@@ -207,10 +214,7 @@ export function WelcomingHome() {
               <span className={styles.anchor} id={legacyAnchors.threatgrid} aria-hidden="true" />
             </div>
             <section ref={previewRef} id="project-preview" className={styles.projectPreview} tabIndex={-1} aria-label={`${shown.name} project preview`}>
-              <div className={styles.previewVisual} aria-label={shown.imageNote}>
-                <span className={styles.previewTag}>Visual archive / {shown.name}</span>
-                <span className={styles.previewPlaceholder}>{shown.imageNote}</span>
-              </div>
+              <ProjectVisual projectId={shown.id} />
               <div className={styles.previewContent}>
                 <p className={styles.previewStatus}>{shown.status}</p>
                 <h3>{shown.name}</h3>
@@ -234,6 +238,6 @@ export function WelcomingHome() {
         </aside>
       </main>
       <footer className={styles.footer}>The Builder’s Logbook · Built by Brandon Hann</footer>
-    </>
+    </div>
   );
 }

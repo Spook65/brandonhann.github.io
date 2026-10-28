@@ -4,8 +4,10 @@ export type ProjectLink = {
   kind: 'project' | 'source' | 'plan';
 };
 
+export type ProjectId = 'project-cura' | 'project-mapetite' | 'project-oddworks';
+
 export type Project = {
-  id: string;
+  id: ProjectId;
   name: string;
   status: string;
   summary: string;
