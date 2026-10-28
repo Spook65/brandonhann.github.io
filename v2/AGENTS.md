@@ -34,6 +34,14 @@ Use PascalCase for React components and their CSS Modules, camelCase for functio
 - Respect `prefers-reduced-motion`, keyboard and touch use, visible focus, accessible names, and mobile widths including 320 px. Preserve the primary homepage as the immediate entry and Guardian as an optional route. Do not make dialogue or animation a gate to projects, résumé, about, or contact.
 - Keep CSS Module selectors local and use shared tokens for common colors and typography. Check text contrast, overflow, responsive artwork crop, and controls against real viewport sizes. Self-hosted fonts and image optimization are existing choices; avoid large new runtime or asset costs without a measured benefit.
 
+## Experience Quality Gate
+
+- Interactive features must reveal, teach, or meaningfully respond; the static opening frame must have a compelling composition.
+- Review visual originality separately from technical correctness. Passing tests does not approve an experience.
+- Do not ship fake demos, fabricated evidence, or decorative functionality. Essential professional navigation must remain available without interaction.
+- Test mouse, keyboard, touch, reduced motion, and fallback behavior for every interactive visual.
+- Stop after one approved vertical slice before expanding into multiple scenes.
+
 ## Security, privacy, and reliability
 
 - Keep secrets, tokens, private contact data, and unapproved images out of source and built assets. Do not imply that client code enforces authorization. If a future backend is introduced, validate and authorize there, before reads or writes; never trust client-provided roles or IDs.
