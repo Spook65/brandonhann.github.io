@@ -35,4 +35,21 @@ Only the portrait is clearly approved and suitable as a visual building block. T
 
 To resume, Brandon should supply or explicitly approve **one genuine Mapetite product capture** (preferably a 1440 px or larger desktop image or short recording of a search/map/detail state, plus a 390 px mobile capture if that state will be shown on mobile). It should avoid personal account data and either omit third-party venue imagery or document permission/attribution. A **second independent authentic visual** such as an approved Cura demo still/video frame or a reviewed ODDWORKS character/gameplay render would make the opening composition substantially more credible. For each, record the creator, public-display permission, caption, and what the image actually demonstrates.
 
-No W.7 visual implementation, screenshots, interaction recording, or runtime tests were attempted because the gate failed.
+At the W.7 gate, no visual implementation, screenshots, interaction recording, or runtime tests were attempted because the gate failed. W.7A later collected private candidate media, as recorded below.
+
+## W.7A private Mapetite capture review — 2026-10-27
+
+The public MVP was inspected in a fresh, unsigned browser session at 1440 × 900 and 390 × 844. Its root URL redirected to `/restaurants`. Entering only `Stockton` produced a real HTTP 409 ambiguous-place response; adding `California` and `United States` through the visible location fields succeeded. The first in-app search showed a backend wake-up message before it completed. A later qualified search reported 40 matches, displayed 36 initially, and reported 40 mapped results. The map loaded tiles and pins; the first restaurant's detail route loaded public listing fields and a photo gallery. The successful desktop and mobile capture runs logged no HTTP errors. These observations describe the live app at capture time, not a reliability guarantee.
+
+Private candidate files are under the ignored `artifacts/w7a-review/` directory and are **not approved for public use**:
+
+| Candidate | Files and actual content | Presentation assessment | Rights review |
+| --- | --- | --- | --- |
+| Search entry | `desktop-search.jpg`, `mobile-search.jpg` | Clear project purpose and input; strong readable mobile framing, but it does not show completed functionality. Wide desktop frame has much empty space. | No venue photograph; keep footer provider attribution if used. |
+| Search results | `desktop-results.jpg`, `mobile-results.jpg` | Proves live search, results count, uncertainty labels, and detail actions. Dense small text and the unopened-map placeholder weaken it as large artwork. | Restaurant names and some fetched venue thumbnails are third-party material. |
+| Open map | `desktop-map.jpg`, `mobile-map.jpg` | Strongest demonstration of Mapetite's distinctive search-plus-geography behavior. Desktop map/candidate list can be cropped within a larger composition; mobile map remains legible. | OpenFreeMap/OpenMapTiles/OpenStreetMap tile attribution is visible and must remain with the map. Restaurant names/thumbnails need review. |
+| Restaurant detail | `desktop-detail.jpg`, `mobile-detail.jpg` | Shows actual decision fields, honest missing-menu data, and a real detail route. Mobile first viewport is mostly text; desktop includes third-party venue photography at the bottom. Better as supporting evidence than primary visual. | Venue photos, name, and listing data require separate rights/content review before publication. |
+
+`contact-sheet.jpg` compares Search, Results, and Open Map at both widths. `desktop-interaction.webm` is an 8.64-second, 1440 × 900 VP8 recording of an actual qualified search, map opening, restaurant detail, and browser Back. It contains no signed-in account data. The strongest **candidate** is the open map, especially its desktop composition, because it visibly connects location input to real results. It remains a documentary app capture, not an approved full-viewport hero asset. Cropping or visual treatment must preserve map attribution and avoid implying Brandon owns map tiles or venue media.
+
+W.7B remains gated on Brandon's selection and public-use approval of specific capture(s), including any requested crop and handling of venue imagery. No candidate media was copied to `public/` or source assets.
