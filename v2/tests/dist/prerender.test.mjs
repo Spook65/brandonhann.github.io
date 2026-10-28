@@ -28,3 +28,11 @@ test('first frame has local font preload and responsive approved portrait paths'
   assert.match(html, /width="1134" height="1512"/);
   assert.doesNotMatch(html, /guardian-organic-sheet|mouth-cavity-organic|operator-core-concept/);
 });
+
+test('optional outpost entry has a useful static poster without homepage media', () => {
+  const outpost = readFileSync(resolve(dist, 'outpost.html'), 'utf8');
+  assert.match(outpost, /Every request meets a rule/);
+  assert.match(outpost, /href="\/brandonhann\.github\.io\/#projects"/);
+  assert.match(outpost, /href="\/brandonhann\.github\.io\/resume\.html"/);
+  assert.doesNotMatch(outpost, /brandon-about|guardian-organic/);
+});

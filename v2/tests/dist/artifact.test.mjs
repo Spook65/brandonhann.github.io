@@ -20,7 +20,7 @@ test('artifact retains required paths and subpath-based assets', () => {
     assert.ok(existsSync(resolve(root, path)), `${path} missing from dist`);
   }
 
-  assert.match(html, /\/brandonhann\.github\.io\/assets\/index-[^" ]+\.js/);
+  assert.match(html, /\/brandonhann\.github\.io\/assets\/(?:index|main)-[^" ]+\.js/);
   assert.match(html, /\/brandonhann\.github\.io\/favicon\.svg/);
   assert.match(html, /https:\/\/spook65\.github\.io\/brandonhann\.github\.io\/brandon-about\.jpg/);
 });
