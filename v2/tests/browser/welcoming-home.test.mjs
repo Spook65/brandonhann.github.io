@@ -11,7 +11,7 @@ test('welcoming homepage introduces Brandon without loading Guardian artwork', a
     const requested = [];
     page.on('request', (request) => requested.push(request.url()));
     await page.goto(site);
-    await page.getByRole('heading', { name: /Hey, I’m Brandon\./ }).waitFor();
+    await page.getByRole('heading', { name: /Brandon\s*Hann\./ }).waitFor();
     assert.ok(await page.getByRole('img', { name: /Brandon Hann in a casual portrait/ }).isVisible());
     assert.ok(await page.getByRole('link', { name: 'Projects', exact: true }).isVisible());
     assert.ok(await page.getByRole('link', { name: 'Résumé', exact: true }).isVisible());
@@ -20,7 +20,7 @@ test('welcoming homepage introduces Brandon without loading Guardian artwork', a
     await page.getByRole('button', { name: /Enter through the Guardian/ }).waitFor();
     assert.match(page.url(), /experience=guardian/);
     await page.getByRole('link', { name: /Return to homepage/ }).first().click();
-    await page.getByRole('heading', { name: /Hey, I’m Brandon\./ }).waitFor();
+    await page.getByRole('heading', { name: /Brandon\s*Hann\./ }).waitFor();
   } finally { await browser.close(); }
 });
 

@@ -11,7 +11,7 @@ test('production preview works at the GitHub Pages subpath across widths', async
       const page = await browser.newPage({ viewport: { width, height: 800 }, reducedMotion: 'reduce' });
       const response = await page.goto(site);
       assert.equal(response?.status(), 200);
-      await page.getByRole('heading', { name: /Hey, I’m Brandon\./, level: 1 }).waitFor();
+      await page.getByRole('heading', { name: /Brandon\s*Hann\./, level: 1 }).waitFor();
 
       const layout = await page.evaluate(() => ({
         viewport: document.documentElement.clientWidth,

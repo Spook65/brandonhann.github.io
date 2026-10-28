@@ -1,0 +1,21 @@
+.identity { position: relative; width: 100%; min-width: 0; }
+.imageField { position: relative; width: 100%; aspect-ratio: 1.07 / 1; overflow: hidden; background: #292d34; clip-path: polygon(8% 0, 100% 0, 100% 88%, 92% 100%, 0 100%, 0 12%); touch-action: pan-y; cursor: crosshair; }
+.imageField img, .imageField canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 32%; }
+.imageField img { display: block; }
+.imageField canvas { pointer-events: none; }
+.edgeLabel { position: absolute; right: 1rem; bottom: 1rem; padding: .35rem .5rem; background: #0c0d10d9; color: white; font: 650 .64rem/1 'JetBrains Mono Variable', monospace; letter-spacing: .08em; }
+.imageFailure { position: absolute; inset: 0; display: grid; place-items: center; padding: 2rem; color: #f7f8fb; text-align: center; font-weight: 650; }
+.halo { position: absolute; z-index: 2; left: var(--pointer-x, 50%); top: var(--pointer-y, 50%); width: 5.5rem; height: 5.5rem; border: 1px solid #e9efffff; border-radius: 50%; box-shadow: 0 0 0 1px #10111496, inset 0 0 0 1px #10111496; transform: translate(-50%, -50%); opacity: 0; pointer-events: none; }
+.imageField[data-pointing="true"] .halo { opacity: .95; }
+.controls { display: flex; align-items: center; justify-content: space-between; gap: .75rem 1.25rem; min-height: 3.4rem; color: #c7cad2; }
+.cue { font: 600 .76rem/1.35 'JetBrains Mono Variable', monospace; letter-spacing: .01em; }
+.buttons { display: flex; gap: .4rem; flex: none; }
+.buttons button { min-height: 44px; padding: .45rem .55rem; border: 0; border-bottom: 1px solid #858c9d; background: transparent; color: #f4f5f8; font: 650 .78rem/1 'Inter Variable', sans-serif; cursor: pointer; }
+.buttons button:hover, .buttons button:focus-visible { border-color: #7890ff; color: #aebcff; }
+.annotation { position: absolute; z-index: 3; left: 1rem; top: 1rem; max-width: min(19rem, calc(100% - 2rem)); margin: 0; padding: .7rem .8rem; background: #0c0e17e8; color: #f7f8fb; font-size: .85rem; line-height: 1.4; opacity: 0; transform: translateY(.35rem); transition: opacity .25s ease, transform .25s ease; }
+.annotation[data-visible="true"] { opacity: 1; transform: none; }
+.annotation a { color: #aebcff; text-underline-offset: .2rem; cursor: pointer; }
+.identity[data-fallback="true"] .imageField { cursor: default; }
+.identity[data-fallback="true"] .halo { display: none; }
+@media (max-width: 700px) { .imageField { aspect-ratio: 1.22 / 1; } .controls { flex-wrap: wrap; } .cue { font-size: .72rem; } }
+@media (prefers-reduced-motion: reduce) { .halo { display: none; } .annotation { transition: none; transform: none; } }

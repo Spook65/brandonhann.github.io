@@ -3,6 +3,9 @@ import { profile, secureAgent, skillGroups } from './data/domain';
 import { legacyAnchors } from './data/legacyAnchors';
 import { projects } from './data/projects';
 import { Patch, type PatchPose } from './Patch';
+import { IdentityPortrait } from './IdentityPortrait';
+import '@fontsource-variable/inter/wght.css';
+import '@fontsource-variable/jetbrains-mono/wght.css';
 import styles from './WelcomingHome.module.css';
 
 const base = import.meta.env.BASE_URL;
@@ -47,7 +50,6 @@ export function WelcomingHome() {
   const [previewId, setPreviewId] = useState<string | null>(null);
   const [patchPose, setPatchPose] = useState<PatchPose>('idle');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [portraitFailed, setPortraitFailed] = useState(false);
   const [revealVersion, setRevealVersion] = useState(0);
   const previewRef = useRef<HTMLElement>(null);
   const menuRef = useRef<HTMLElement>(null);
@@ -131,7 +133,7 @@ export function WelcomingHome() {
   const shown = showcase.find((item) => item.id === previewId) ?? showcase.find((item) => item.id === selectedId) ?? showcase[0];
 
   return (
-    <>
+    <div className={styles.welcome}>
       <a className={styles.skipLink} href="#main-content">Skip to content</a>
       <header className={styles.header}>
         <a className={styles.brand} href={base} aria-label="Brandon Hann, homepage">bh<span>.</span></a>
@@ -151,22 +153,25 @@ export function WelcomingHome() {
       </header>
       <main id="main-content">
         <section className={styles.hero} aria-labelledby="welcome-title">
-          <div className={styles.heroCopy}>
-            <p className={styles.eyebrow}>A field note from Brandon</p>
-            <h1 id="welcome-title">Hey, I’m<br /><em>Brandon.</em></h1>
-            <p className={styles.lead}>I build things, break things, and figure out why they broke.</p>
-            <p className={styles.intro}>{profile.education}. I’m drawn to software engineering, cybersecurity, AI evaluation, and creative experiments that make complex systems easier to understand.</p>
+          <div className={styles.heroTopline}><span>Hey, I’m</span><span>Developer / builder / curious human</span></div>
+          <div className={styles.heroStage}>
+            <h1 id="welcome-title"><span>Brandon</span><span>Hann<span className={styles.nameDot}>.</span></span></h1>
+            <div className={styles.portraitArea}>
+              <IdentityPortrait src={base + 'brandon-about.jpg'} />
+            </div>
+          </div>
+          <div className={styles.heroBottom}>
+            <div className={styles.heroCopy}>
+              <p className={styles.lead}>I build things, break things, and figure out why they broke.</p>
+              <p className={styles.intro}>{profile.education}. I’m drawn to software engineering, cybersecurity, AI evaluation, and creative experiments that make complex systems easier to understand.</p>
+            </div>
             <div className={styles.heroActions}>
               <a className={styles.primaryAction} href="#projects" onPointerEnter={() => reactPatch('wave')} onFocus={() => reactPatch('wave')}>Explore projects <span aria-hidden="true">↗</span></a>
               <a className={styles.textAction} href={base + 'resume.html'}>Read résumé ↗</a>
             </div>
-            <p className={styles.now}>Currently building: SecureAgent Lab · active development</p>
           </div>
-          <div className={styles.portraitArea}>
-            <div className={styles.photoFrame}>
-              {portraitFailed ? <div className={styles.portraitFallback}>Brandon’s portrait is temporarily unavailable.</div> : <img src={base + 'brandon-about.jpg'} alt="Brandon Hann in a casual portrait" onError={() => setPortraitFailed(true)} />}
-              <div className={styles.photoCaption}><span>Brandon, outside the editor</span><span>bh / 2026</span></div>
-            </div>
+          <div className={styles.heroFooter}>
+            <p className={styles.now}>Currently building: SecureAgent Lab · active development</p>
             <Patch pose={patchPose} onActivate={() => reactPatch('wave')} />
           </div>
         </section>
@@ -234,6 +239,6 @@ export function WelcomingHome() {
         </aside>
       </main>
       <footer className={styles.footer}>The Builder’s Logbook · Built by Brandon Hann</footer>
-    </>
+    </div>
   );
 }
