@@ -1,6 +1,6 @@
 # Portfolio v2: engineering guide for coding agents
 
-Scope: this file governs work under `v2/`. Read it with `v2/README.md` and any more specific instructions before editing. Direct user instructions take precedence. The repository root is the existing production portfolio; `v2/` is a separate, unpublished Vite application. Do not treat the two sites as interchangeable.
+Scope: this file governs work under `v2/`. Read it with `v2/README.md` and any more specific instructions before editing. For UI/UX work, also read `v2/DESIGN.md` before making changes. Direct user instructions take precedence. The repository root is the existing production portfolio; `v2/` is a separate, unpublished Vite application. Do not treat the two sites as interchangeable.
 
 ## Current architecture and contracts
 
