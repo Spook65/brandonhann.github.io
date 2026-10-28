@@ -28,7 +28,7 @@
 .portraitArea { width: min(100%, 27.5rem); justify-self: center; margin-bottom: 2rem; transform: rotate(2deg); }
 .photoFrame { position: relative; padding: .75rem .75rem 1rem; background: #eee7d8; box-shadow: .95rem 1rem 0 #05090875; }
 .photoFrame::before { content: ''; position: absolute; z-index: 2; top: -.7rem; left: 39%; width: 4.5rem; height: 1.3rem; transform: rotate(-5deg); background: #e6ab62bd; }
-.photoFrame img { display: block; width: 100%; aspect-ratio: 4 / 4.7; object-fit: cover; object-position: center 32%; filter: saturate(.83) contrast(1.04); }
+.photoFrame img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 4.7; object-fit: cover; object-position: center 32%; filter: saturate(.83) contrast(1.04); }
 .photoCaption { display: flex; justify-content: space-between; gap: 1rem; padding: .75rem .3rem 0; color: #3a3834; font-size: .85rem; font-weight: 700; }
 .portraitFallback { display: grid; place-items: center; min-height: 24rem; padding: 1.5rem; background: #ddd1ba; color: #3a3834; text-align: center; }
 .portraitArea > :last-child { position: absolute; right: 0; bottom: -5.2rem; transform: rotate(-2deg); }

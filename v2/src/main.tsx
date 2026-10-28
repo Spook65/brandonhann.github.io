@@ -1,5 +1,5 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import { createRoot, hydrateRoot } from 'react-dom/client';
 import App from './App';
 import '@fontsource-variable/fraunces/wght.css';
 import '@fontsource-variable/source-sans-3/wght.css';
@@ -12,8 +12,11 @@ if (!mount) {
   throw new Error('Portfolio mount point is missing.');
 }
 
-createRoot(mount).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-);
+const app = <React.StrictMode><App /></React.StrictMode>;
+
+if (mount.dataset.prerendered === 'home' && new URLSearchParams(window.location.search).get('experience') !== 'guardian') {
+  hydrateRoot(mount, app);
+} else {
+  mount.replaceChildren();
+  createRoot(mount).render(app);
+}

@@ -35,15 +35,8 @@ const showcase: readonly ShowcaseItem[] = [
   },
 ];
 
-function projectFromHash() {
-  const hash = decodeURIComponent(window.location.hash.slice(1));
-  if (hash === legacyAnchors.cura) return 'project-cura';
-  if (hash === legacyAnchors.oddworks) return 'project-oddworks';
-  return showcase.find((item) => item.id === hash)?.id ?? 'project-cura';
-}
-
 export function WelcomingHome() {
-  const [selectedId, setSelectedId] = useState(projectFromHash);
+  const [selectedId, setSelectedId] = useState('project-cura');
   const [previewId, setPreviewId] = useState<string | null>(null);
   const [patchPose, setPatchPose] = useState<PatchPose>('idle');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -164,7 +157,7 @@ export function WelcomingHome() {
           </div>
           <div className={styles.portraitArea}>
             <div className={styles.photoFrame}>
-              {portraitFailed ? <div className={styles.portraitFallback}>Brandon’s portrait is temporarily unavailable.</div> : <img src={base + 'brandon-about.jpg'} alt="Brandon Hann in a casual portrait" onError={() => setPortraitFailed(true)} />}
+              {portraitFailed ? <div className={styles.portraitFallback}>Brandon’s portrait is temporarily unavailable.</div> : <picture><source type="image/webp" srcSet={`${base}brandon-about-640.webp 640w, ${base}brandon-about-1134.webp 1134w`} sizes="(max-width: 700px) 75vw, 440px" /><img src={base + 'brandon-about.jpg'} width="1134" height="1512" alt="Brandon Hann in a casual portrait" onError={() => setPortraitFailed(true)} /></picture>}
               <div className={styles.photoCaption}><span>Brandon, outside the editor</span><span>bh / 2026</span></div>
             </div>
             <Patch pose={patchPose} onActivate={() => reactPatch('wave')} />
