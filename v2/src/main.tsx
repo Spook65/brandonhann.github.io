@@ -14,7 +14,8 @@ if (!mount) {
 
 const app = <React.StrictMode><App /></React.StrictMode>;
 
-if (mount.dataset.prerendered === 'home' && new URLSearchParams(window.location.search).get('experience') !== 'guardian') {
+const experience = new URLSearchParams(window.location.search).get('experience');
+if (mount.dataset.prerendered === 'home' && experience !== 'guardian') {
   hydrateRoot(mount, app);
 } else {
   mount.replaceChildren();

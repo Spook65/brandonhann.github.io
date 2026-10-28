@@ -225,6 +225,10 @@ export function WelcomingHome() {
           <div><p className={styles.eyebrow}>An optional side door</p><h2 id="inner-title">The Inner Workings.</h2><p>An optional cinematic journey through the Guardian to the connections behind the work. The main portfolio is always available here.</p></div>
           <a href={`${base}?experience=guardian`}>Enter The Inner Workings <span aria-hidden="true">↗</span></a>
         </aside>
+        <aside className={styles.innerInvitation} aria-labelledby="outpost-title">
+          <div><p className={styles.eyebrow}>An optional guided simulation</p><h2 id="outpost-title">The Signal Outpost.</h2><p>Meet Scout and Sentinel at a small security checkpoint. Watch a request meet an authorization rule before simulated execution.</p></div>
+          <a href={`${base}outpost.html`}>Enter the outpost <span aria-hidden="true">↗</span></a>
+        </aside>
       </main>
       <footer className={styles.footer}>The Builder’s Logbook · Built by Brandon Hann</footer>
     </>

@@ -6,5 +6,6 @@ export default defineConfig({
   plugins: [react()],
   build: {
     outDir: 'dist',
+    rollupOptions: { input: { home: 'index.html', outpost: 'outpost.html' } },
   },
 });

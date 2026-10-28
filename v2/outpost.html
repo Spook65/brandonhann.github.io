@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="The Signal Outpost: an optional guided simulation of request authorization by Brandon Hann." />
+    <meta name="theme-color" content="#081320" />
+    <title>The Signal Outpost | Brandon Hann</title>
+    <style>
+      html:not([data-app-ready]) #root { display: none; }
+      html[data-app-ready] .entry-poster { display: none; }
+      .entry-poster { display: grid; min-height: 100svh; align-content: center; gap: 1.1rem; padding: clamp(2rem, 8vw, 7rem); background: radial-gradient(ellipse at 65% 55%, #17385c, #081320 65%); color: #eef8fa; font: 600 clamp(1rem, 2vw, 1.3rem)/1.5 system-ui, sans-serif; }
+      .entry-poster h1 { max-width: 12ch; margin: 0; font-size: clamp(3rem, 9vw, 7rem); line-height: 1; }
+      .entry-poster a { color: #9ce7ee; text-underline-offset: .3em; }
+    </style>
+  </head>
+  <body>
+    <div class="entry-poster" aria-live="polite"><p>The Signal Outpost / guided simulation</p><h1>Every request meets a rule.</h1><p>Opening the optional scene if supported. Brandon’s work remains available.</p><noscript><p>The 3D scene requires JavaScript; Projects and Résumé are available below.</p></noscript><nav aria-label="Outpost entry links"><a href="%BASE_URL%">Homepage</a> · <a href="%BASE_URL%#projects">Projects</a> · <a href="%BASE_URL%resume.html">Résumé</a></nav></div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
