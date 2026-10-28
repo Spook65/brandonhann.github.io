@@ -9,8 +9,8 @@ Brandon is a creative, personable developer curious about software, cybersecurit
 ## Visual rules
 
 - Compose a strong opening frame before adding motion. Brandon's name, one concise statement, and authentic imagery should read immediately.
-- Use modern, bold typography with deliberate size, weight, line height, letter spacing, and line length. Inter carries primary copy; JetBrains Mono is reserved for sparse technical details.
-- Start from black, white, or near monochrome and choose one deliberate accent. Preserve enough contrast for reading and focus.
+- Use modern, intentional typography with deliberate size, weight, line height, letter spacing, and line length. Inter and JetBrains Mono are candidates, not mandatory treatments; review the complete type hierarchy at mobile and desktop sizes.
+- Choose a deliberate, limited palette from the approved artwork and composition. Preserve enough contrast for reading and focus; do not inherit a rejected experiment's palette by default.
 - Use approved personal imagery and verified project material. Label illustrative treatments clearly; never fabricate a project screenshot or result.
 - Avoid the olive green, beige, and brown workspace aesthetic; giant faux notebooks; CSS rooms; generic dashboards; excessive empty panels; arbitrary particles; and decorative visual noise.
 
@@ -30,3 +30,11 @@ Review visual composition, typography, interaction satisfaction, originality, mo
 - [Bruno Simon](https://bruno-simon.com/) and its [source](https://github.com/brunosimon/folio-2025): transferable principles include a coherent relationship among input, visual feedback, object meaning, and content, with recovery controls and alternate input. Its explicit loop phases show how input and rendering can remain coordinated. Brandon's portfolio should gain that coherence without importing a vehicle, 3D room, physics system, assets, or mandatory game controls.
 
 The W.3 scratch reveal is recoverable on `archive/portfolio-experiments-w5`. Its useful principle is that interaction with Brandon's approved photograph reveals the same real person underneath. It is a technique to adapt, not a visual template.
+
+## Approved hybrid direction — H.1 planning
+
+The next experience has three independent layers: an immediately usable, visually authored homepage; a lightweight interactive enhancement that responds after content is available; and a small optional explorable world entered by choice. The Guardian remains a separate optional experience. The world must extend the homepage's visual language and project meaning, without making conventional navigation conditional on play or loading.
+
+Design the interaction ladder as: immediate identity → discoverable response → meaningful reveal → optional world entry → authentic project-object discovery → focused project content → reversible return. One connected visual rule should carry this path; do not accumulate unrelated effects. No particular renderer, palette, or font is approved yet. The W.7A Mapetite captures remain private review candidates until Brandon selects a specific asset and approves public use and third-party attribution handling.
+
+At each checkpoint, review the static opening composition, typographic hierarchy, interaction satisfaction, originality, recruiter clarity, mobile behavior, performance, and accessibility as separate questions. Use actual 390 px, 768 px, and 1440 px views and interaction recordings for visual review. Passing tests or meeting a timing target does not constitute visual approval. Stop after one vertical slice for owner review before expanding the world.

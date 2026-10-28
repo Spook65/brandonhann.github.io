@@ -34,6 +34,12 @@ Use PascalCase for React components and their CSS Modules, camelCase for functio
 - Respect `prefers-reduced-motion`, keyboard and touch use, visible focus, accessible names, and mobile widths including 320 px. Preserve the primary homepage as the immediate entry and Guardian as an optional route. Do not make dialogue or animation a gate to projects, résumé, about, or contact.
 - Keep CSS Module selectors local and use shared tokens for common colors and typography. Check text contrast, overflow, responsive artwork crop, and controls against real viewport sizes. Self-hosted fonts and image optimization are existing choices; avoid large new runtime or asset costs without a measured benefit.
 
+## Performance and Initial Experience Gate
+
+- The homepage must expose Brandon's identity, introduction, Projects and Résumé links, and accessible navigation immediately. Interactive enhancements are progressive; no splash, mandatory startup animation, world entry, or renderer initialization may gate ordinary use.
+- Keep optional world code, models, textures, and Guardian artwork outside the homepage critical path. Measure the current load before expanding features; review mobile cold and repeat visits, transfer sizes, main-thread work, Core Web Vitals, and idle rendering separately. Lab results are not field guarantees.
+- Bound and clean up rendering loops, observers, listeners, and timers; stop idle or offscreen work. Validate mobile, keyboard, touch, reduced motion, and a functioning static/HTML fallback when an enhancement or asset fails.
+
 ## Security, privacy, and reliability
 
 - Keep secrets, tokens, private contact data, and unapproved images out of source and built assets. Do not imply that client code enforces authorization. If a future backend is introduced, validate and authorize there, before reads or writes; never trust client-provided roles or IDs.
