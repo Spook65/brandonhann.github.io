@@ -5,3 +5,5 @@ artifacts/**/*.jpeg
 artifacts/**/*.webp
 artifacts/**/*.mp4
 artifacts/**/*.webm
+# Includes local projected-bound measurements alongside H.2D captures.
+artifacts/h2d-review/

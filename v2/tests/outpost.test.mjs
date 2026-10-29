@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { evaluatePolicy, finishSimulation, nextPhase, scenarios } from '../src/outpost/scenario.ts';
-import { visualTargets } from '../src/outpost/motionPlan.ts';
+import { facingYaw, outpostSpace, targetFacings, turnToward, visualTargets } from '../src/outpost/motionPlan.ts';
 
 test('policy evaluates trusted synthetic context before any simulated action', () => {
   const read = evaluatePolicy(scenarios.inspect.request);
@@ -21,6 +21,30 @@ test('policy evaluates trusted synthetic context before any simulated action', (
   assert.equal(protectedRead.decision, 'DENY');
   const trainingExport = evaluatePolicy({ ...scenarios.export.request, resource: { id: 'synthetic-report', classification: 'training' } });
   assert.equal(trainingExport.decision, 'DENY');
+});
+
+test('world +X travel and face-to-face inspection use local +Z forward', () => {
+  assert.equal(facingYaw(0, 0, 2, 0), Math.PI / 2);
+  assert.equal(facingYaw(0, 0, -2, 0), -Math.PI / 2);
+  const inspection = targetFacings('examine', null);
+  assert.ok(inspection.scout > Math.PI / 2);
+  assert.ok(inspection.sentinel < 0);
+  assert.ok(targetFacings('idle', null).scout > 0);
+  assert.equal(targetFacings('travel', null).scout, Math.PI / 2);
+  assert.equal(targetFacings('allow', 'ALLOW').scout, Math.PI / 2);
+  assert.equal(targetFacings('deny', 'DENY').scout, -Math.PI / 2);
+  assert.equal(targetFacings('recover', 'ALLOW').scout, -Math.PI / 2);
+  assert.ok(Math.abs(turnToward(Math.PI - 0.1, -Math.PI + 0.1, 1) - (Math.PI + 0.1)) < 0.001);
+});
+
+test('closed gate keeps the packet clear and both characters in separate lanes', () => {
+  for (const phase of ['idle', 'pickup', 'travel', 'examine', 'deny']) {
+    const target = visualTargets(phase, phase === 'deny' ? 'DENY' : null);
+    assert.ok(target.packetX <= outpostSpace.closedPacketLimitX);
+    assert.ok(target.packetX + outpostSpace.packetHalfWidth < outpostSpace.gateX - outpostSpace.gateHalfThickness);
+    assert.ok(Math.abs(target.scoutZ - outpostSpace.sentinelLaneZ) >= 1);
+  }
+  assert.ok(visualTargets('allow', 'ALLOW').gateY - 0.675 > 1.4);
 });
 
 test('allowed packet crosses the gate; denied packet and Scout turn back', () => {

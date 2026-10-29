@@ -22,7 +22,6 @@ export default function SecurityOutpost() {
   const [result, setResult] = useState<PolicyResult | null>(null);
   const [runSource, setRunSource] = useState<'auto' | 'user'>('user');
   const [paused, setPaused] = useState(false);
-  const [progress, setProgress] = useState(0);
   const [renderError, setRenderError] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const [sceneVisible, setSceneVisible] = useState(false);
@@ -99,7 +98,6 @@ export default function SecurityOutpost() {
   }, [phase, result, renderError, reducedMotion]);
 
   useEffect(() => { scene.current?.setPaused(paused); }, [paused, renderError, reducedMotion]);
-  useEffect(() => { scene.current?.setProgress(progress); }, [progress, renderError, reducedMotion]);
 
   useEffect(() => {
     if (phase === 'idle' || paused || !scenario || !pageVisible || (!sceneVisible && !renderError)) return;
@@ -127,22 +125,12 @@ export default function SecurityOutpost() {
         else window.location.assign(base);
         return;
       }
-      if (event.target instanceof HTMLElement && ['BUTTON', 'A', 'INPUT', 'SELECT'].includes(event.target.tagName)) return;
-      if (event.key === 'ArrowRight' || event.key === 'ArrowUp') {
-        event.preventDefault();
-        setProgress((value) => Math.min(1, value + 0.25));
-      }
-      if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') {
-        event.preventDefault();
-        setProgress((value) => Math.max(0, value - 0.25));
-      }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [phase]);
 
   const dialogue = phaseDialogue(phase, scenario, result);
-  const nextAction: ActionId = scenario?.id === 'export' ? 'inspect' : 'export';
   const gateStatus = phase === 'allow' || (phase === 'audit' && result?.decision === 'ALLOW') ? 'open'
     : phase === 'deny' || (phase === 'audit' && result?.decision === 'DENY') ? 'locked' : 'standing by';
 
@@ -155,6 +143,11 @@ export default function SecurityOutpost() {
       </header>
 
       <section className={styles.stage} aria-labelledby="outpost-heading" data-phase={phase}>
+        <div className={styles.sceneTitle}>
+          <p>SecureAgent Lab / illustrative simulation</p>
+          <h1 id="outpost-heading">Every request meets a rule.</h1>
+          <p>Scout delivers. Sentinel checks. The gate tells the story.</p>
+        </div>
         <div className={styles.scene} ref={host} data-render-status={renderError ? 'fallback' : 'active'}>
           {renderError && <div className={styles.fallback} role="status"><strong>The scene is unavailable.</strong><span>The guided request sequence still works below.</span></div>}
           {(['scout', 'sentinel', 'audit'] as const).map((actor) => (
@@ -163,21 +156,19 @@ export default function SecurityOutpost() {
               <span>{dialogue?.actor === actor ? dialogue.text : ''}</span>
             </p>
           ))}
+          <div className={styles.gateLabel} data-gate-label aria-hidden="true"><span className={styles.gateDot} data-state={gateStatus} /> Trust gate / {gateStatus}</div>
         </div>
-        <div className={styles.sceneTitle}>
-          <p>SecureAgent Lab / illustrative simulation</p>
-          <h1 id="outpost-heading">Every request<br />meets a rule.</h1>
-          <p>Scout delivers. Sentinel checks. The gate tells the story.</p>
-        </div>
-        <div className={styles.gateLabel} aria-hidden="true"><span className={styles.gateDot} data-state={gateStatus} /> Trust gate / {gateStatus}</div>
         <div className={styles.actionRail} aria-label="Outpost controls">
           <p>{renderError ? 'Scene unavailable; use the sample request controls.' : phase === 'idle' ? 'Tap the glowing packet or choose a sample request.' : `${scenario?.label ?? 'Request'} · ${phase}${paused ? ' · paused' : ''}`}</p>
           <div>
-            <button type="button" className={styles.primaryAction} onClick={() => begin(scenario?.id ?? 'inspect')} disabled={phase !== 'idle'}>Replay {scenario?.id === 'export' ? 'protected export' : 'read-only'}</button>
-            <button type="button" onClick={() => begin(nextAction)} disabled={phase !== 'idle'}>Try {nextAction === 'export' ? 'protected export' : 'read-only request'}</button>
-            <button type="button" onClick={() => setPaused((value) => !value)} disabled={phase === 'idle'}>{paused ? 'Resume' : 'Pause'}</button>
-            <button type="button" onClick={reset} disabled={phase === 'idle'}>Reset</button>
-            <button type="button" onClick={() => setProgress((value) => value === 0 ? 1 : 0)}>{progress === 0 ? 'Look closer' : 'Overview'}</button>
+            {phase === 'idle' ? <>
+              <button type="button" className={styles.primaryAction} onClick={() => begin('inspect')}>Try read-only request</button>
+              <button type="button" onClick={() => begin('export')}>Try protected export</button>
+              {scenario && <button type="button" onClick={() => begin(scenario.id)}>Replay last request</button>}
+            </> : <>
+              <button type="button" className={styles.primaryAction} aria-pressed={paused} onClick={() => setPaused((value) => !value)}>{paused ? 'Resume' : 'Pause'}</button>
+              <button type="button" onClick={reset}>Reset</button>
+            </>}
           </div>
         </div>
       </section>

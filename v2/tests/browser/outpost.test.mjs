@@ -71,7 +71,7 @@ test('reduced motion requires an explicit choice; deny remains blocked and repla
     assert.match(await page.locator('details').innerText(), /Policy: DENY/);
     assert.match(await page.locator('details').innerText(), /BLOCKED/);
     await phase(page, 'idle').waitFor({ timeout: 6000 });
-    await page.getByRole('button', { name: /Replay protected export/ }).click();
+    await page.getByRole('button', { name: 'Replay last request' }).click();
     await phase(page, 'deny').waitFor({ timeout: 6000 });
   } finally { await browser.close(); }
 });
@@ -83,7 +83,13 @@ test('pause, reset, pointer pickup, and browser Back remain reversible', async (
     await page.goto(site);
     await page.getByRole('link', { name: /Enter the outpost/ }).click();
     await page.locator('canvas').waitFor();
-    await page.mouse.click(615, 391);
+    const packet = await page.evaluate(() => {
+      const host = document.querySelector('[data-render-status]');
+      const bounds = host.outpostInspection().objects.packet;
+      const rect = host.getBoundingClientRect();
+      return { x: rect.left + (bounds.left + bounds.right) / 2, y: rect.top + (bounds.top + bounds.bottom) / 2 };
+    });
+    await page.mouse.click(packet.x, packet.y);
     await phase(page, 'pickup').waitFor();
     await page.getByRole('button', { name: 'Pause' }).click();
     await page.waitForTimeout(1100);
@@ -106,7 +112,7 @@ test('the transaction waits while its world is offscreen, then resumes', async (
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
     await page.goto(`${site}outpost.html`);
     await page.locator('canvas').waitFor();
-    await page.getByRole('button', { name: /Replay read-only/ }).click();
+    await page.getByRole('button', { name: 'Try read-only request' }).click();
     await phase(page, 'pickup').waitFor();
     await page.evaluate(() => {
       const spacer = document.createElement('div');
@@ -132,12 +138,90 @@ test('touch and keyboard can reach the scene outcome without losing mobile conte
     assert.ok(await page.locator('[data-bubble="sentinel"][data-visible="true"]').isVisible());
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1), true);
     await phase(page, 'idle').waitFor({ timeout: 6000 });
-    const replay = page.getByRole('button', { name: /Replay protected export/ });
+    const replay = page.getByRole('button', { name: 'Replay last request' });
     await replay.focus();
     await page.keyboard.press('Enter');
     await phase(page, 'pickup').waitFor();
     await page.getByRole('link', { name: 'Résumé' }).tap();
     await page.waitForURL(/resume\.html$/);
+  } finally { await browser.close(); }
+});
+
+test('scene bounds, actor facing, and dialogue stay clear at 320, 390, 768, and 1440 pixels', async () => {
+  const browser = await chromium.launch();
+  try {
+    for (const width of [320, 390, 768, 1440]) {
+      const page = await browser.newPage({ viewport: { width, height: width < 600 ? 844 : 900 }, reducedMotion: 'reduce' });
+      await page.goto(`${site}outpost.html`);
+      await page.locator('canvas').waitFor();
+      const inspect = () => page.evaluate(() => document.querySelector('[data-render-status]').outpostInspection());
+      const assertSafe = async (state) => {
+        const sample = await inspect();
+        for (const name of ['scout', 'sentinel', 'packet', 'gate', 'barrier', 'nearRail', 'farRail', 'water', 'inlet', 'basin', 'audit']) {
+          const box = sample.objects[name];
+          assert.ok(box.left >= -1 && box.right <= sample.width + 1 && box.top >= -1 && box.bottom <= sample.height + 1, `${width}px ${state}: ${name} clipped ${JSON.stringify(box)}`);
+        }
+        for (const box of sample.bubbles) {
+          assert.ok(box.left >= 0 && box.right <= sample.width && box.top >= 0 && box.bottom <= sample.height, `${width}px ${state}: dialogue outside scene`);
+        }
+        const bubbleClearance = await page.evaluate(() => {
+          const label = document.querySelector('[data-gate-label]');
+          const visible = document.querySelector('[data-bubble][data-visible="true"]');
+          if (!label || !visible) return true;
+          const a = label.getBoundingClientRect();
+          const b = visible.getBoundingClientRect();
+          return a.right <= b.left || b.right <= a.left || a.bottom <= b.top || b.bottom <= a.top;
+        });
+        assert.equal(bubbleClearance, true, `${width}px ${state}: dialogue overlaps gate status`);
+        const horizontalOverflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
+        assert.equal(horizontalOverflow, false, `${width}px ${state}: horizontal overflow`);
+        return sample;
+      };
+      await assertSafe('idle');
+      await page.getByRole('button', { name: 'Try read-only request' }).click();
+      await phase(page, 'examine').waitFor();
+      const examination = await assertSafe('examine');
+      assert.ok(examination.facing.scoutToSentinel > .8 && examination.facing.sentinelToScout > .8, `${width}px: actors must face each other`);
+      assert.ok(examination.world.packetX < 1.0 && examination.world.gateBottomY < .1);
+      await phase(page, 'allow').waitFor();
+      const allowed = await assertSafe('allow');
+      assert.ok(allowed.world.packetX > 1.35 && allowed.world.gateBottomY > 1.4);
+      await page.getByRole('button', { name: 'Reset' }).click();
+      await page.getByRole('button', { name: 'Try protected export' }).click();
+      await phase(page, 'deny').waitFor();
+      const denied = await assertSafe('deny');
+      assert.ok(denied.world.packetX < 1.0 && denied.world.gateBottomY < .1);
+      await page.close();
+    }
+  } finally { await browser.close(); }
+});
+
+test('the gate opens before passage and stays open while Scout returns', async () => {
+  const browser = await chromium.launch();
+  try {
+    const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'no-preference' });
+    await page.goto(`${site}outpost.html`);
+    await page.locator('canvas').waitFor();
+    await page.getByRole('button', { name: 'Try read-only request' }).click();
+    const readings = await page.evaluate(async () => {
+      const host = document.querySelector('[data-render-status]');
+      const samples = [];
+      for (let index = 0; index < 145; index++) {
+        samples.push(host.outpostInspection());
+        await new Promise((resolve) => setTimeout(resolve, 60));
+      }
+      return samples;
+    });
+    assert.ok(readings.some((sample) => sample.phase === 'allow' && sample.world.packetX > 1.35));
+    for (const sample of readings) {
+      const { scoutX, packetX, packetY, packetVisible, gateBottomY } = sample.world;
+      if (packetVisible && packetX + .26 >= 1.295 && packetX - .26 <= 1.405) {
+        assert.ok(gateBottomY > packetY + .13, `packet touched a closed barrier in ${sample.phase}`);
+      }
+      if (scoutX + .32 >= 1.295 && scoutX - .32 <= 1.405) {
+        assert.ok(gateBottomY > 1.42, `Scout touched a closing barrier in ${sample.phase}`);
+      }
+    }
   } finally { await browser.close(); }
 });
 

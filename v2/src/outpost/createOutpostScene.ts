@@ -1,10 +1,9 @@
 import * as THREE from 'three';
 import type { Decision, Phase } from './scenario';
-import { visualTargets } from './motionPlan';
+import { facingYaw, outpostSpace, targetFacings, turnToward, visualTargets } from './motionPlan';
 
 export type OutpostScene = {
   setPhase: (phase: Phase, decision: Decision | null) => void;
-  setProgress: (progress: number) => void;
   setPaused: (paused: boolean) => void;
   dispose: () => void;
 };
@@ -25,8 +24,8 @@ export function createOutpostScene(host: HTMLElement, onRequest: () => void, onV
   const scene = new THREE.Scene();
   scene.fog = new THREE.FogExp2(palette.dark, 0.018);
   const camera = new THREE.OrthographicCamera(-6, 6, 4, -4, 0.1, 80);
-  camera.position.set(8, 8.7, 11);
-  camera.lookAt(0, 0, 0);
+  camera.position.set(3, 8.5, 14);
+  camera.lookAt(0, 0.7, 1.1);
   scene.add(new THREE.HemisphereLight(0xb6d8ff, 0x13233a, 2.1));
   const warmLight = new THREE.PointLight(palette.amber, 32, 10, 2);
   warmLight.position.set(1.8, 3.5, 1.4);
@@ -62,20 +61,25 @@ export function createOutpostScene(host: HTMLElement, onRequest: () => void, onV
   for (let index = -4; index <= 4; index++) {
     box(scene, [0.04, 0.012, 2.7], [index, 0.055, 0], edgeMat);
   }
-  for (const side of [-1, 1]) {
-    box(scene, [8.7, 0.16, 0.12], [0, 0.12, side * 1.49], edgeMat);
-    for (let x = -4; x <= 4; x += 0.8) box(scene, [0.09, 0.42, 0.09], [x, 0.33, side * 1.49], darkMat);
-    box(scene, [8.7, 0.07, 0.07], [0, 0.59, side * 1.49], cyanMat);
-  }
-  box(scene, [0.55, 2.5, 0.6], [1.35, 1.25, -1.05], darkMat);
-  box(scene, [0.55, 2.5, 0.6], [1.35, 1.25, 1.05], darkMat);
-  box(scene, [0.16, 0.2, 2.14], [1.35, 2.4, 0], edgeMat);
-  const gateLamp = box(scene, [0.13, 0.1, 1.68], [1.35, 2.3, 0], gateMat);
-  const gateBarrier = box(scene, [0.11, 1.35, 1.72], [1.35, 0.74, 0], barrierMat);
+  const railGroups = [-1, 1].map((side) => {
+    const group = new THREE.Group();
+    scene.add(group);
+    box(group, [8.7, 0.16, 0.12], [0, 0.12, side * 1.49], edgeMat);
+    for (let x = -4; x <= 4; x += 0.8) box(group, [0.09, 0.42, 0.09], [x, 0.33, side * 1.49], darkMat);
+    box(group, [8.7, 0.07, 0.07], [0, 0.59, side * 1.49], cyanMat);
+    return group;
+  });
+  const gateGroup = new THREE.Group();
+  scene.add(gateGroup);
+  box(gateGroup, [0.55, 2.5, 0.6], [1.35, 1.25, -1.05], darkMat);
+  box(gateGroup, [0.55, 2.5, 0.6], [1.35, 1.25, 1.05], darkMat);
+  box(gateGroup, [0.16, 0.2, 2.14], [1.35, 2.4, 0], edgeMat);
+  const gateLamp = box(gateGroup, [0.13, 0.1, 1.68], [1.35, 2.3, 0], gateMat);
+  const gateBarrier = box(gateGroup, [0.11, 1.35, 1.72], [1.35, 0.74, 0], barrierMat);
   for (const height of [0.35, 0.75, 1.15]) box(gateBarrier, [0.015, 0.035, 1.7], [0.06, height - 0.74, 0], cyanMat);
-  box(scene, [1.0, 0.12, 1.1], [3.2, 0.15, 0], darkMat);
-  box(scene, [0.64, 0.9, 0.65], [3.2, 0.64, 0], edgeMat);
-  const auditBeacon = ball(scene, 0.24, [3.2, 1.22, 0], auditMat);
+  box(scene, [0.78, 0.12, 0.65], [3.65, 0.15, -0.75], darkMat);
+  box(scene, [0.52, 0.72, 0.5], [3.65, 0.56, -0.75], edgeMat);
+  const auditBeacon = ball(scene, 0.2, [3.65, 1.09, -0.75], auditMat);
 
   // Flow is directional in both vertex displacement and color bands.
   const waterUniforms = { uTime: { value: 0 }, uTint: { value: new THREE.Color(0x115077) } };
@@ -106,7 +110,8 @@ export function createOutpostScene(host: HTMLElement, onRequest: () => void, onV
   scene.add(basinWater);
 
   const scout = new THREE.Group();
-  scout.position.set(-2.65, 0.05, 0.2);
+  scout.position.set(-2.65, 0.05, outpostSpace.scoutLaneZ);
+  scout.rotation.y = Math.PI / 2;
   scene.add(scout);
   box(scout, [0.45, 0.58, 0.38], [0, 0.52, 0], amberMat);
   ball(scout, 0.29, [0, 1.02, 0], mat(0xffd8aa));
@@ -126,12 +131,13 @@ export function createOutpostScene(host: HTMLElement, onRequest: () => void, onV
   scout.add(scoutArm);
   box(scoutArm, [0.13, 0.4, 0.16], [0.04, -0.19, 0], mat(0xffd8aa));
   const packet = new THREE.Group();
-  packet.position.set(-1.65, 0.38, 0.15);
+  packet.position.set(-1.65, 0.38, outpostSpace.scoutLaneZ);
   scene.add(packet);
   const packetBody = box(packet, [0.48, 0.26, 0.36], [0, 0, 0], cyanMat);
   box(packet, [0.52, 0.035, 0.06], [0, 0.15, 0], darkMat);
   const sentinel = new THREE.Group();
-  sentinel.position.set(2.35, 0.05, -0.25);
+  sentinel.position.set(2.35, 0.05, outpostSpace.sentinelLaneZ);
+  sentinel.rotation.y = facingYaw(2.35, outpostSpace.sentinelLaneZ, scout.position.x, scout.position.z);
   scene.add(sentinel);
   box(sentinel, [0.55, 0.78, 0.45], [0, 0.49, 0], mat(0x8e89cd));
   const sentinelHead = new THREE.Group();
@@ -165,9 +171,9 @@ export function createOutpostScene(host: HTMLElement, onRequest: () => void, onV
   let animationTime = 0;
   let lastFrame = 0;
   let previousTime = 0;
-  let progress = 0;
   let pointerShift = 0;
   let cameraShift = 0;
+  let lastScoutX = scout.position.x;
   const onPointerMove = (event: PointerEvent) => {
     const rect = renderer.domElement.getBoundingClientRect();
     pointerShift = ((event.clientX - rect.left) / Math.max(rect.width, 1) - 0.5) * 0.55;
@@ -175,29 +181,80 @@ export function createOutpostScene(host: HTMLElement, onRequest: () => void, onV
   const onPointerLeave = () => { pointerShift = 0; };
   renderer.domElement.addEventListener('pointermove', onPointerMove);
   renderer.domElement.addEventListener('pointerleave', onPointerLeave);
-  const projectBubble = (actor: 'scout' | 'sentinel' | 'audit', object: THREE.Object3D, height: number) => {
+  const projectBubble = (actor: 'scout' | 'sentinel' | 'audit', object: THREE.Object3D, height: number, occupied: DOMRect[]) => {
     const bubble = host.querySelector<HTMLElement>(`[data-bubble="${actor}"]`);
-    if (!bubble) return;
+    if (!bubble || bubble.dataset.visible !== 'true') return;
     const point = new THREE.Vector3(0, height, 0).applyMatrix4(object.matrixWorld).project(camera);
-    bubble.style.left = `${(point.x * 0.5 + 0.5) * host.clientWidth}px`;
-    bubble.style.top = `${(-point.y * 0.5 + 0.5) * host.clientHeight}px`;
+    const width = host.clientWidth;
+    const sceneHeight = host.clientHeight;
+    const mobile = width < 600;
+    const bubbleWidth = bubble.offsetWidth;
+    const bubbleHeight = bubble.offsetHeight;
+    if (point.z < -1 || point.z > 1 || (!mobile && (Math.abs(point.x) > 1 || Math.abs(point.y) > 1))) {
+      bubble.dataset.projected = 'offscreen';
+      return;
+    }
+    bubble.dataset.projected = 'inside';
+    let left = mobile ? (width - bubbleWidth) / 2 : (point.x * 0.5 + 0.5) * width - bubbleWidth / 2;
+    let top = mobile ? sceneHeight - bubbleHeight - 12 : (-point.y * 0.5 + 0.5) * sceneHeight - bubbleHeight - 12;
+    left = THREE.MathUtils.clamp(left, 10, Math.max(10, width - bubbleWidth - 10));
+    top = THREE.MathUtils.clamp(top, 10, Math.max(10, sceneHeight - bubbleHeight - 10));
+    // Dialogue is single-speaker today; retain non-overlap if a future beat shows two speakers.
+    for (const used of occupied) {
+      if (left < used.right + 8 && left + bubbleWidth > used.left - 8 && top < used.bottom + 8 && top + bubbleHeight > used.top - 8) {
+        top = Math.max(10, used.top - bubbleHeight - 8);
+      }
+    }
+    bubble.style.left = `${left}px`;
+    bubble.style.top = `${top}px`;
+    occupied.push(new DOMRect(left, top, bubbleWidth, bubbleHeight));
   };
   const updateBubbles = () => {
     scene.updateMatrixWorld(true);
-    projectBubble('scout', scout, 1.55);
-    projectBubble('sentinel', sentinel, 1.9);
-    projectBubble('audit', auditBeacon, 0.65);
+    const occupied: DOMRect[] = [];
+    projectBubble('scout', scout, 1.65, occupied);
+    projectBubble('sentinel', sentinel, 1.8, occupied);
+    projectBubble('audit', auditBeacon, 0.42, occupied);
   };
   const render = () => { updateBubbles(); renderer.render(scene, camera); };
+  const framingPoints = [
+    [-5.05, -0.5, 1.9], [-5.05, -0.5, 3.4], [-5.05, 0.4, 3.4],
+    [5.5, -0.6, 1.5], [5.5, -0.6, 3.85], [5.5, 0.5, 3.85],
+    [-4.45, -0.4, -1.6], [-4.45, 0.7, 1.6], [4.45, -0.4, -1.6], [4.45, 0.7, 1.6],
+    [1.35, 3.2, -1.4], [1.35, 3.2, 1.4], [-3.2, 1.8, 0.35], [3.4, 1.8, 0.35],
+  ].map(([x, y, z]) => new THREE.Vector3(x, y, z));
+  let cameraBase = new THREE.Vector3(3, 8.5, 14);
+  let cameraTarget = new THREE.Vector3(0, 0.7, 1.1);
   const resize = () => {
     const width = Math.max(host.clientWidth, 1);
     const height = Math.max(host.clientHeight, 1);
     const aspect = width / height;
-    const extent = aspect < 1 ? 6.25 : 5.15;
-    camera.left = -extent * aspect;
-    camera.right = extent * aspect;
-    camera.top = extent;
-    camera.bottom = -extent;
+    cameraBase.set(3, 8.5, 14);
+    cameraTarget.set(0, 0.7, 1.1);
+    camera.position.copy(cameraBase);
+    camera.lookAt(cameraTarget);
+    camera.updateMatrixWorld(true);
+    const local = framingPoints.map((point) => point.clone().applyMatrix4(camera.matrixWorldInverse));
+    const minX = Math.min(...local.map((point) => point.x));
+    const maxX = Math.max(...local.map((point) => point.x));
+    const minY = Math.min(...local.map((point) => point.y));
+    const maxY = Math.max(...local.map((point) => point.y));
+    const safe = width < 600 ? { left: 0.055, right: 0.945, top: 0.06, bottom: 0.74 } : { left: 0.04, right: 0.96, top: 0.06, bottom: 0.94 };
+    const halfHeight = Math.max((maxY - minY) / (2 * (safe.bottom - safe.top)), (maxX - minX) / (2 * aspect * (safe.right - safe.left))) * 1.05;
+    camera.left = -halfHeight * aspect;
+    camera.right = halfHeight * aspect;
+    camera.top = halfHeight;
+    camera.bottom = -halfHeight;
+    const right = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 0);
+    const up = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 1);
+    const desiredX = (safe.left + safe.right - 1) * halfHeight * aspect;
+    const desiredY = (1 - safe.top - safe.bottom) * halfHeight;
+    const offset = right.multiplyScalar((minX + maxX) / 2 - desiredX).add(up.multiplyScalar((minY + maxY) / 2 - desiredY));
+    cameraBase.add(offset);
+    cameraTarget.add(offset);
+    camera.position.copy(cameraBase);
+    camera.lookAt(cameraTarget);
+    camera.zoom = 1;
     camera.updateProjectionMatrix();
     renderer.setSize(width, height, false);
     render();
@@ -231,8 +288,8 @@ export function createOutpostScene(host: HTMLElement, onRequest: () => void, onV
     animationTime += delta;
     waterUniforms.uTime.value = animationTime;
     applyTargets(Math.min(1, delta * 3.1));
-    const targets = visualTargets(phase, decision);
-    const walking = Math.abs(scout.position.x - targets.scoutX) > 0.08;
+    const walking = Math.abs(scout.position.x - lastScoutX) > 0.002;
+    lastScoutX = scout.position.x;
     scout.position.y = 0.05 + (walking ? Math.sin(animationTime * 11) * 0.045 : Math.sin(animationTime * 2) * 0.012);
     scoutLegs[0].rotation.z = walking ? Math.sin(animationTime * 11) * 0.28 : 0;
     scoutLegs[1].rotation.z = walking ? -Math.sin(animationTime * 11) * 0.28 : 0;
@@ -243,33 +300,72 @@ export function createOutpostScene(host: HTMLElement, onRequest: () => void, onV
   function applyTargets(amount: number) {
     const targets = visualTargets(phase, decision);
     const move = (current: number, target: number) => current + (target - current) * amount;
-    scout.position.x = move(scout.position.x, targets.scoutX);
-    scout.rotation.y = move(scout.rotation.y, phase === 'deny' || (phase === 'recover' && decision === 'ALLOW') ? -0.85 : 0.32);
-    packet.position.x = move(packet.position.x, targets.packetX);
+    const gateReady = gateBarrier.position.y >= 2.14 || amount >= 1;
+    const returningThroughGate = phase === 'recover' && decision === 'ALLOW' && scout.position.x > outpostSpace.closedPacketLimitX;
+    const gateTarget = returningThroughGate ? 2.48 : targets.gateY;
+    const waitingForGate = phase === 'allow' && !gateReady;
+    scout.position.x = move(scout.position.x, waitingForGate ? 0.1 : targets.scoutX);
+    scout.position.z = move(scout.position.z, targets.scoutZ);
+    const facings = targetFacings(phase, decision, targets);
+    scout.rotation.y = turnToward(scout.rotation.y, facings.scout, amount);
+    sentinel.rotation.y = turnToward(sentinel.rotation.y, facings.sentinel, amount);
+    packet.position.x = move(packet.position.x, waitingForGate ? 0.72 : targets.packetX);
+    packet.position.z = move(packet.position.z, targets.packetZ);
     packet.position.y = move(packet.position.y, targets.packetY);
     packet.visible = !(phase === 'recover' && decision === 'ALLOW');
     scoutArm.rotation.z = move(scoutArm.rotation.z, ['pickup', 'travel', 'examine', 'allow', 'deny'].includes(phase) ? -0.82 : 0);
     sentinelArm.rotation.z = move(sentinelArm.rotation.z, targets.sentinelArmZ);
-    gateBarrier.position.y = move(gateBarrier.position.y, targets.gateY);
+    gateBarrier.position.y = move(gateBarrier.position.y, gateTarget);
     gateLamp.scale.y = phase === 'examine' ? 1.5 : 1;
-    const targetShift = targets.cameraFocusX + progress * 1.1 + pointerShift;
+    const targetShift = targets.cameraFocusX * 0.3 + pointerShift * 0.25;
     cameraShift = move(cameraShift, targetShift);
-    camera.position.set(8 + cameraShift, 8.7, 11);
-    camera.lookAt(cameraShift, 0, 0);
-    const targetZoom = 1 + progress * 0.2;
-    if (Math.abs(camera.zoom - targetZoom) > 0.001) {
-      camera.zoom = move(camera.zoom, targetZoom);
-      camera.updateProjectionMatrix();
-    }
+    camera.position.copy(cameraBase).add(new THREE.Vector3(cameraShift, 0, 0));
+    camera.lookAt(cameraTarget.clone().add(new THREE.Vector3(cameraShift, 0, 0)));
   }
   resize();
   updateLoop();
 
+  // Read-only inspection hook for viewport and clearance regression checks.
+  type InspectableHost = HTMLElement & { outpostInspection?: () => unknown };
+  const inspectedHost = host as InspectableHost;
+  const projectedBounds = (object: THREE.Object3D) => {
+    const bounds = new THREE.Box3().setFromObject(object);
+    const points = [
+      [bounds.min.x, bounds.min.y, bounds.min.z], [bounds.min.x, bounds.min.y, bounds.max.z],
+      [bounds.min.x, bounds.max.y, bounds.min.z], [bounds.min.x, bounds.max.y, bounds.max.z],
+      [bounds.max.x, bounds.min.y, bounds.min.z], [bounds.max.x, bounds.min.y, bounds.max.z],
+      [bounds.max.x, bounds.max.y, bounds.min.z], [bounds.max.x, bounds.max.y, bounds.max.z],
+    ].map(([x, y, z]) => new THREE.Vector3(x, y, z).project(camera));
+    return {
+      left: Math.min(...points.map((point) => (point.x + 1) * host.clientWidth / 2)),
+      right: Math.max(...points.map((point) => (point.x + 1) * host.clientWidth / 2)),
+      top: Math.min(...points.map((point) => (1 - point.y) * host.clientHeight / 2)),
+      bottom: Math.max(...points.map((point) => (1 - point.y) * host.clientHeight / 2)),
+    };
+  };
+  inspectedHost.outpostInspection = () => {
+    scene.updateMatrixWorld(true);
+    camera.updateMatrixWorld(true);
+    const facing = (character: THREE.Object3D, target: THREE.Object3D) => {
+      const front = new THREE.Vector3(0, 0, 1).applyQuaternion(character.getWorldQuaternion(new THREE.Quaternion()));
+      const toward = target.getWorldPosition(new THREE.Vector3()).sub(character.getWorldPosition(new THREE.Vector3())).normalize();
+      return front.dot(toward);
+    };
+    const bubbles = [...host.querySelectorAll<HTMLElement>('[data-bubble][data-visible="true"]')].map((bubble) => {
+      const box = bubble.getBoundingClientRect();
+      const stage = host.getBoundingClientRect();
+      return { left: box.left - stage.left, right: box.right - stage.left, top: box.top - stage.top, bottom: box.bottom - stage.top };
+    });
+    return {
+      phase, decision, width: host.clientWidth, height: host.clientHeight,
+      objects: { scout: projectedBounds(scout), sentinel: projectedBounds(sentinel), packet: projectedBounds(packet), gate: projectedBounds(gateGroup), barrier: projectedBounds(gateBarrier), nearRail: projectedBounds(railGroups[1]), farRail: projectedBounds(railGroups[0]), water: projectedBounds(water), inlet: projectedBounds(inlet), basin: projectedBounds(basin), audit: projectedBounds(auditBeacon) },
+      facing: { scoutToSentinel: facing(scout, sentinel), sentinelToScout: facing(sentinel, scout) },
+      world: { scoutX: scout.position.x, scoutZ: scout.position.z, sentinelX: sentinel.position.x, sentinelZ: sentinel.position.z, packetX: packet.position.x, packetY: packet.position.y, packetVisible: packet.visible, gateY: gateBarrier.position.y, gateBottomY: gateBarrier.position.y - 0.675 },
+      bubbles,
+    };
+  };
+
   return {
-    setProgress(nextProgress) {
-      progress = Math.max(0, Math.min(nextProgress, 1));
-      if (reducedMotion || paused) { applyTargets(1); render(); }
-    },
     setPhase(nextPhase, nextDecision) {
       phase = nextPhase;
       decision = nextDecision;
@@ -278,7 +374,7 @@ export function createOutpostScene(host: HTMLElement, onRequest: () => void, onV
       gateMat.emissive.copy(gateMat.color);
       auditMat.color.setHex(phase === 'audit' && decision === 'ALLOW' ? 0x78ebc0 : phase === 'audit' && decision === 'DENY' ? 0xff718e : palette.amber);
       auditMat.emissive.copy(auditMat.color);
-      if (nextPhase === 'idle') packet.position.set(-1.65, 0.38, 0.15);
+      if (nextPhase === 'idle') packet.position.set(-1.65, 0.38, outpostSpace.scoutLaneZ);
       if (reducedMotion || paused) {
         applyTargets(1);
         render();
@@ -299,6 +395,7 @@ export function createOutpostScene(host: HTMLElement, onRequest: () => void, onV
       renderer.domElement.removeEventListener('click', onCanvasClick);
       renderer.domElement.removeEventListener('pointermove', onPointerMove);
       renderer.domElement.removeEventListener('pointerleave', onPointerLeave);
+      delete inspectedHost.outpostInspection;
       const geometries = new Set<THREE.BufferGeometry>();
       const materials = new Set<THREE.Material>();
       scene.traverse((object) => {
