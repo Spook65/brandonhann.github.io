@@ -4,7 +4,7 @@ Reviewed October 29, 2026. Experimental direction, pending owner visual approval
 
 ## Foundation and implementation plan
 
-Branch `experiment/engineering-portfolio` starts at verified H.2A `1a55503315bf971e04edc89f235c4df205046d7a`. The original Outpost checkout, `.DS_Store` modification, and W.3–W.5 archives are preserved. Work is isolated in `/private/tmp/portfolio-engineering`. No Outpost code was imported; its experiment stays on its existing branches. Guardian remains the existing lazy route.
+Branch `experiment/engineering-portfolio` starts at verified H.2A `1a55503315bf971e04edc89f235c4df205046d7a`. The original Outpost checkout, `.DS_Store` modification, and W.3–W.5 archives are preserved. Work began in an isolated temporary worktree and is preserved at `/Users/bhann/Documents/portfolio/engineering-portfolio`. No Outpost code was imported; its experiment stays on its existing branches. Guardian remains the existing lazy route.
 
 `data/caseStudies.ts` extends existing public-safe facts with typed problem, contribution, architecture, decisions, stack, evidence, and limitations. `showcase/ProjectShowcase.tsx` renders the semantic index and full case studies; `useProjectNavigation.ts` reads validated URL state. `WelcomingHome` owns the compact identity, static professional links, principle inspector, additional work, and existing profile/skills/contact. Scoped CSS tokens keep the engineering identity separate from Guardian. H.2A's render/hydration path remains; the prerender script preloads the new homepage fonts. Tests and local capture/measurement scripts verify the resulting contracts.
 
