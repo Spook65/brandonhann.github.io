@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Scout and Sentinel character direction review</title>
+  <desc id="desc">Original silhouette studies for a compact courier and protective authorizer, with their facing relationship across a security gate. Concept only, not finished models.</desc>
+  <defs>
+    <linearGradient id="ground" x2="0" y2="1"><stop stop-color="#14273b"/><stop offset="1" stop-color="#091623"/></linearGradient>
+    <linearGradient id="scout" x2="0.8" y2="1"><stop stop-color="#ffd6a8"/><stop offset="1" stop-color="#dd8e58"/></linearGradient>
+    <linearGradient id="sentinel" x2="0.7" y2="1"><stop stop-color="#c5d4f5"/><stop offset="1" stop-color="#677db7"/></linearGradient>
+    <filter id="shadow"><feDropShadow dx="0" dy="18" stdDeviation="12" flood-color="#05101c" flood-opacity=".5"/></filter>
+    <g id="scout-front" filter="url(#shadow)">
+      <path d="M-52 164 Q-76 127-65 42 L-42-20 Q0-43 46-14 L66 43 Q78 127 49 164 Z" fill="url(#scout)" stroke="#0b2034" stroke-width="8"/>
+      <path d="M-63 35 Q-76-45-42-87 Q-3-118 43-82 Q66-57 65 20 L35-7 Q0-16-34 3 Z" fill="#243e57" stroke="#0b2034" stroke-width="8"/>
+      <path d="M-44-33 Q0-60 47-31 L42 2 Q2-18-38 5 Z" fill="#eff9f3"/>
+      <path d="M-24-30 Q-14-35-4-29 M16-28 Q27-33 37-26" fill="none" stroke="#163247" stroke-width="7" stroke-linecap="round"/>
+      <path d="M-44 28 Q-23 75 43 133" fill="none" stroke="#284357" stroke-width="18" stroke-linecap="round"/>
+      <path d="M34 80 Q75 67 82 90 L85 155 Q63 179 23 155 L21 109 Z" fill="#315a6e" stroke="#0b2034" stroke-width="8"/>
+      <path d="M34 95 L71 91 M35 140 Q57 149 77 136" fill="none" stroke="#83d8dc" stroke-width="5"/>
+      <path d="M-42 159 L-44 207 Q-74 223-80 207 L-74 192 M40 159 L50 207 Q77 220 83 204 L72 191" fill="#243d53" stroke="#0b2034" stroke-width="8" stroke-linejoin="round"/>
+    </g>
+    <g id="sentinel-front" filter="url(#shadow)">
+      <path d="M-79 36 Q-89-45-32-112 Q0-132 35-108 Q88-58 80 31 L65 165 Q9 194-63 165 Z" fill="url(#sentinel)" stroke="#0b2034" stroke-width="9"/>
+      <path d="M-79 31 Q-82-61-32-113 Q2-131 34-108 Q66-75 78 15 L44-25 Q0-45-46-20 Z" fill="#263d61" stroke="#0b2034" stroke-width="9"/>
+      <path d="M-51-19 Q-5-47 48-18 L45 24 Q3 10-45 25 Z" fill="#dce8ee"/>
+      <path d="M-27-10 L-7-15 M20-14 L40-6" stroke="#193b56" stroke-width="8" stroke-linecap="round"/>
+      <path d="M-77 57 Q-116 75-111 110 L-86 147 L-62 102 M77 53 Q118 64 117 101 L94 140 L66 106" fill="#506997" stroke="#0b2034" stroke-width="9" stroke-linejoin="round"/>
+      <path d="M-55 106 Q-5 128 59 100" fill="none" stroke="#dae6eb" stroke-width="8"/>
+      <path d="M-47 169 L-50 214 L-79 222 L-89 205 M42 170 L54 213 L82 218 L87 200" fill="#263d61" stroke="#0b2034" stroke-width="9" stroke-linejoin="round"/>
+      <path d="M77-50 L103-78 L121-61 L91-29" fill="#8ce5e4" stroke="#0b2034" stroke-width="7"/>
+    </g>
+  </defs>
+  <rect width="1600" height="900" fill="url(#ground)"/>
+  <path d="M0 112 H1600 M0 770 H1600" stroke="#49627a" stroke-width="2"/>
+  <text x="68" y="62" fill="#e7f1ef" font-family="Arial, sans-serif" font-size="34" font-weight="800">THE SIGNAL OUTPOST</text>
+  <text x="68" y="94" fill="#9fc0d2" font-family="Arial, sans-serif" font-size="18" letter-spacing="3">CHARACTER DIRECTION / CONCEPT REVIEW / NOT FINAL MODELS</text>
+  <text x="90" y="172" fill="#ffcc93" font-family="Arial, sans-serif" font-size="25" font-weight="800">01  SCOUT</text>
+  <text x="600" y="172" fill="#c5d4f5" font-family="Arial, sans-serif" font-size="25" font-weight="800">02  SENTINEL</text>
+  <text x="1090" y="172" fill="#8ce5e4" font-family="Arial, sans-serif" font-size="25" font-weight="800">03  RELATIONSHIP</text>
+  <g transform="translate(263 388) scale(1.08)"><use href="#scout-front"/></g>
+  <g transform="translate(766 388) scale(1.02)"><use href="#sentinel-front"/></g>
+  <text x="90" y="677" fill="#e6edf0" font-family="Arial, sans-serif" font-size="19">Forward lean · messenger pouch</text>
+  <text x="90" y="707" fill="#e6edf0" font-family="Arial, sans-serif" font-size="19">Short, purposeful gait</text>
+  <text x="595" y="677" fill="#e6edf0" font-family="Arial, sans-serif" font-size="19">Shield silhouette · scanning brow</text>
+  <text x="595" y="707" fill="#e6edf0" font-family="Arial, sans-serif" font-size="19">Open path / stop gesture</text>
+  <g transform="translate(1095 312)">
+    <path d="M0 183 H396" stroke="#4a7890" stroke-width="29" stroke-linecap="round"/>
+    <path d="M194 40 V235 M230 40 V235 M194 40 H230" fill="none" stroke="#b9cff0" stroke-width="15" stroke-linejoin="round"/>
+    <path d="M67 150 L119 150" stroke="#ffd1a5" stroke-width="22" stroke-linecap="round"/>
+    <path d="M326 150 L277 150" stroke="#cad8f3" stroke-width="22" stroke-linecap="round"/>
+    <path d="M133 105 L168 105" stroke="#84e5e2" stroke-width="16" stroke-linecap="round"/>
+    <path d="M154 102 L172 102" stroke="#0a2639" stroke-width="4"/>
+    <path d="M178 104 L190 104" stroke="#ffd1a5" stroke-width="3" stroke-dasharray="3 5"/>
+    <text x="4" y="40" fill="#ffd1a5" font-family="Arial, sans-serif" font-size="18" font-weight="700">Scout →</text>
+    <text x="285" y="40" fill="#cad8f3" font-family="Arial, sans-serif" font-size="18" font-weight="700">← Sentinel</text>
+    <text x="116" y="284" fill="#e7f1ef" font-family="Arial, sans-serif" font-size="18">packet → gate → audit</text>
+  </g>
+  <text x="1090" y="677" fill="#e6edf0" font-family="Arial, sans-serif" font-size="19">Face each other at inspection</text>
+  <text x="1090" y="707" fill="#e6edf0" font-family="Arial, sans-serif" font-size="19">Separate lanes at the gate</text>
+  <text x="70" y="812" fill="#b7cbd5" font-family="Arial, sans-serif" font-size="20">Next review: front · side · three-quarter · expression · packet scale at actual camera distance.</text>
+  <text x="70" y="852" fill="#8ce5e4" font-family="Arial, sans-serif" font-size="17" letter-spacing="2">ORIGINAL SHAPE STUDY  •  BLENDER SOURCE + OPTIMIZED GLB AFTER DESIGN APPROVAL</text>
+</svg>
