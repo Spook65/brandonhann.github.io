@@ -11,7 +11,7 @@ test('production preview works at the GitHub Pages subpath across widths', async
       const page = await browser.newPage({ viewport: { width, height: 800 }, reducedMotion: 'reduce' });
       const response = await page.goto(site);
       assert.equal(response?.status(), 200);
-      await page.getByRole('heading', { name: /Hey, I’m Brandon\./, level: 1 }).waitFor();
+      await page.getByRole('heading', { name: /Brandon Hann\./, level: 1 }).waitFor();
 
       const layout = await page.evaluate(() => ({
         viewport: document.documentElement.clientWidth,
@@ -39,7 +39,7 @@ test('direct legacy hash navigation and static assets work', async () => {
     await page.goto(`${site}#project-cuda-mandelbrot`);
     await page.getByRole('heading', { name: 'Cura' }).waitFor();
     assert.ok(await page.locator('#project-cuda-mandelbrot').count());
-    assert.equal(await page.getByRole('button', { name: /Cura/ }).getAttribute('aria-pressed'), 'true');
+    assert.equal(await page.locator('#project-cura').count(), 1);
 
     for (const path of ['favicon.svg', 'brandon-about.jpg', 'assets/resume/Brandon-Hann-Resume.pdf']) {
       const response = await page.request.get(`${site}${path}`);
@@ -57,7 +57,7 @@ test('direct legacy hash navigation and static assets work', async () => {
 
     await page.goto(site);
     const downloadPromise = page.waitForEvent('download');
-    await page.getByRole('link', { name: 'Download PDF' }).first().click();
+    await page.getByRole('link', { name: 'Résumé PDF ↗' }).click();
     const download = await downloadPromise;
     assert.equal(download.suggestedFilename(), 'Brandon-Hann-Resume.pdf');
 

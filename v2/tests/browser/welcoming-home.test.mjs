@@ -1,71 +1,138 @@
-import assert from 'node:assert/strict';
-import test from 'node:test';
-import { chromium } from 'playwright';
-
-const site = process.env.PORTFOLIO_PREVIEW_URL ?? 'http://127.0.0.1:4173/brandonhann.github.io/';
-
-test('welcoming homepage introduces Brandon without loading Guardian artwork', async () => {
+import assert from "node:assert/strict";
+import test from "node:test";
+import { chromium } from "playwright";
+const site =
+  process.env.PORTFOLIO_PREVIEW_URL ??
+  "http://127.0.0.1:4173/brandonhann.github.io/";
+test("engineering homepage exposes identity and keeps optional worlds out of entry requests", async () => {
   const browser = await chromium.launch();
   try {
-    const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-    const requested = [];
-    page.on('request', (request) => requested.push(request.url()));
+    const page = await browser.newPage({
+      viewport: { width: 1440, height: 900 },
+    });
+    const requests = [];
+    page.on("request", (r) => requests.push(r.url()));
     await page.goto(site);
-    await page.getByRole('heading', { name: /Hey, I’m Brandon\./ }).waitFor();
-    assert.ok(await page.getByRole('img', { name: /Brandon Hann in a casual portrait/ }).isVisible());
-    assert.ok(await page.getByRole('link', { name: 'Projects', exact: true }).isVisible());
-    assert.ok(await page.getByRole('link', { name: 'Résumé', exact: true }).isVisible());
-    assert.equal(requested.some((url) => /guardian-organic|mouth-cavity-organic|operator-core-concept|GuardianExperience/.test(url)), false);
-    await page.getByRole('link', { name: /Enter The Inner Workings/ }).click();
-    await page.getByRole('button', { name: /Enter through the Guardian/ }).waitFor();
-    assert.match(page.url(), /experience=guardian/);
-    await page.getByRole('link', { name: /Return to homepage/ }).first().click();
-    await page.getByRole('heading', { name: /Hey, I’m Brandon\./ }).waitFor();
-  } finally { await browser.close(); }
+    await page
+      .getByRole("heading", { name: "Brandon Hann.", exact: true })
+      .waitFor();
+    assert.equal(await page.locator("main img").count(), 0);
+    assert.ok(
+      await page
+        .getByRole("link", { name: "Projects", exact: true })
+        .isVisible(),
+    );
+    assert.equal(
+      requests.some((url) =>
+        /GuardianExperience|guardian-organic|SecurityOutpost|three|brandon-about/.test(
+          url,
+        ),
+      ),
+      false,
+    );
+    await page.getByRole("button", { name: "Validate" }).click();
+    assert.match(
+      await page.locator('[aria-live="polite"]').innerText(),
+      /uncertain input/,
+    );
+    await page
+      .getByRole("link", { name: "Explore The Inner Workings ↗" })
+      .click();
+    await page
+      .getByRole("button", { name: /Enter through the Guardian/ })
+      .waitFor();
+  } finally {
+    await browser.close();
+  }
 });
-
-test('project explorer responds to hover, focus, selection, and Patch interaction', async () => {
+test("index preview, case-study details, direct links and history are coherent", async () => {
   const browser = await chromium.launch();
   try {
-    const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+    const page = await browser.newPage({ reducedMotion: "reduce" });
     await page.goto(site);
-    const patch = page.getByRole('button', { name: /Wave to Patch/ });
-    const oddworks = page.getByRole('button', { name: /ODDWORKS/ });
-    await oddworks.hover();
-    assert.equal(await patch.getAttribute('data-pose'), 'inspect');
-    assert.ok(await page.getByRole('heading', { name: 'ODDWORKS' }).isVisible());
-    await oddworks.click();
-    assert.equal(await oddworks.getAttribute('aria-pressed'), 'true');
-    assert.match(page.url(), /#project-oddworks$/);
-    await patch.click();
-    assert.equal(await patch.getAttribute('data-pose'), 'wave');
-    const mapetite = page.getByRole('button', { name: /Mapetite/ });
-    await mapetite.focus();
-    assert.ok(await page.getByRole('heading', { name: 'Mapetite' }).isVisible());
-  } finally { await browser.close(); }
+    const nav = page.getByRole("navigation", { name: "Project index" });
+    await nav.getByRole("link", { name: /Rivet/ }).hover();
+    assert.match(
+      await page.locator('[aria-label="Project focus preview"]').innerText(),
+      /Rivet/,
+    );
+    assert.equal(
+      await nav
+        .getByRole("link", { name: /Mapetite/ })
+        .getAttribute("aria-current"),
+      "location",
+    );
+    await nav.getByRole("link", { name: /Rivet/ }).click();
+    assert.match(page.url(), /#project-rivet$/);
+    await page.locator("#project-rivet summary").click();
+    assert.ok(
+      (await page.locator("#project-rivet details").getAttribute("open")) !==
+        null,
+    );
+    await page.goto(`${site}#project-oddworks`);
+    assert.equal(
+      await nav
+        .getByRole("link", { name: /ODDWORKS/ })
+        .getAttribute("aria-current"),
+      "location",
+    );
+    await page.goto(`${site}#project-systems-grid`);
+    assert.equal(
+      await nav
+        .getByRole("link", { name: /SecureAgent Lab/ })
+        .getAttribute("aria-current"),
+      "location",
+    );
+    await nav.getByRole("link", { name: /Mapetite/ }).focus();
+    await page.keyboard.press("Enter");
+    await page.goBack();
+    assert.equal(
+      await nav
+        .getByRole("link", { name: /SecureAgent Lab/ })
+        .getAttribute("aria-current"),
+      "location",
+    );
+    await page.goForward();
+    assert.equal(
+      await nav
+        .getByRole("link", { name: /Mapetite/ })
+        .getAttribute("aria-current"),
+      "location",
+    );
+  } finally {
+    await browser.close();
+  }
 });
-
-test('mobile project selection, Back, menu, and reduced motion remain usable', async () => {
+test("mobile touch, direct navigation, and all viewport widths have no horizontal overflow", async () => {
   const browser = await chromium.launch();
   try {
-    for (const width of [320, 390]) {
-      const page = await browser.newPage({ viewport: { width, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
+    for (const width of [320, 390, 768, 1440]) {
+      const page = await browser.newPage({
+        viewport: { width, height: 900 },
+        hasTouch: true,
+        reducedMotion: "reduce",
+      });
       await page.goto(site);
-      const menu = page.getByRole('button', { name: /Menu/ });
-      await menu.tap();
-      assert.equal(await menu.getAttribute('aria-expanded'), 'true');
-      assert.ok(await page.getByRole('link', { name: 'About', exact: true }).isVisible());
-      await page.keyboard.press('Escape');
-      assert.equal(await menu.getAttribute('aria-expanded'), 'false');
-      await page.getByRole('button', { name: /SecureAgent Lab/ }).tap();
-      const preview = page.locator('#project-preview');
-      assert.equal(await page.getByRole('button', { name: /SecureAgent Lab/ }).getAttribute('aria-pressed'), 'true');
-      const box = await preview.boundingBox();
-      assert.ok(box && box.y < 844 && box.y + box.height > 0, `selected preview not in view at ${width}px`);
-      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1), true);
-      await page.goBack();
-      assert.equal(await page.getByRole('button', { name: /Cura/ }).getAttribute('aria-pressed'), 'true');
+      await page
+        .getByRole("navigation", { name: "Primary navigation" })
+        .getByRole("link", { name: "Projects" })
+        .tap();
+      await page
+        .getByRole("navigation", { name: "Project index" })
+        .getByRole("link", { name: /Rivet/ })
+        .tap();
+      assert.equal(await page.locator("#project-rivet").isVisible(), true);
+      assert.equal(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth + 1,
+        ),
+        true,
+      );
+      await page.getByRole("link", { name: "Résumé", exact: true }).tap();
+      await page.waitForURL(/resume.html$/);
       await page.close();
     }
-  } finally { await browser.close(); }
+  } finally {
+    await browser.close();
+  }
 });

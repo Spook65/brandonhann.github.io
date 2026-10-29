@@ -1,49 +1,55 @@
-import assert from 'node:assert/strict';
-import test from 'node:test';
-import { chromium } from 'playwright';
-
-const site = process.env.PORTFOLIO_PREVIEW_URL ?? 'http://127.0.0.1:4173/brandonhann.github.io/';
-
-test('no-JavaScript homepage retains identity, navigation, projects, and résumé', async () => {
-  const browser = await chromium.launch();
+import assert from "node:assert/strict";
+import test from "node:test";
+import { chromium } from "playwright";
+const site =
+  process.env.PORTFOLIO_PREVIEW_URL ??
+  "http://127.0.0.1:4173/brandonhann.github.io/";
+test("without JavaScript all case studies, details and navigation remain usable", async () => {
+  const b = await chromium.launch();
   try {
-    const page = await browser.newPage({ viewport: { width: 390, height: 844 }, javaScriptEnabled: false });
-    await page.goto(site);
-    assert.equal(await page.getByRole('heading', { name: /Hey, I’m Brandon\./ }).count(), 1);
-    assert.ok(await page.getByRole('link', { name: /Explore projects/ }).isVisible());
-    assert.ok(await page.getByRole('link', { name: /Read résumé/ }).isVisible());
-    assert.ok(await page.getByRole('link', { name: 'About', exact: true }).isVisible());
-    assert.equal(await page.getByRole('button', { name: /Menu/ }).isVisible(), false);
-    await page.getByRole('link', { name: /Explore projects/ }).click();
-    assert.match(page.url(), /#projects$/);
-    assert.ok(await page.getByRole('heading', { name: 'Selected work.' }).isVisible());
-    await page.getByRole('link', { name: /Read résumé/ }).click();
-    assert.match(page.url(), /\/brandonhann\.github\.io\/resume\.html$/);
-    assert.ok(await page.getByRole('heading', { name: 'Brandon Hann', level: 1 }).isVisible());
-  } finally { await browser.close(); }
+    const p = await b.newPage({
+      viewport: { width: 390, height: 844 },
+      javaScriptEnabled: false,
+    });
+    await p.goto(site);
+    assert.equal(
+      await p
+        .getByRole("heading", { name: "Brandon Hann.", exact: true })
+        .count(),
+      1,
+    );
+    for (const id of ["mapetite", "rivet", "secureagent", "oddworks"])
+      assert.equal(await p.locator(`#project-${id}`).count(), 1);
+    await p.locator("#project-rivet summary").click();
+    assert.ok(
+      (await p.locator("#project-rivet details").getAttribute("open")) !== null,
+    );
+    await p
+      .getByRole("navigation", { name: "Project index" })
+      .getByRole("link", { name: /Mapetite/ })
+      .click();
+    assert.match(p.url(), /#project-mapetite$/);
+    await p.getByRole("link", { name: "Read résumé ↗" }).click();
+    assert.match(p.url(), /resume.html$/);
+  } finally {
+    await b.close();
+  }
 });
-
-test('hydration keeps one homepage and interactive navigation without warnings', async () => {
-  const browser = await chromium.launch();
+test("hydration has no warnings or duplicate content and tolerates malformed hashes", async () => {
+  const b = await chromium.launch();
   try {
-    const page = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
+    const p = await b.newPage({ viewport: { width: 390, height: 844 } });
     const errors = [];
-    page.on('pageerror', (error) => errors.push(error.message));
-    page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
-    await page.goto(`${site}#project-oddworks`);
-    await page.getByRole('button', { name: /ODDWORKS/ }).waitFor();
-    assert.equal(await page.getByRole('heading', { name: /Hey, I’m Brandon\./ }).count(), 1);
-    assert.equal(await page.getByRole('button', { name: /ODDWORKS/ }).getAttribute('aria-pressed'), 'true');
-    const menu = page.getByRole('button', { name: /Menu/ });
-    await menu.tap();
-    assert.equal(await menu.getAttribute('aria-expanded'), 'true');
-    await page.getByRole('button', { name: /Mapetite/ }).tap();
-    assert.match(page.url(), /#project-mapetite$/);
-    await page.goBack();
-    assert.equal(await page.getByRole('button', { name: /ODDWORKS/ }).getAttribute('aria-pressed'), 'true');
-    await page.goForward();
-    assert.equal(await page.getByRole('button', { name: /Mapetite/ }).getAttribute('aria-pressed'), 'true');
-    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1), true);
+    p.on("pageerror", (e) => errors.push(e.message));
+    p.on("console", (m) => {
+      if (m.type() === "error") errors.push(m.text());
+    });
+    await p.goto(`${site}#%E0%A4%A`);
+    await p.getByRole("button", { name: "Authorize" }).waitFor();
+    assert.equal(await p.getByRole("heading", { level: 1 }).count(), 1);
+    assert.equal(await p.locator("#project-rivet").count(), 1);
     assert.deepEqual(errors, []);
-  } finally { await browser.close(); }
+  } finally {
+    await b.close();
+  }
 });

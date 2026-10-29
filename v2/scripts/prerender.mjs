@@ -21,7 +21,7 @@ try {
   const { renderHome } = await import(pathToFileURL(join(temporary, 'entry-server.js')).href);
   const html = await readFile(join(output, 'index.html'), 'utf8');
   const files = await readdir(join(output, 'assets'));
-  const fontNames = ['source-sans-3-latin-wght-normal-', 'fraunces-latin-wght-normal-'];
+  const fontNames = ['inter-latin-wght-normal-', 'jetbrains-mono-latin-wght-normal-'];
   const fontLinks = fontNames.map((prefix) => {
     const file = files.find((name) => name.startsWith(prefix) && name.endsWith('.woff2'));
     if (!file) throw new Error(`Missing expected Latin font: ${prefix}`);
