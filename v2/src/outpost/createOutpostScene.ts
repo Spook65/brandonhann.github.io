@@ -1,9 +1,11 @@
 import * as THREE from 'three';
-import type { Phase } from './scenario';
+import type { Decision, Phase } from './scenario';
+import { visualTargets } from './motionPlan';
 
 export type OutpostScene = {
-  setPhase: (phase: Phase, decision: 'allowed' | 'denied' | null) => void;
+  setPhase: (phase: Phase, decision: Decision | null) => void;
   setProgress: (progress: number) => void;
+  setPaused: (paused: boolean) => void;
   dispose: () => void;
 };
 
@@ -12,7 +14,7 @@ const palette = {
   cyan: 0x7de7ee, amber: 0xffc17d, violet: 0xb8a3ff,
 };
 
-export function createOutpostScene(host: HTMLElement, onRequest: () => void, reducedMotion: boolean): OutpostScene {
+export function createOutpostScene(host: HTMLElement, onRequest: () => void, onVisibilityChange: (visible: boolean) => void, reducedMotion: boolean): OutpostScene {
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -21,7 +23,7 @@ export function createOutpostScene(host: HTMLElement, onRequest: () => void, red
   renderer.domElement.style.cssText = 'display:block;width:100%;height:100%;cursor:pointer';
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(palette.dark, 0.028);
+  scene.fog = new THREE.FogExp2(palette.dark, 0.018);
   const camera = new THREE.OrthographicCamera(-6, 6, 4, -4, 0.1, 80);
   camera.position.set(8, 8.7, 11);
   camera.lookAt(0, 0, 0);
@@ -38,8 +40,10 @@ export function createOutpostScene(host: HTMLElement, onRequest: () => void, red
   const edgeMat = mat(palette.edge, 0.36);
   const darkMat = mat(palette.dark, 0.3);
   const amberMat = mat(palette.amber);
+  const auditMat = new THREE.MeshStandardMaterial({ color: palette.amber, emissive: palette.amber, emissiveIntensity: 0.25 });
   const cyanMat = new THREE.MeshStandardMaterial({ color: palette.cyan, emissive: palette.cyan, emissiveIntensity: 0.45 });
   const gateMat = new THREE.MeshStandardMaterial({ color: palette.violet, emissive: palette.violet, emissiveIntensity: 0.42 });
+  const barrierMat = new THREE.MeshStandardMaterial({ color: 0x7c73c2, emissive: 0x5e58a0, emissiveIntensity: 0.3, transparent: true, opacity: 0.7, metalness: 0.3 });
   const box = (parent: THREE.Object3D, size: [number, number, number], position: [number, number, number], material: THREE.Material) => {
     const mesh = new THREE.Mesh(new THREE.BoxGeometry(...size), material);
     mesh.position.set(...position);
@@ -67,9 +71,11 @@ export function createOutpostScene(host: HTMLElement, onRequest: () => void, red
   box(scene, [0.55, 2.5, 0.6], [1.35, 1.25, 1.05], darkMat);
   box(scene, [0.16, 0.2, 2.14], [1.35, 2.4, 0], edgeMat);
   const gateLamp = box(scene, [0.13, 0.1, 1.68], [1.35, 2.3, 0], gateMat);
+  const gateBarrier = box(scene, [0.11, 1.35, 1.72], [1.35, 0.74, 0], barrierMat);
+  for (const height of [0.35, 0.75, 1.15]) box(gateBarrier, [0.015, 0.035, 1.7], [0.06, height - 0.74, 0], cyanMat);
   box(scene, [1.0, 0.12, 1.1], [3.2, 0.15, 0], darkMat);
   box(scene, [0.64, 0.9, 0.65], [3.2, 0.64, 0], edgeMat);
-  ball(scene, 0.24, [3.2, 1.22, 0], amberMat);
+  const auditBeacon = ball(scene, 0.24, [3.2, 1.22, 0], auditMat);
 
   // Flow is directional in both vertex displacement and color bands.
   const waterUniforms = { uTime: { value: 0 }, uTint: { value: new THREE.Color(0x115077) } };
@@ -80,12 +86,24 @@ export function createOutpostScene(host: HTMLElement, onRequest: () => void, red
     vertexShader: `varying vec2 vUv; uniform float uTime; void main() { vUv=uv; vec3 p=position; p.z += sin(p.x*2.4 + uTime*1.7)*0.06 + sin(p.y*4.1-uTime*1.2)*0.035; gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0); }`,
     fragmentShader: `varying vec2 vUv; uniform float uTime; uniform vec3 uTint; void main() { float flow=sin((vUv.x*7.0-vUv.y*2.0)-uTime*0.95); float fine=sin((vUv.x*21.0+vUv.y*8.0)-uTime*1.7); vec3 color=uTint + vec3(0.025,0.10,0.14)*(0.5+0.5*flow) + vec3(0.03,0.10,0.11)*pow(max(fine,0.0),9.0); gl_FragColor=vec4(color,0.88); }`,
   });
-  for (const side of [-1, 1]) {
-    const water = new THREE.Mesh(new THREE.PlaneGeometry(9, 5, 32, 12), waterMaterial);
-    water.rotation.x = -Math.PI / 2;
-    water.position.set(0, -0.39, side * 3.85);
-    scene.add(water);
-  }
+  const water = new THREE.Mesh(new THREE.PlaneGeometry(8.9, 2.0, 36, 10), waterMaterial);
+  water.rotation.x = -Math.PI / 2;
+  water.position.set(0, -0.39, 2.65);
+  scene.add(water);
+  for (const bank of [1.62, 3.68]) box(scene, [8.9, 0.16, 0.13], [0, -0.31, bank], darkMat);
+  const inlet = new THREE.Mesh(new THREE.CylinderGeometry(0.58, 0.72, 0.33, 8), edgeMat);
+  inlet.position.set(-4.4, -0.25, 2.65);
+  scene.add(inlet);
+  const inletWater = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 0.04, 8), cyanMat);
+  inletWater.position.set(-4.4, -0.07, 2.65);
+  scene.add(inletWater);
+  const basin = new THREE.Mesh(new THREE.CylinderGeometry(1.03, 1.1, 0.18, 16), edgeMat);
+  basin.position.set(4.36, -0.38, 2.65);
+  scene.add(basin);
+  const basinWater = new THREE.Mesh(new THREE.CircleGeometry(0.91, 24), waterMaterial);
+  basinWater.rotation.x = -Math.PI / 2;
+  basinWater.position.set(4.36, -0.27, 2.65);
+  scene.add(basinWater);
 
   const scout = new THREE.Group();
   scout.position.set(-2.65, 0.05, 0.2);
@@ -93,10 +111,20 @@ export function createOutpostScene(host: HTMLElement, onRequest: () => void, red
   box(scout, [0.45, 0.58, 0.38], [0, 0.52, 0], amberMat);
   ball(scout, 0.29, [0, 1.02, 0], mat(0xffd8aa));
   box(scout, [0.22, 0.11, 0.18], [0, 1.29, 0], darkMat);
+  box(scout, [0.26, 0.08, 0.32], [0.11, 1.22, 0.09], darkMat);
+  box(scout, [0.14, 0.36, 0.43], [-0.27, 0.62, -0.04], edgeMat);
   for (const eye of [-0.11, 0.11]) ball(scout, 0.045, [eye, 1.05, 0.26], darkMat);
-  const scoutLegs = new THREE.Group();
-  scout.add(scoutLegs);
-  for (const side of [-1, 1]) box(scoutLegs, [0.13, 0.24, 0.14], [side * 0.13, 0.14, 0], darkMat);
+  const scoutLegs = [-1, 1].map((side) => {
+    const leg = new THREE.Group();
+    leg.position.set(side * 0.13, 0.27, 0);
+    scout.add(leg);
+    box(leg, [0.13, 0.25, 0.16], [0, -0.12, 0], darkMat);
+    return leg;
+  });
+  const scoutArm = new THREE.Group();
+  scoutArm.position.set(0.28, 0.78, 0);
+  scout.add(scoutArm);
+  box(scoutArm, [0.13, 0.4, 0.16], [0.04, -0.19, 0], mat(0xffd8aa));
   const packet = new THREE.Group();
   packet.position.set(-1.65, 0.38, 0.15);
   scene.add(packet);
@@ -106,14 +134,17 @@ export function createOutpostScene(host: HTMLElement, onRequest: () => void, red
   sentinel.position.set(2.35, 0.05, -0.25);
   scene.add(sentinel);
   box(sentinel, [0.55, 0.78, 0.45], [0, 0.49, 0], mat(0x8e89cd));
-  ball(sentinel, 0.33, [0, 1.06, 0], mat(0xbab4ef));
+  const sentinelHead = new THREE.Group();
+  sentinelHead.position.set(0, 1.06, 0);
+  sentinel.add(sentinelHead);
+  ball(sentinelHead, 0.33, [0, 0, 0], mat(0xbab4ef));
   const sentinelArm = new THREE.Group();
   sentinelArm.position.set(-0.34, 0.79, 0);
   sentinel.add(sentinelArm);
   box(sentinelArm, [0.16, 0.5, 0.19], [-0.04, -0.22, 0], mat(0xbab4ef));
-  for (const eye of [-0.12, 0.12]) ball(sentinel, 0.045, [eye, 1.1, 0.29], darkMat);
-  box(sentinel, [0.08, 0.32, 0.08], [0, 1.45, 0], edgeMat);
-  ball(sentinel, 0.10, [0, 1.64, 0], cyanMat);
+  for (const eye of [-0.12, 0.12]) ball(sentinelHead, 0.045, [eye, 0.04, 0.29], darkMat);
+  box(sentinelHead, [0.08, 0.32, 0.08], [0, 0.39, 0], edgeMat);
+  ball(sentinelHead, 0.10, [0, 0.58, 0], cyanMat);
 
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
@@ -126,37 +157,71 @@ export function createOutpostScene(host: HTMLElement, onRequest: () => void, red
   renderer.domElement.addEventListener('click', onCanvasClick);
 
   let phase: Phase = 'idle';
-  let decision: 'allowed' | 'denied' | null = null;
+  let decision: Decision | null = null;
+  let paused = false;
   let active = true;
   let visible = true;
+  let pageSuspended = false;
   let animationTime = 0;
   let lastFrame = 0;
   let previousTime = 0;
+  let progress = 0;
+  let pointerShift = 0;
+  let cameraShift = 0;
+  const onPointerMove = (event: PointerEvent) => {
+    const rect = renderer.domElement.getBoundingClientRect();
+    pointerShift = ((event.clientX - rect.left) / Math.max(rect.width, 1) - 0.5) * 0.55;
+  };
+  const onPointerLeave = () => { pointerShift = 0; };
+  renderer.domElement.addEventListener('pointermove', onPointerMove);
+  renderer.domElement.addEventListener('pointerleave', onPointerLeave);
+  const projectBubble = (actor: 'scout' | 'sentinel' | 'audit', object: THREE.Object3D, height: number) => {
+    const bubble = host.querySelector<HTMLElement>(`[data-bubble="${actor}"]`);
+    if (!bubble) return;
+    const point = new THREE.Vector3(0, height, 0).applyMatrix4(object.matrixWorld).project(camera);
+    bubble.style.left = `${(point.x * 0.5 + 0.5) * host.clientWidth}px`;
+    bubble.style.top = `${(-point.y * 0.5 + 0.5) * host.clientHeight}px`;
+  };
+  const updateBubbles = () => {
+    scene.updateMatrixWorld(true);
+    projectBubble('scout', scout, 1.55);
+    projectBubble('sentinel', sentinel, 1.9);
+    projectBubble('audit', auditBeacon, 0.65);
+  };
+  const render = () => { updateBubbles(); renderer.render(scene, camera); };
   const resize = () => {
     const width = Math.max(host.clientWidth, 1);
     const height = Math.max(host.clientHeight, 1);
     const aspect = width / height;
-    const extent = aspect < 1 ? 6.2 : 5.5;
+    const extent = aspect < 1 ? 6.25 : 5.15;
     camera.left = -extent * aspect;
     camera.right = extent * aspect;
     camera.top = extent;
     camera.bottom = -extent;
     camera.updateProjectionMatrix();
     renderer.setSize(width, height, false);
-    renderer.render(scene, camera);
+    render();
   };
   const observer = new ResizeObserver(resize);
   observer.observe(host);
   const visibility = new IntersectionObserver((entries) => {
     visible = (entries[0]?.intersectionRatio ?? 0) >= 0.1;
+    onVisibilityChange(visible && !document.hidden);
     updateLoop();
   }, { threshold: [0, 0.1] });
   visibility.observe(host);
-  const onPageVisibility = () => updateLoop();
+  const onPageVisibility = () => {
+    onVisibilityChange(visible && !document.hidden);
+    updateLoop();
+  };
+  const onPageHide = () => { pageSuspended = true; onVisibilityChange(false); updateLoop(); };
+  const onPageShow = () => { pageSuspended = false; onVisibilityChange(visible && !document.hidden); updateLoop(); };
   document.addEventListener('visibilitychange', onPageVisibility);
+  window.addEventListener('pagehide', onPageHide);
+  window.addEventListener('pageshow', onPageShow);
   function updateLoop() {
-    renderer.setAnimationLoop(active && visible && !document.hidden && !reducedMotion ? tick : null);
-    if (reducedMotion && active && visible) renderer.render(scene, camera);
+    renderer.setAnimationLoop(active && visible && !pageSuspended && !document.hidden && !reducedMotion && !paused ? tick : null);
+    if (active && visible && (reducedMotion || paused)) render();
   }
   function tick(time: number) {
     if (time - lastFrame < 32) return;
@@ -165,40 +230,63 @@ export function createOutpostScene(host: HTMLElement, onRequest: () => void, red
     lastFrame = time;
     animationTime += delta;
     waterUniforms.uTime.value = animationTime;
-    const target = phase === 'approach' || phase === 'policy' || phase === 'allowed' || phase === 'denied' || phase === 'audit' ? -0.1 : -2.65;
-    scout.position.x += (target - scout.position.x) * Math.min(1, delta * 3.7);
-    scout.position.y = 0.05 + Math.sin(animationTime * (phase === 'approach' ? 9 : 2.5)) * 0.045;
-    scoutLegs.rotation.z = phase === 'approach' ? Math.sin(animationTime * 10) * 0.13 : 0;
-    sentinel.rotation.z = Math.sin(animationTime * 1.7) * 0.015;
-    packet.rotation.y += delta * 0.7;
-    packet.position.x = scout.position.x + 1;
-    packet.position.y = 0.38 + Math.sin(animationTime * 2) * 0.065;
-    const inspecting = phase === 'policy' || phase === 'allowed' || phase === 'denied' || phase === 'audit';
-    sentinelArm.rotation.z += ((inspecting ? -1.2 : 0) - sentinelArm.rotation.z) * Math.min(1, delta * 5);
-    gateLamp.scale.y = phase === 'policy' ? 1.5 : 1;
-    renderer.render(scene, camera);
+    applyTargets(Math.min(1, delta * 3.1));
+    const targets = visualTargets(phase, decision);
+    const walking = Math.abs(scout.position.x - targets.scoutX) > 0.08;
+    scout.position.y = 0.05 + (walking ? Math.sin(animationTime * 11) * 0.045 : Math.sin(animationTime * 2) * 0.012);
+    scoutLegs[0].rotation.z = walking ? Math.sin(animationTime * 11) * 0.28 : 0;
+    scoutLegs[1].rotation.z = walking ? -Math.sin(animationTime * 11) * 0.28 : 0;
+    sentinelHead.rotation.z = phase === 'examine' ? -0.12 : Math.sin(animationTime * 1.6) * 0.025;
+    auditBeacon.scale.setScalar(phase === 'audit' ? 1.1 + Math.sin(animationTime * 6) * 0.1 : 1);
+    render();
+  }
+  function applyTargets(amount: number) {
+    const targets = visualTargets(phase, decision);
+    const move = (current: number, target: number) => current + (target - current) * amount;
+    scout.position.x = move(scout.position.x, targets.scoutX);
+    scout.rotation.y = move(scout.rotation.y, phase === 'deny' || (phase === 'recover' && decision === 'ALLOW') ? -0.85 : 0.32);
+    packet.position.x = move(packet.position.x, targets.packetX);
+    packet.position.y = move(packet.position.y, targets.packetY);
+    packet.visible = !(phase === 'recover' && decision === 'ALLOW');
+    scoutArm.rotation.z = move(scoutArm.rotation.z, ['pickup', 'travel', 'examine', 'allow', 'deny'].includes(phase) ? -0.82 : 0);
+    sentinelArm.rotation.z = move(sentinelArm.rotation.z, targets.sentinelArmZ);
+    gateBarrier.position.y = move(gateBarrier.position.y, targets.gateY);
+    gateLamp.scale.y = phase === 'examine' ? 1.5 : 1;
+    const targetShift = targets.cameraFocusX + progress * 1.1 + pointerShift;
+    cameraShift = move(cameraShift, targetShift);
+    camera.position.set(8 + cameraShift, 8.7, 11);
+    camera.lookAt(cameraShift, 0, 0);
+    const targetZoom = 1 + progress * 0.2;
+    if (Math.abs(camera.zoom - targetZoom) > 0.001) {
+      camera.zoom = move(camera.zoom, targetZoom);
+      camera.updateProjectionMatrix();
+    }
   }
   resize();
   updateLoop();
 
   return {
-    setProgress(progress) {
-      const shift = Math.max(0, Math.min(progress, 1)) * 1.8;
-      camera.position.set(8 + shift, 8.7, 11);
-      camera.lookAt(shift, 0, 0);
-      renderer.render(scene, camera);
+    setProgress(nextProgress) {
+      progress = Math.max(0, Math.min(nextProgress, 1));
+      if (reducedMotion || paused) { applyTargets(1); render(); }
     },
     setPhase(nextPhase, nextDecision) {
       phase = nextPhase;
       decision = nextDecision;
-      gateMat.color.setHex(decision === 'allowed' && ['allowed', 'audit'].includes(phase) ? 0x78ebc0 : decision === 'denied' && ['denied', 'audit'].includes(phase) ? 0xff718e : palette.violet);
+      const showingOutcome = ['allow', 'deny', 'audit'].includes(phase);
+      gateMat.color.setHex(showingOutcome && decision === 'ALLOW' ? 0x78ebc0 : showingOutcome && decision === 'DENY' ? 0xff718e : palette.violet);
       gateMat.emissive.copy(gateMat.color);
-      if (reducedMotion) {
-        scout.position.x = phase === 'idle' || phase === 'received' ? -2.65 : -0.1;
-        packet.position.x = scout.position.x + 1;
-        sentinelArm.rotation.z = phase === 'policy' || phase === 'allowed' || phase === 'denied' || phase === 'audit' ? -1.2 : 0;
-        renderer.render(scene, camera);
+      auditMat.color.setHex(phase === 'audit' && decision === 'ALLOW' ? 0x78ebc0 : phase === 'audit' && decision === 'DENY' ? 0xff718e : palette.amber);
+      auditMat.emissive.copy(auditMat.color);
+      if (nextPhase === 'idle') packet.position.set(-1.65, 0.38, 0.15);
+      if (reducedMotion || paused) {
+        applyTargets(1);
+        render();
       }
+    },
+    setPaused(nextPaused) {
+      paused = nextPaused;
+      updateLoop();
     },
     dispose() {
       active = false;
@@ -206,7 +294,11 @@ export function createOutpostScene(host: HTMLElement, onRequest: () => void, red
       observer.disconnect();
       visibility.disconnect();
       document.removeEventListener('visibilitychange', onPageVisibility);
+      window.removeEventListener('pagehide', onPageHide);
+      window.removeEventListener('pageshow', onPageShow);
       renderer.domElement.removeEventListener('click', onCanvasClick);
+      renderer.domElement.removeEventListener('pointermove', onPointerMove);
+      renderer.domElement.removeEventListener('pointerleave', onPointerLeave);
       const geometries = new Set<THREE.BufferGeometry>();
       const materials = new Set<THREE.Material>();
       scene.traverse((object) => {
