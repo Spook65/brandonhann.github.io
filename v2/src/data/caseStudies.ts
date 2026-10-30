@@ -170,18 +170,30 @@ export const mapetiteValidation = {
       label: "No matching place",
       result: "Stop and ask for a valid location",
       kind: "stop",
+      example: "fakecity · California · United States",
+      providerReached: false,
+      explanation:
+        "The city has no exact match in the backend place index. Validation stops before restaurant providers receive a search.",
     },
     {
       code: "PLACE_AMBIGUOUS",
       label: "Multiple matching places",
       result: "Return up to five suggestions",
       kind: "clarify",
+      example: "Springfield · no region or country",
+      providerReached: false,
+      explanation:
+        "Several indexed places share the name. The backend asks for more location context instead of selecting one silently.",
     },
     {
       code: "RESOLVED PLACE",
       label: "One matching place",
       result: "Canonical location reaches provider search",
       kind: "continue",
+      example: "Stockton · California · United States",
+      providerReached: true,
+      explanation:
+        "One indexed place matches. Its canonical location can proceed to Geoapify, with OSM / Overpass available as a fallback.",
     },
   ],
   followThrough: "Geoapify search → OSM / Overpass fallback when needed",

@@ -44,6 +44,11 @@
   color: var(--muted);
   font-size: 0.84rem;
 }
+.hint {
+  margin: 0.85rem 0 0.55rem;
+  color: var(--ink);
+  font-size: 0.82rem;
+}
 .outcomes {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -53,32 +58,111 @@
   margin: 0;
 }
 .outcomes li {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
   min-width: 0;
-  min-height: 10rem;
-  padding: 0.8rem 0.65rem;
   border-top: 3px solid var(--line);
   background: var(--surface);
 }
-.outcomes li[data-kind="stop"] { border-color: #d8868c; }
-.outcomes li[data-kind="clarify"] { border-color: #e6b86e; }
-.outcomes li[data-kind="continue"] { border-color: var(--cyan); }
+.outcomes li[data-selected="true"] {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  background: #1b2b42;
+}
+.outcomes li[data-kind="stop"] {
+  border-color: #d8868c;
+}
+.outcomes li[data-kind="clarify"] {
+  border-color: #e6b86e;
+}
+.outcomes li[data-kind="continue"] {
+  border-color: var(--cyan);
+}
+.outcomes button,
+.staticOutcome {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  width: 100%;
+  min-height: 7rem;
+  padding: 0.8rem 0.65rem;
+  text-align: left;
+}
+.outcomes button {
+  color: inherit;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}
+.outcomes button:hover {
+  background: #20314a;
+}
+.outcomes button:active {
+  background: #29405f;
+}
+.outcomes button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -4px;
+}
 .outcomes code {
   overflow-wrap: anywhere;
   color: var(--ink);
-  font: 0.64rem/1.4 var(--mono);
+  font: 0.7rem/1.4 var(--mono);
 }
 .outcomes strong {
   color: var(--ink);
   font-size: 0.82rem;
   font-weight: 600;
 }
-.outcomes li > span {
+.outcomes button > span,
+.staticOutcome > span {
   color: var(--muted);
   font-size: 0.78rem;
   line-height: 1.45;
+}
+.outcomes button > span {
+  color: var(--accent);
+}
+.trace {
+  margin-top: 0.75rem;
+  padding: 0.85rem 0 0.7rem;
+  border-block: 1px solid var(--line);
+}
+.traceLabel {
+  margin: 0 0 0.65rem;
+  color: var(--accent);
+  font: 0.72rem/1.5 var(--mono);
+}
+.trace ol {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.trace li {
+  display: grid;
+  align-content: start;
+  gap: 0.25rem;
+  padding-left: 0.65rem;
+  border-left: 2px solid var(--cyan);
+}
+.trace li span {
+  color: var(--accent);
+  font: 0.69rem/1.4 var(--mono);
+}
+.trace li strong {
+  color: var(--ink);
+  font-size: 0.76rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.trace > p:last-child {
+  margin: 0.85rem 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
 }
 .followThrough {
   display: grid;
@@ -98,7 +182,22 @@
   font-size: 0.82rem;
 }
 @media (max-width: 480px) {
-  .outcomes { grid-template-columns: 1fr; }
-  .outcomes li { min-height: 0; padding: 0.65rem 0.8rem; }
-  .outcomes li > span { font-size: 0.83rem; }
+  .outcomes {
+    grid-template-columns: 1fr;
+  }
+  .outcomes button,
+  .staticOutcome {
+    min-height: 0;
+    padding: 0.65rem 0.8rem;
+  }
+  .outcomes button > span,
+  .staticOutcome > span {
+    font-size: 0.83rem;
+  }
+  .trace ol {
+    grid-template-columns: 1fr;
+  }
+  .trace li {
+    padding-block: 0.15rem;
+  }
 }
