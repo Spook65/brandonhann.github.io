@@ -1,29 +1,35 @@
-# Portfolio v2 — The Builder's Logbook
+# Portfolio v2 — engineering-first review candidate
 
-Checkpoint A.1 of the CalHacks Event MVP adds a Guardian entrance, a short mouth-shaped passage, a Human Core dialogue and relic, and one interactive Builder's Domain chamber. Six accessible destinations open real HTML content. Direct navigation to projects, about, skills, résumé, and contact remains available throughout. The repository root remains the production legacy site.
+`v2/` is an unpublished Vite, React, and TypeScript portfolio. The repository root is the legacy live site. The current review branch is `experiment/release-candidate-prep`; a commit or push to it does not authorize a release. Read `AGENTS.md`, `DESIGN.md`, and `RELEASE_CHECKLIST.md` before changing UI or preparing publication.
 
-The four illustrated scene assets in `src/assets/` are separate optimized WebP files. The mobile chamber has its own composition; interface text and controls remain HTML. Fraunces and Source Sans 3 are self-hosted font packages. Local review captures under `artifacts/` are ignored by Git; the creative-reset storyboard source is preserved there.
+## What the application serves
 
-## Requirements and local preview
+- The default route is Brandon's engineering-first homepage: identity, direct Projects/Résumé/GitHub/Contact navigation, four featured technical case studies (Mapetite, Rivet, SecureAgent Lab, ODDWORKS), additional Cura work, About, Skills, and Contact. `src/data/` owns public-safe project facts; `src/showcase/` renders the case studies and Mapetite's **illustrative**, source-derived place-validation explainer. Every case study remains available without interacting with the explainer.
+- `npm run build` runs TypeScript, Vite, and `scripts/prerender.mjs`. The prerender step renders the React homepage into `dist/index.html` at build time from the same content modules used during hydration. Identity, project content, navigation, and résumé links are present and usable without client JavaScript. `src/main.tsx` hydrates that HTML on the default route; it mounts a separate React tree for the optional Guardian query route.
+- `?experience=guardian` lazily loads the separate Guardian experience. Its art and code should not be requested by the default homepage. The rejected Signal Outpost experiments are not part of this application entry.
+- `public/resume.html` is a standalone, script-free résumé page. Its relative PDF link resolves to `public/assets/resume/Brandon-Hann-Resume.pdf`. The main homepage uses self-hosted Inter and JetBrains Mono; the optional Guardian keeps its existing typography. W.7A Mapetite captures are **not** in `public/` or the built site and remain private review material.
 
-- Node 24 (see `.nvmrc`); npm 11 is used for the lockfile.
-- From `v2/`, run `npm ci`, `npm run typecheck`, `npm test`, and `npm run build`.
-- Run `npm run test:dist` after a build.
-- Run `npm run preview`. The production output is served at `http://127.0.0.1:4173/brandonhann.github.io/` unless that port is occupied; use the URL printed by Vite.
-- With the preview server running, run `npm run test:browser` for layout, dialogue, relic, destination panels, direct hashes, static assets, and no-JavaScript résumé checks. If preview selected another port, set `PORTFOLIO_PREVIEW_URL=http://127.0.0.1:<port>/brandonhann.github.io/`. Install Playwright Chromium with `npx playwright install chromium` if it is not already present.
-- For iteration only, run `npm run dev` and visit the same project subpath shown by Vite.
+## Local setup and verification
 
-Vite uses `base: '/brandonhann.github.io/'`. References in React to copied public files use `import.meta.env.BASE_URL`; do not use domain-root `/assets/...` paths. The `dist/` directory, not the `v2/` directory, is the future Pages artifact root.
+Use Node 24 (`.nvmrc`) and the lockfile's npm version. From `v2/`:
 
-## Boundaries
+```sh
+npm ci
+npm run typecheck
+npm test
+npm run build
+npm run test:dist
+npm run preview
+```
 
-- Do not import root `index.html` styles, `assets/js/site.js`, Three.js, or old animation code.
-- `public/resume.html` is a standalone copy of the existing résumé with its script dependency removed. Its inline CSS is scoped to that document and is not part of the React bundle.
-- `public/assets/resume/Brandon-Hann-Resume.pdf` retains the public PDF URL.
-- `public/brandon-about.jpg` retains the current social-image URL for compatibility. Its portrait proportions should be replaced in a later approved content pass.
-- Memories use text placeholders until photos and captions are approved. SecureAgent Lab appears only through the public-safe, typed data in `src/data/domain.ts`; its dated reviewed metrics do not imply a public demo or production guarantee.
-- The Guardian is a flattened image. Its mouth receives a dark oval response and an elliptical passage transition; the lower jaw is not articulated. A convincing physical jaw needs separate approved artwork. Patch and additional environment reactions remain future work.
+In another terminal, run `npm run test:browser` against the printed preview URL. If Vite uses a port other than 4173, set `PORTFOLIO_PREVIEW_URL=http://127.0.0.1:<port>/brandonhann.github.io/` for that command. Install Playwright Chromium with `npx playwright install chromium` if absent. `npm run dev` is for iteration; browser release checks use the built preview.
 
-## Release and rollback (not part of Phase 1)
+The browser suite covers no-JavaScript content, hydration, Mapetite pointer/keyboard/touch selection, project hashes and Back/Forward, mobile widths and overflow, résumé paths, and optional Guardian loading. Passing tests does not establish visual or content approval. See `RELEASE_READINESS.md` for the latest audit and measured limitations.
 
-Do not publish from this feature branch automatically. The current Pages source setting must be recorded in GitHub Settings → Pages before a release. After separate approval, build `v2/` and publish only its `dist/` contents from a dedicated publishing branch. Change Pages to that branch's root. Keep `main` and its legacy root files intact. To roll back, restore the recorded prior Pages source setting and verify the legacy homepage and résumé.
+Vite's base is `/brandonhann.github.io/`. Use `import.meta.env.BASE_URL` for copied public paths. Verify direct hashes, the résumé page/PDF, and optional query routes under that subpath. `dist/` is generated output and is not committed to review branches.
+
+## Release boundary
+
+No release has been authorized. Before a separately approved deployment, record the **actual** GitHub Settings → Pages source, branch/folder or Actions workflow, custom domain, and current live URL. This repository does not expose that setting in tracked files, and the current audit could not read it through the available API. Do not infer it from `main` or from the absence of workflows.
+
+Follow `RELEASE_CHECKLIST.md` for the exact preflight, conditional publishing procedure, smoke checks, and rollback. Keep the legacy `main` branch and its root site files unchanged. Never publish unapproved Mapetite captures, local review artifacts, recovery archives, caches, or source-only files. The Guardian remains optional and Linux Bridge stays private.

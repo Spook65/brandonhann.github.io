@@ -54,6 +54,6 @@ Representative H.3D cold transfer: entry JavaScript 70,678 B; CSS 7,490 B; two L
 
 **Fixable defects:** The duplicate Mapetite trace and broken résumé brand anchor were corrected here. No other confirmed code defect was found in this audit. LinkedIn reachability needs a manual normal-browser check because automated requests were blocked.
 
-**Owner approval required:** Public reuse of either W.7A capture, review of map/provider and venue-content rights, current accuracy of personal résumé/profile facts and SecureAgent's dated status, and visual approval of the recommended evidence order. No release should proceed on the assumption that private capture equals publication consent.
+**Owner approval required:** Public reuse of either W.7A capture and review of map/provider and venue-content rights **if those captures are later included**; current accuracy of personal résumé/profile facts and SecureAgent's dated status; and visual approval of the recommended evidence order if implemented. The present release candidate can omit the private media entirely. No release should proceed on the assumption that private capture equals publication consent.
 
 **Optional later:** Approved project-specific evidence for Rivet/ODDWORKS, further mobile density refinement if user testing identifies difficulty, and field performance/accessibility monitoring after an actual release. None is needed to judge this checkpoint.

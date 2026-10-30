@@ -4,12 +4,12 @@ Scope: this file governs work under `v2/`. Read it with `v2/README.md` and any m
 
 ## Current architecture and contracts
 
-- `src/main.tsx` mounts React in Strict Mode and loads the self-hosted Fraunces and Source Sans 3 fonts, tokens, and base CSS. `src/App.tsx` selects `WelcomingHome` by default and lazily loads `GuardianExperience` for `?experience=guardian`.
-- `src/WelcomingHome.tsx` is the primary, welcoming portfolio. It renders project selection, Patch, navigation, and the invitation to the optional Guardian experience. `src/GuardianExperience.tsx` owns the `guardian → entering → human → domain` scene state, destination selection, history/hash behavior, focus, and transition timing. `LayeredGuardian.tsx`, `BreachTransition.tsx`, and `NeuralCore.tsx` render scene visuals. `Patch.tsx` renders the small interactive companion. These components currently contain some mixed concerns; the map below is a direction for future focused refactoring, not a claim that separation already exists.
+- `scripts/prerender.mjs` renders the default React homepage into `dist/index.html` at build time. `src/main.tsx` hydrates it in Strict Mode and loads shared styles; the homepage uses self-hosted Inter and JetBrains Mono, while the optional Guardian retains Fraunces and Source Sans 3. `src/App.tsx` selects `WelcomingHome` by default and lazily loads `GuardianExperience` for `?experience=guardian`.
+- `src/WelcomingHome.tsx` renders the engineering-first identity, professional navigation, additional work, profile, and invitation to the optional Guardian experience. `src/showcase/` renders four semantic project case studies, URL-backed selection, and Mapetite's illustrative validation explainer. `src/GuardianExperience.tsx` owns the separate `guardian → entering → human → domain` scene state, destination selection, history/hash behavior, focus, and transition timing. `LayeredGuardian.tsx`, `BreachTransition.tsx`, and `NeuralCore.tsx` render Guardian scene visuals. `Patch.tsx` is retained but not mounted by either route.
 - `src/data/projects.ts`, `domain.ts`, and `legacyAnchors.ts` hold typed, public-facing facts, destination IDs, and compatibility anchors. Project status and evidence language are deliberate: do not turn an experiment, prototype, or unapproved photo into a claimed public demo or verified result.
 - Component CSS Modules own local styling; `src/styles/tokens.css` and `base.css` own shared tokens and fundamentals. `src/assets/` holds bundled scene artwork. `public/` holds copied static files, including standalone `resume.html`, its PDF, and the social image. Do not import the legacy root site's CSS, JavaScript, Three.js, or animation system.
 - Vite's `base` is `/brandonhann.github.io/`. Use `import.meta.env.BASE_URL` for copied public paths. Preserve direct hashes, legacy anchors, the résumé URLs, and browser Back behavior. Keep the root production site intact.
-- This is currently a static client app with no portfolio backend, authentication, or AI service. Rivet's [authorization boundary](https://github.com/danielwork12121-lab/Rivet/blob/main/convex/lib/auth.ts), [owned-data contract](https://github.com/danielwork12121-lab/Rivet/blob/main/convex/lib/drafts.ts), and [deterministic decision layer](https://github.com/danielwork12121-lab/Rivet/blob/main/convex/lib/decide.ts) are design examples, not dependencies or features to transplant. Adapt the principle: define inputs and outputs, keep facts and decisions reviewable, and isolate effects. If external or AI services are ever added, keep deterministic decisions independent and validate responses at their boundary.
+- This is a statically hosted, build-time-prerendered application with client-side enhancement and no portfolio backend, authentication, or AI service. Rivet's [authorization boundary](https://github.com/danielwork12121-lab/Rivet/blob/main/convex/lib/auth.ts), [owned-data contract](https://github.com/danielwork12121-lab/Rivet/blob/main/convex/lib/drafts.ts), and [deterministic decision layer](https://github.com/danielwork12121-lab/Rivet/blob/main/convex/lib/decide.ts) are design examples, not dependencies or features to transplant. Adapt the principle: define inputs and outputs, keep facts and decisions reviewable, and isolate effects. If external or AI services are ever added, keep deterministic decisions independent and validate responses at their boundary.
 
 ## Directory responsibilities and module boundaries
 
@@ -64,7 +64,7 @@ From `v2/`, with Node 24 (`.nvmrc`) and the lockfile's npm version, `npm ci` ins
 ```text
 npm run typecheck    # tsc --noEmit
 npm test             # node --test tests/*.test.mjs
-npm run build        # typecheck, then vite build
+npm run build        # typecheck, vite build, then build-time homepage prerender
 npm run test:dist     # node --test tests/dist/*.test.mjs; requires build
 npm run preview       # local built-site server
 npm run test:browser  # node --test tests/browser/*.test.mjs; requires preview and Playwright Chromium
@@ -74,7 +74,7 @@ The preview default is `http://127.0.0.1:4173/brandonhann.github.io/`; use the p
 
 ## Git, release, and definition of done
 
-Inspect `git status` before and after edits. Respect the current branch, checkpoints, and uncommitted work. Never delete or overwrite unrelated changes. Do not automatically commit, push, merge, deploy, switch Pages settings, or publish `dist/`. `v2/README.md` contains the release and rollback constraints; release requires separate owner approval and preserving the legacy root site.
+Inspect `git status` before and after edits. Respect the current branch, checkpoints, and uncommitted work. Never delete or overwrite unrelated changes. Do not automatically commit, push, merge, deploy, switch Pages settings, or publish `dist/`. `v2/README.md` and `v2/RELEASE_CHECKLIST.md` contain the release and rollback constraints; release requires separate owner approval and preserving the legacy root site.
 
 Before reporting completion, confirm:
 
