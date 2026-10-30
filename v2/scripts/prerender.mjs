@@ -1,4 +1,4 @@
-import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { build, resolveConfig } from 'vite';
@@ -20,13 +20,11 @@ try {
 
   const { renderHome } = await import(pathToFileURL(join(temporary, 'entry-server.js')).href);
   const html = await readFile(join(output, 'index.html'), 'utf8');
-  const files = await readdir(join(output, 'assets'));
-  const fontNames = ['inter-latin-wght-normal-', 'jetbrains-mono-latin-wght-normal-'];
-  const fontLinks = fontNames.map((prefix) => {
-    const file = files.find((name) => name.startsWith(prefix) && name.endsWith('.woff2'));
-    if (!file) throw new Error(`Missing expected Latin font: ${prefix}`);
-    return `<link rel="preload" as="font" type="font/woff2" crossorigin href="${base}assets/${file}">`;
-  }).join('\n    ');
+  const fontFiles = ['sora-latin-wght-normal.woff2', 'ibm-plex-mono-latin-400-normal.woff2'];
+  const fontLinks = (await Promise.all(fontFiles.map(async (file) => {
+    await readFile(join(output, 'fonts', file));
+    return `<link rel="preload" as="font" type="font/woff2" crossorigin href="${base}fonts/${file}">`;
+  }))).join('\n    ');
   const prerendered = html
     .replace('</head>', `    ${fontLinks}\n  </head>`)
     .replace('<div id="root"></div>', `<div id="root" data-prerendered="home">${renderHome()}</div>`);

@@ -5,8 +5,6 @@ import { legacyAnchors } from "./data/legacyAnchors";
 import { principles } from "./data/caseStudies";
 import { ProjectShowcase } from "./showcase/ProjectShowcase";
 import styles from "./WelcomingHome.module.css";
-import "@fontsource-variable/inter/wght.css";
-import "@fontsource-variable/jetbrains-mono/wght.css";
 
 const base = import.meta.env.BASE_URL;
 const foundCura = projects.find((project) => project.id === "project-cura");

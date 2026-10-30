@@ -20,6 +20,8 @@ test('built HTML contains one semantic homepage before JavaScript', () => {
 });
 
 test('first frame preloads only the homepage typefaces and no portrait or world media', () => {
-  for (const font of ['inter-latin', 'jetbrains-mono-latin']) assert.match(html, new RegExp(`rel="preload" as="font"[^>]+/brandonhann\\.github\\.io/assets/${font}`));
+  for (const font of ['sora-latin', 'ibm-plex-mono-latin-400']) assert.match(html, new RegExp(`rel="preload" as="font"[^>]+/brandonhann\\.github\\.io/fonts/${font}`));
+  assert.match(html, /href="\.\/portfolio-type\.css"/);
+  assert.doesNotMatch(html, /fonts\.googleapis\.com|fonts\.gstatic\.com/);
   assert.doesNotMatch(html, /<img|guardian-organic-sheet|mouth-cavity-organic|operator-core-concept/);
 });
