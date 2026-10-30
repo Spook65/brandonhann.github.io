@@ -50,3 +50,9 @@ Use a controlled 1200 px content grid, consistent section rhythm, and a compact 
 The project index previews the problem on hover/focus; activation navigates to an actual semantic case study with native hash/history behavior. All case studies and native expandable notes exist in prerendered HTML. No always-running animation, Canvas, splash, or empty media rectangle is needed. Architecture diagrams must be explicitly illustrative and derived from reviewed facts. Unapproved Mapetite captures stay private.
 
 Review visual quality, evidence accuracy, accessibility, mobile layout, and performance separately. Owner review of screenshots and an actual recording is required before treating H.3A as an approved visual system. No automatic deployment follows a passing test suite or commit.
+
+## H.3E — Résumé-led visual refinement proposal
+
+The existing résumé page is the primary style reference for the main route. The homepage and résumé now use the same self-hosted Sora and IBM Plex Mono Latin subsets, near-black surfaces, blue action color, rounded grouping, and pill actions. The Guardian keeps its separate visual identity. Body reading text starts at 16 px; technical labels are generally 12–13 px; secondary descriptions are 14–16 px. The project index uses four columns only when content has room, two at compact desktop/tablet widths, and one on narrow phones. Project content and the Mapetite interaction remain unchanged in meaning and navigation.
+
+This is a visual review proposal, not release approval. Evaluate the 900 px project index, mobile case-study reading length, visual repetition of rounded surfaces, focus states, and measured initial-load impact against H.3D before adopting it.

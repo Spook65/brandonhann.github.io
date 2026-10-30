@@ -1,13 +1,13 @@
 # Portfolio v2 — engineering-first review candidate
 
-`v2/` is an unpublished Vite, React, and TypeScript portfolio. The repository root is the legacy live site. The current review branch is `experiment/release-candidate-prep`; a commit or push to it does not authorize a release. Read `AGENTS.md`, `DESIGN.md`, and `RELEASE_CHECKLIST.md` before changing UI or preparing publication.
+`v2/` is an unpublished Vite, React, and TypeScript portfolio. The repository root is the legacy live site. The current visual review branch is `experiment/visual-refinement`; a commit or push to it does not authorize a release. Read `AGENTS.md`, `DESIGN.md`, and `RELEASE_CHECKLIST.md` before changing UI or preparing publication.
 
 ## What the application serves
 
 - The default route is Brandon's engineering-first homepage: identity, direct Projects/Résumé/GitHub/Contact navigation, four featured technical case studies (Mapetite, Rivet, SecureAgent Lab, ODDWORKS), additional Cura work, About, Skills, and Contact. `src/data/` owns public-safe project facts; `src/showcase/` renders the case studies and Mapetite's **illustrative**, source-derived place-validation explainer. Every case study remains available without interacting with the explainer.
 - `npm run build` runs TypeScript, Vite, and `scripts/prerender.mjs`. The prerender step renders the React homepage into `dist/index.html` at build time from the same content modules used during hydration. Identity, project content, navigation, and résumé links are present and usable without client JavaScript. `src/main.tsx` hydrates that HTML on the default route; it mounts a separate React tree for the optional Guardian query route.
 - `?experience=guardian` lazily loads the separate Guardian experience. Its art and code should not be requested by the default homepage. The rejected Signal Outpost experiments are not part of this application entry.
-- `public/resume.html` is a standalone, script-free résumé page. Its relative PDF link resolves to `public/assets/resume/Brandon-Hann-Resume.pdf`. The main homepage uses self-hosted Inter and JetBrains Mono; the optional Guardian keeps its existing typography. W.7A Mapetite captures are **not** in `public/` or the built site and remain private review material.
+- `public/resume.html` is a standalone, script-free résumé page. Its relative PDF link resolves to `public/assets/resume/Brandon-Hann-Resume.pdf`. The main homepage and résumé share self-hosted Sora and IBM Plex Mono Latin subsets from `public/portfolio-type.css` and `public/fonts/`; the optional Guardian keeps its existing typography. W.7A Mapetite captures are **not** in `public/` or the built site and remain private review material.
 
 ## Local setup and verification
 
