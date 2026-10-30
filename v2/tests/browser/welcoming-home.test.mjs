@@ -32,7 +32,7 @@ test("engineering homepage exposes identity and keeps optional worlds out of ent
     );
     await page.getByRole("button", { name: "Validate" }).click();
     assert.match(
-      await page.locator('[aria-live="polite"]').innerText(),
+      await page.getByRole("complementary", { name: "Engineering principles" }).locator('[aria-live="polite"]').innerText(),
       /uncertain input/,
     );
     await page
@@ -41,6 +41,21 @@ test("engineering homepage exposes identity and keeps optional worlds out of ent
     await page
       .getByRole("button", { name: /Enter through the Guardian/ })
       .waitFor();
+  } finally {
+    await browser.close();
+  }
+});
+test("résumé paths and return anchor resolve at the Pages subpath", async () => {
+  const browser = await chromium.launch();
+  try {
+    const page = await browser.newPage({ javaScriptEnabled: false });
+    const resume = await page.goto(`${site}resume.html`);
+    assert.equal(resume.status(), 200);
+    const pdf = await page.request.get(`${site}assets/resume/Brandon-Hann-Resume.pdf`);
+    assert.equal(pdf.status(), 200);
+    await page.getByRole("link", { name: "Back to Brandon Hann portfolio" }).click();
+    assert.match(page.url(), /#main-content$/);
+    assert.equal(await page.locator("#main-content").count(), 1);
   } finally {
     await browser.close();
   }

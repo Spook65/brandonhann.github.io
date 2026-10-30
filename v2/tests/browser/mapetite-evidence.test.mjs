@@ -14,12 +14,16 @@ test("Mapetite cases trace the documented validation boundary without API calls"
     page.on("request", (request) => requests.push(request.url()));
     await page.goto(`${site}#project-mapetite`);
     const figure = page.locator("#project-mapetite figure");
+    const announcement = figure.getByRole("status");
+    assert.equal(await announcement.count(), 1);
+    assert.equal(await announcement.getAttribute("aria-atomic"), "true");
     await figure.getByRole("button", { name: /No matching place/ }).click();
-    assert.match(await figure.getByRole("status").innerText(), /fakecity[\s\S]*PLACE_NOT_FOUND[\s\S]*Not reached/);
+    assert.match(await announcement.textContent(), /fakecity[\s\S]*PLACE_NOT_FOUND[\s\S]*not reached/i);
+    assert.match(await figure.innerText(), /01 \/ Example input[\s\S]*fakecity[\s\S]*02 \/ Backend validation[\s\S]*PLACE_NOT_FOUND[\s\S]*03 \/ Provider search[\s\S]*Not reached/);
     await figure.getByRole("button", { name: /Multiple matching places/ }).click();
-    assert.match(await figure.getByRole("status").innerText(), /Springfield[\s\S]*PLACE_AMBIGUOUS[\s\S]*Not reached/);
+    assert.match(await announcement.textContent(), /Springfield[\s\S]*PLACE_AMBIGUOUS[\s\S]*not reached/i);
     await figure.getByRole("button", { name: /One matching place/ }).click();
-    assert.match(await figure.getByRole("status").innerText(), /Stockton[\s\S]*Would proceed/);
+    assert.match(await announcement.textContent(), /Stockton[\s\S]*would proceed/i);
     assert.equal(await figure.getByRole("button", { name: /One matching place/ }).getAttribute("aria-pressed"), "true");
     assert.equal(requests.some((url) => /mapetite-nine|mapetite-y04j|geoapify/i.test(url)), false);
   } finally {

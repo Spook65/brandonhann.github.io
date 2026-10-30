@@ -22,15 +22,23 @@ export function MapetiteEvidence() {
         </span>
       </figcaption>
       <div className={styles.input}>
-        <span className={styles.step}>01 / Input</span>
-        <strong>{mapetiteValidation.input}</strong>
+        <span className={styles.step}>
+          01 / {selected ? "Example input" : "Input"}
+        </span>
+        <strong>{selected?.example ?? mapetiteValidation.input}</strong>
       </div>
       <div className={styles.boundary}>
         <span className={styles.step}>02 / Backend validation</span>
-        <p>
-          Resolve against the backend place index before requesting restaurant
-          data.
-        </p>
+        {selected ? (
+          <p>
+            <code>{selected.code}</code> · {selected.result}
+          </p>
+        ) : (
+          <p>
+            Resolve against the backend place index before requesting restaurant
+            data.
+          </p>
+        )}
       </div>
       {enhanced && (
         <p className={styles.hint}>
@@ -64,35 +72,31 @@ export function MapetiteEvidence() {
           </li>
         ))}
       </ol>
-      {selected ? (
-        <div className={styles.trace} role="status" aria-live="polite">
-          <p className={styles.traceLabel}>
-            Repository test case · illustrative trace
-          </p>
-          <ol aria-label="Selected validation path">
-            <li>
-              <span>01 / Input</span>
-              <strong>{selected.example}</strong>
-            </li>
-            <li>
-              <span>02 / Validate</span>
-              <strong>{selected.code}</strong>
-            </li>
-            <li>
-              <span>03 / Provider search</span>
-              <strong>
-                {selected.providerReached ? "Would proceed" : "Not reached"}
-              </strong>
-            </li>
-          </ol>
-          <p>{selected.explanation}</p>
-        </div>
-      ) : (
-        <p className={styles.followThrough}>
-          <span className={styles.step}>03 / Resolved place only</span>
-          {mapetiteValidation.followThrough}
-        </p>
-      )}
+      <div
+        className={styles.announcement}
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {selected
+          ? `${selected.example}. ${selected.code}. Provider search ${selected.providerReached ? "would proceed" : "not reached"}. ${selected.explanation}`
+          : ""}
+      </div>
+      <p className={styles.followThrough}>
+        <span className={styles.step}>
+          03 / {selected ? "Provider search" : "Resolved place only"}
+        </span>
+        {selected ? (
+          <>
+            <strong>
+              {selected.providerReached ? "Would proceed" : "Not reached"}
+            </strong>
+            <span>{selected.explanation}</span>
+          </>
+        ) : (
+          mapetiteValidation.followThrough
+        )}
+      </p>
       <a
         className={styles.source}
         href={mapetiteValidation.source}
