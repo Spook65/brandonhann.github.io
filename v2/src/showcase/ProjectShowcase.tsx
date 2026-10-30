@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { caseStudies, type CaseStudy } from "../data/caseStudies";
 import { legacyAnchors } from "../data/legacyAnchors";
 import { useProjectNavigation } from "./useProjectNavigation";
@@ -120,7 +120,7 @@ function CaseStudyArticle({
   );
 }
 
-export function ProjectShowcase() {
+export function ProjectShowcase({ afterIndex }: { afterIndex?: ReactNode }) {
   const selected = useProjectNavigation();
   const [hovered, setHovered] = useState<string | null>(null);
   const [focused, setFocused] = useState<string | null>(null);
@@ -187,6 +187,7 @@ export function ProjectShowcase() {
           Read case study <span aria-hidden="true">↓</span>
         </a>
       </div>
+      {afterIndex}
       {caseStudies.map((study, index) => (
         <CaseStudyArticle
           key={study.project.id}

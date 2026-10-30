@@ -44,10 +44,12 @@
 .home h2,
 .home h3 {
   font-family: inherit;
-  font-weight: 700;
+  font-weight: 650;
   line-height: 1.17;
   letter-spacing: -0.045em;
 }
+.home h1 { font-weight: 750; }
+.home h2 { font-weight: 600; }
 .home h2 {
   font-size: clamp(1.8rem, 3vw, 2.5rem);
   margin: 0.6rem 0 1.4rem;
@@ -189,11 +191,10 @@
   color: #08131d !important;
 }
 .principle {
-  padding: 1.15rem 1.25rem;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--surface-raised);
+  padding: 0 0 0 1.4rem;
+  border-left: 1px solid var(--line);
 }
+.mobilePrinciple { display: none; }
 .principle > div {
   display: flex;
   flex-wrap: wrap;
@@ -237,26 +238,10 @@
   font-size: 0.875rem;
   color: var(--accent);
 }
-.education {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1.25rem 0 0;
-  margin: 1.5rem 0 0 !important;
-  color: var(--muted);
-  font-size: 0.875rem;
-  border-top: 1px solid var(--line);
-}
-.education span {
-  font-family: var(--mono);
-  font-size: 0.78rem;
-}
 .additional {
   margin-top: 2.25rem;
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  background: var(--surface);
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--line);
 }
 .additional article {
   display: grid;
@@ -299,10 +284,8 @@
   grid-template-columns: 1fr 1fr;
   gap: clamp(2rem, 7vw, 7rem);
   margin-top: 2.25rem;
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  background: var(--surface);
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--line);
 }
 .aboutGrid p {
   color: var(--muted);
@@ -389,19 +372,13 @@
   .principleDetail {
     min-height: 0;
   }
-  .education {
-    flex-direction: column;
-    gap: 0.3rem;
-  }
   .additional article,
   .aboutGrid {
     grid-template-columns: 1fr;
   }
   .additional,
-  .aboutGrid,
-  .contact {
-    padding: 1.5rem;
-  }
+  .aboutGrid { padding: 2rem 0; }
+  .contact { padding: 1.5rem; }
   .aboutGrid {
     gap: 2rem;
   }
@@ -412,6 +389,24 @@
 @media (max-width: 390px) {
   .header nav { justify-content: flex-start; column-gap: 1rem; }
   .hero { padding: 1.25rem; }
+}
+@media (max-width: 540px) {
+  .header { margin-top: 0.5rem; }
+  .hero { margin-top: 0.75rem; padding: 1.25rem; }
+  .hero h1 { margin: 0.35rem 0 0.9rem; }
+  .heroBody { gap: 0; }
+  .heroActions { margin: 1rem 0 0; }
+  .heroActions a { padding-inline: 0.85rem; }
+  .desktopPrinciple { display: none; }
+  .mobilePrinciple {
+    display: block;
+    margin: 1.5rem 0 0;
+    padding: 1rem 0;
+    border: 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .mobilePrinciple .principleDetail { min-height: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .home *,

@@ -11,6 +11,42 @@ const foundCura = projects.find((project) => project.id === "project-cura");
 if (!foundCura) throw new Error("Cura content is required.");
 const cura = foundCura;
 
+function EngineeringPrinciple({
+  principle,
+  onSelect,
+  className,
+}: {
+  principle: number;
+  onSelect: (index: number) => void;
+  className: string;
+}) {
+  return (
+    <aside
+      className={`${styles.principle} ${className}`}
+      aria-label="Engineering principles"
+    >
+      <p className={styles.eyebrow}>A principle behind the work</p>
+      <div role="group" aria-label="Inspect a principle">
+        {principles.map((item, index) => (
+          <button
+            key={item.name}
+            type="button"
+            aria-pressed={principle === index}
+            onClick={() => onSelect(index)}
+          >
+            {item.name}
+            <span aria-hidden="true">{index < 2 ? "→" : "↵"}</span>
+          </button>
+        ))}
+      </div>
+      <p className={styles.principleDetail} aria-live="polite">
+        {principles[principle].detail}
+      </p>
+      <a href="#project-secureagent">Explore the authorization boundary ↗</a>
+    </aside>
+  );
+}
+
 export function WelcomingHome() {
   const [principle, setPrinciple] = useState(1);
   return (
@@ -60,44 +96,34 @@ export function WelcomingHome() {
                 work—and what happens when they don’t.
               </p>
               <div className={styles.heroActions}>
-                <a href="#projects" className={styles.primaryAction}>
-                  Explore projects <span aria-hidden="true">↓</span>
+                <a
+                  href="#projects"
+                  className={styles.primaryAction}
+                  aria-label="Explore projects"
+                >
+                  Projects <span aria-hidden="true">↓</span>
                 </a>
-                <a href={base + "resume.html"}>Read résumé ↗</a>
+                <a href={base + "resume.html"} aria-label="Read résumé ↗">
+                  Résumé ↗
+                </a>
               </div>
             </div>
-            <aside
-              className={styles.principle}
-              aria-label="Engineering principles"
-            >
-              <p className={styles.eyebrow}>A principle behind the work</p>
-              <div role="group" aria-label="Inspect a principle">
-                {principles.map((item, index) => (
-                  <button
-                    key={item.name}
-                    type="button"
-                    aria-pressed={principle === index}
-                    onClick={() => setPrinciple(index)}
-                  >
-                    {item.name}
-                    <span aria-hidden="true">{index < 2 ? "→" : "↵"}</span>
-                  </button>
-                ))}
-              </div>
-              <p className={styles.principleDetail} aria-live="polite">
-                {principles[principle].detail}
-              </p>
-              <a href="#project-secureagent">
-                Explore the authorization boundary ↗
-              </a>
-            </aside>
+            <EngineeringPrinciple
+              principle={principle}
+              onSelect={setPrinciple}
+              className={styles.desktopPrinciple}
+            />
           </div>
-          <p className={styles.education}>
-            {profile.education}
-            <span>Software · Security · AI systems</span>
-          </p>
         </section>
-        <ProjectShowcase />
+        <ProjectShowcase
+          afterIndex={
+            <EngineeringPrinciple
+              principle={principle}
+              onSelect={setPrinciple}
+              className={styles.mobilePrinciple}
+            />
+          }
+        />
         <section
           className={styles.additional}
           aria-labelledby="additional-title"
