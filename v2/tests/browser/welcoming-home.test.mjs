@@ -54,7 +54,13 @@ test("index preview, case-study details, direct links and history are coherent",
     await nav.getByRole("link", { name: /Rivet/ }).hover();
     assert.match(
       await page.locator('[aria-label="Project focus preview"]').innerText(),
-      /Rivet/,
+      /Rivet[\s\S]*ownership checks/,
+    );
+    assert.equal(
+      await nav
+        .getByRole("link", { name: /Rivet/ })
+        .getAttribute("data-preview"),
+      "true",
     );
     assert.equal(
       await nav
@@ -62,8 +68,16 @@ test("index preview, case-study details, direct links and history are coherent",
         .getAttribute("aria-current"),
       "location",
     );
+    assert.match(
+      await nav.getByRole("link", { name: /Mapetite/ }).innerText(),
+      /Selected/,
+    );
     await nav.getByRole("link", { name: /Rivet/ }).click();
     assert.match(page.url(), /#project-rivet$/);
+    assert.match(
+      await nav.getByRole("link", { name: /Rivet/ }).innerText(),
+      /Selected/,
+    );
     await page.locator("#project-rivet summary").click();
     assert.ok(
       (await page.locator("#project-rivet details").getAttribute("open")) !==
@@ -83,7 +97,14 @@ test("index preview, case-study details, direct links and history are coherent",
         .getAttribute("aria-current"),
       "location",
     );
+    await page.keyboard.press("Tab");
     await nav.getByRole("link", { name: /Mapetite/ }).focus();
+    assert.notEqual(
+      await nav
+        .getByRole("link", { name: /Mapetite/ })
+        .evaluate((e) => getComputedStyle(e).outlineStyle),
+      "none",
+    );
     await page.keyboard.press("Enter");
     await page.goBack();
     assert.equal(

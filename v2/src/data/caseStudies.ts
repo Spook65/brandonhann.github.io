@@ -6,6 +6,7 @@ export type CaseStudy = {
   readonly project: Project;
   readonly category: string;
   readonly problem: string;
+  readonly insight: string;
   readonly contribution: string;
   readonly stack: readonly string[];
   readonly flow: readonly { title: string; detail: string }[];
@@ -26,6 +27,7 @@ export const caseStudies: readonly CaseStudy[] = [
     category: "Full-stack · Data quality",
     problem:
       "Restaurant data is incomplete. A useful search experience has to make uncertainty visible.",
+    insight: "Ambiguous places return suggestions before a provider search begins.",
     contribution:
       "Built a restaurant discovery MVP with a React interface, an Express API, place validation, provider normalization, and a saved-place demo.",
     stack: ["React", "TypeScript", "Express", "MapLibre", "Vitest"],
@@ -67,6 +69,7 @@ export const caseStudies: readonly CaseStudy[] = [
     category: "Backend · Authorization",
     problem:
       "Robot recommendations need explainable matching and private, account-owned requests.",
+    insight: "Backend ownership checks protect each request before matching runs.",
     contribution:
       "Worked primarily on the backend: Convex, Clerk authentication, secure user data, AI workflow coordination, and robot matching.",
     stack: ["TypeScript", "Convex", "Clerk", "AI integrations"],
@@ -105,6 +108,7 @@ export const caseStudies: readonly CaseStudy[] = [
     category: "AI security · Offline systems",
     problem:
       "An agent proposal should not become a tool action until a separate authorization boundary permits it.",
+    insight: "A deterministic policy decides before simulated execution.",
     contribution:
       "Developing an offline experimental gateway that applies authorization rules before simulated tool execution.",
     stack: ["Policy evaluation", "Synthetic scenarios", "Regression testing"],
@@ -130,6 +134,7 @@ export const caseStudies: readonly CaseStudy[] = [
     category: "Multiplayer · Server authority",
     problem:
       "Workshop progression and item ownership must remain consistent when multiple players act at once.",
+    insight: "The server owns rewards and progression; clients request actions.",
     contribution:
       "Building a Roblox/Luau workshop prototype with server-owned gameplay state, persistence, crafting, progression, and sanitized client replication.",
     stack: ["Luau", "Roblox Studio", "Rojo", "ProfileStore"],
@@ -154,6 +159,34 @@ export const caseStudies: readonly CaseStudy[] = [
       "https://github.com/Spook65/Oddworks/blob/main/docs/VERTICAL_SLICE_PLAN.md",
   },
 ];
+
+// An illustrative rendering of the public place-validation contract, not a product screenshot.
+export const mapetiteValidation = {
+  title: "Resolve the place before searching restaurants",
+  input: "City + optional region / country",
+  outcomes: [
+    {
+      code: "PLACE_NOT_FOUND",
+      label: "No matching place",
+      result: "Stop and ask for a valid location",
+      kind: "stop",
+    },
+    {
+      code: "PLACE_AMBIGUOUS",
+      label: "Multiple matching places",
+      result: "Return up to five suggestions",
+      kind: "clarify",
+    },
+    {
+      code: "RESOLVED PLACE",
+      label: "One matching place",
+      result: "Canonical location reaches provider search",
+      kind: "continue",
+    },
+  ],
+  followThrough: "Geoapify search → OSM / Overpass fallback when needed",
+  source: "https://github.com/Spook65/Mapetite/blob/main/server/services/placeValidation.js",
+} as const;
 
 export const principles = [
   {

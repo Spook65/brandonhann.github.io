@@ -20,6 +20,14 @@ test("without JavaScript all case studies, details and navigation remain usable"
     );
     for (const id of ["mapetite", "rivet", "secureagent", "oddworks"])
       assert.equal(await p.locator(`#project-${id}`).count(), 1);
+    assert.match(
+      await p.locator("#project-mapetite").innerText(),
+      /PLACE_NOT_FOUND[\s\S]*PLACE_AMBIGUOUS[\s\S]*RESOLVED PLACE/,
+    );
+    assert.equal(
+      await p.locator("#project-mapetite img").count(),
+      0,
+    );
     await p.locator("#project-rivet summary").click();
     assert.ok(
       (await p.locator("#project-rivet details").getAttribute("open")) !== null,

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { caseStudies, type CaseStudy } from "../data/caseStudies";
 import { legacyAnchors } from "../data/legacyAnchors";
 import { useProjectNavigation } from "./useProjectNavigation";
+import { MapetiteEvidence } from "./MapetiteEvidence";
 import styles from "./ProjectShowcase.module.css";
 
 function CaseStudyArticle({
@@ -70,25 +71,29 @@ function CaseStudyArticle({
           </div>
         </div>
         <div className={styles.evidence}>
-          <figure className={styles.architecture}>
-            <figcaption>
-              Architecture schematic{" "}
-              <span>Illustrative · based on reviewed documentation</span>
-            </figcaption>
-            <ol>
-              {study.flow.map((step, stepIndex) => (
-                <li key={step.title}>
-                  <span className={styles.node} aria-hidden="true">
-                    {stepIndex + 1}
-                  </span>
-                  <div>
-                    <strong>{step.title}</strong>
-                    <small>{step.detail}</small>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </figure>
+          {project.id === "project-mapetite" ? (
+            <MapetiteEvidence />
+          ) : (
+            <figure className={styles.architecture}>
+              <figcaption>
+                Architecture schematic{" "}
+                <span>Illustrative · based on reviewed documentation</span>
+              </figcaption>
+              <ol>
+                {study.flow.map((step, stepIndex) => (
+                  <li key={step.title}>
+                    <span className={styles.node} aria-hidden="true">
+                      {stepIndex + 1}
+                    </span>
+                    <div>
+                      <strong>{step.title}</strong>
+                      <small>{step.detail}</small>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </figure>
+          )}
           <div className={styles.validation}>
             <h4>Evidence & boundaries</h4>
             <p>{study.evidence}</p>
@@ -117,7 +122,9 @@ function CaseStudyArticle({
 
 export function ProjectShowcase() {
   const selected = useProjectNavigation();
-  const [preview, setPreview] = useState<string | null>(null);
+  const [hovered, setHovered] = useState<string | null>(null);
+  const [focused, setFocused] = useState<string | null>(null);
+  const preview = focused ?? hovered;
   const active =
     caseStudies.find(({ project }) => project.id === (preview ?? selected)) ??
     caseStudies[0];
@@ -141,36 +148,41 @@ export function ProjectShowcase() {
       <nav
         className={styles.index}
         aria-label="Project index"
-        onMouseLeave={() => setPreview(null)}
+        onPointerLeave={() => setHovered(null)}
       >
         {caseStudies.map(({ project, category }, index) => (
           <a
             key={project.id}
             href={`#${project.id}`}
             aria-current={selected === project.id ? "location" : undefined}
-            data-preview={preview === project.id}
-            onMouseEnter={() => setPreview(project.id)}
-            onFocus={() => setPreview(project.id)}
-            onBlur={() => setPreview(null)}
-            onClick={() => setPreview(null)}
+            data-preview={preview === project.id && selected !== project.id}
+            onPointerEnter={(event) => {
+              if (event.pointerType !== "touch") setHovered(project.id);
+            }}
+            onFocus={() => setFocused(project.id)}
+            onBlur={() => setFocused(null)}
           >
             <span className={styles.indexNumber}>
               {String(index + 1).padStart(2, "0")}
-              <i aria-hidden="true" />
+              <span className={styles.indexState} aria-hidden="true">
+                {selected === project.id
+                  ? "Selected"
+                  : preview === project.id
+                    ? "Preview"
+                    : "Open ↘"}
+              </span>
             </span>
             <strong>{project.name}</strong>
             <small>{category}</small>
-            <span className={styles.indexArrow} aria-hidden="true">
-              ↘
-            </span>
           </a>
         ))}
       </nav>
       <div className={styles.preview} aria-label="Project focus preview">
         <span>
-          {preview ? "Preview" : "Selected"} / {active.project.name}
+          {preview && preview !== selected ? "Preview" : "Selected"} /{" "}
+          {active.project.name}
         </span>
-        <p>{active.problem}</p>
+        <p>{active.insight}</p>
         <a href={`#${active.project.id}`}>
           Read case study <span aria-hidden="true">↓</span>
         </a>
