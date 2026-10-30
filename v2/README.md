@@ -1,6 +1,6 @@
 # Portfolio v2 — engineering-first review candidate
 
-`v2/` is an unpublished Vite, React, and TypeScript portfolio. The repository root is the legacy live site. The current visual review branch is `experiment/visual-refinement`; a commit or push to it does not authorize a release. Read `AGENTS.md`, `DESIGN.md`, and `RELEASE_CHECKLIST.md` before changing UI or preparing publication.
+`v2/` is an unpublished Vite, React, and TypeScript portfolio. The repository root is the legacy live site. The current visual review branch is `experiment/layout-hierarchy`; a commit or push to it does not authorize a release. Read `AGENTS.md`, `DESIGN.md`, and `RELEASE_CHECKLIST.md` before changing UI or preparing publication.
 
 ## What the application serves
 

@@ -56,3 +56,9 @@ Review visual quality, evidence accuracy, accessibility, mobile layout, and perf
 The existing résumé page is the primary style reference for the main route. The homepage and résumé now use the same self-hosted Sora and IBM Plex Mono Latin subsets, near-black surfaces, blue action color, rounded grouping, and pill actions. The Guardian keeps its separate visual identity. Body reading text starts at 16 px; technical labels are generally 12–13 px; secondary descriptions are 14–16 px. The project index uses four columns only when content has room, two at compact desktop/tablet widths, and one on narrow phones. Project content and the Mapetite interaction remain unchanged in meaning and navigation.
 
 This is a visual review proposal, not release approval. Evaluate the 900 px project index, mobile case-study reading length, visual repetition of rounded surfaces, focus states, and measured initial-load impact against H.3D before adopting it.
+
+## H.3F — Layout hierarchy review
+
+H.3E is the owner's preferred visual direction. Keep its fonts, near-black and blue palette, rounded application feel, four featured projects, and case-study content. At narrow phone widths, prioritize identity, introduction, and a direct Projects action; place the optional engineering-principle interaction after the project index so project discovery comes first. Use compact full-width project rows at 320–540 px, two columns through compact desktop, and four only when space permits. Keep all links and factual content available in prerendered HTML.
+
+Use rounded surfaces for major groupings, then let spacing and dividers handle lower-priority sections. Main identity, section titles, project titles, descriptions, and metadata should have distinct weight and scale. H.3F remains an owner-review proposal; tests and local performance measurements do not approve its visual quality or authorize publication.
