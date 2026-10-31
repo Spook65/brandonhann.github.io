@@ -116,7 +116,7 @@ export function WelcomingHome() {
           </div>
         </section>
         <ProjectShowcase
-          afterIndex={
+          afterStudies={
             <EngineeringPrinciple
               principle={principle}
               onSelect={setPrinciple}

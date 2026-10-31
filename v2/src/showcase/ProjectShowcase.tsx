@@ -120,7 +120,7 @@ function CaseStudyArticle({
   );
 }
 
-export function ProjectShowcase({ afterIndex }: { afterIndex?: ReactNode }) {
+export function ProjectShowcase({ afterStudies }: { afterStudies?: ReactNode }) {
   const selected = useProjectNavigation();
   const [hovered, setHovered] = useState<string | null>(null);
   const [focused, setFocused] = useState<string | null>(null);
@@ -187,7 +187,6 @@ export function ProjectShowcase({ afterIndex }: { afterIndex?: ReactNode }) {
           Read case study <span aria-hidden="true">↓</span>
         </a>
       </div>
-      {afterIndex}
       {caseStudies.map((study, index) => (
         <CaseStudyArticle
           key={study.project.id}
@@ -196,6 +195,7 @@ export function ProjectShowcase({ afterIndex }: { afterIndex?: ReactNode }) {
           selected={selected === study.project.id}
         />
       ))}
+      {afterStudies}
     </section>
   );
 }

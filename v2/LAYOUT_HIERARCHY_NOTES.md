@@ -47,3 +47,13 @@ The first mobile viewport now communicates identity, the main actions, and proje
 Manual physical-device and screen-reader review remain before release. Private Mapetite captures remain unpublished. No deployment or production change is part of H.3F.
 
 Final verification: `npm run typecheck`, `npm test` (5/5), `npm run build`, `npm run test:dist` (5/5), and `npm run test:browser` (28/28) passed against the built H.3F preview. Browser coverage includes no-JavaScript content, hydration, hash/history navigation, Mapetite, touch, keyboard, reduced motion, Guardian, and overflow. The first parallel browser run surfaced an overstrict new row-width assertion and an intermittent Guardian focus result; the assertion was corrected, both targeted files passed, and the complete 28-test suite passed on the final source.
+
+## Final correction for owner review
+
+The narrow-screen principle now follows all four featured case studies. The project index, selected preview, and Mapetite study are adjacent in the reading order. The desktop principle stays in the hero. Both placements still share one React state value, and CSS makes only the relevant controls visible and focusable. The no-JavaScript version retains its visible explanation.
+
+At 320 px, the header uses a deliberate two-column, two-row navigation grid. Projects, Résumé, GitHub, and Contact remain visible with 44 px minimum touch height. No destination was removed. The earlier H.3F measurements above describe the pre-correction layout; this correction was captured separately under the ignored local `artifacts/h3f-final-review/` directory.
+
+The Guardian focus check now waits for the component's scheduled focus, which occurs in a `requestAnimationFrame` after the panel becomes visible. No Guardian implementation changed.
+
+On the final 320/390/1440 px captures, the selected preview directly precedes Mapetite. At 320 px the principle begins at document position 9363 px, after the fourth study ends at 9339 px; at 390 px it begins at 8212 px, after the fourth study ends at 8188 px. The desktop principle remains in the hero. No captured width showed horizontal overflow or page errors. Final correction verification passed: TypeScript, 5 unit tests, production build/prerender, 5 built-artifact tests, and 28 browser tests.

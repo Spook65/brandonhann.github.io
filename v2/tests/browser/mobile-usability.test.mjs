@@ -19,7 +19,8 @@ async function assertPanelInView(page, title) {
     const header = document.querySelector('header');
     if (!panel || !heading || heading.textContent !== expected || !header) return false;
     const rect = heading.getBoundingClientRect();
-    return rect.top >= header.getBoundingClientRect().bottom && rect.top < window.innerHeight;
+    return rect.top >= header.getBoundingClientRect().bottom &&
+      rect.top < window.innerHeight && panel === document.activeElement;
   }, title);
   assert.equal(await page.locator('#destination-panel').evaluate((node) => node === document.activeElement), true);
 }

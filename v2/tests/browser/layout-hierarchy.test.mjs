@@ -28,17 +28,37 @@ test('narrow phones reveal Projects sooner with compact, full-width links', asyn
       assert.ok(layout.rowHeights.every((height) => height >= 44 && height <= 110));
       assert.ok(layout.rowWidths.every((rowWidth) => Math.abs(rowWidth - layout.navWidth) <= 2.5));
       assert.equal(layout.overflow, false);
+      if (width === 320) {
+        const links = page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('link');
+        const boxes = await Promise.all((await links.all()).map((link) => link.boundingBox()));
+        assert.equal(boxes.length, 4);
+        assert.ok(boxes.every((box) => box && box.width >= 44 && box.height >= 44));
+        assert.equal(boxes[0].y, boxes[1].y);
+        assert.equal(boxes[2].y, boxes[3].y);
+        assert.ok(boxes[2].y > boxes[0].y);
+      }
       const principle = page.getByRole('complementary', { name: 'Engineering principles' });
       assert.equal(await principle.count(), 1);
       const order = await page.evaluate(() => {
-        const index = document.querySelector('nav[aria-label="Project index"]');
+        const preview = document.querySelector('[aria-label="Project focus preview"]');
+        const firstStudy = document.querySelector('#project-mapetite');
+        const lastStudy = document.querySelector('#project-oddworks');
         const asides = [...document.querySelectorAll('aside[aria-label="Engineering principles"]')];
         const visible = asides.find((aside) => getComputedStyle(aside).display !== 'none');
-        return visible.getBoundingClientRect().top > index.getBoundingClientRect().bottom;
+        const hidden = asides.find((aside) => aside !== visible);
+        return {
+          continuous: preview.nextElementSibling === firstStudy,
+          afterStudies: lastStudy.nextElementSibling === visible &&
+            visible.getBoundingClientRect().top > lastStudy.getBoundingClientRect().bottom,
+          hiddenFromFocus: getComputedStyle(hidden).display === 'none',
+        };
       });
-      assert.equal(order, true);
+      assert.deepEqual(order, { continuous: true, afterStudies: true, hiddenFromFocus: true });
       await principle.getByRole('button', { name: 'Validate' }).tap();
       assert.match(await principle.locator('[aria-live="polite"]').innerText(), /uncertain input/);
+      await principle.getByRole('button', { name: 'Verify' }).focus();
+      await page.keyboard.press('Enter');
+      assert.match(await principle.locator('[aria-live="polite"]').innerText(), /observable evidence/);
       await page.close();
     }
   } finally { await browser.close(); }
@@ -52,6 +72,8 @@ test('mobile principle and project content remain readable without JavaScript', 
     const principle = page.getByRole('complementary', { name: 'Engineering principles' });
     assert.equal(await principle.count(), 1);
     assert.match(await principle.innerText(), /Keep permission separate/);
+    assert.equal(await page.locator('[aria-label="Project focus preview"]').evaluate((node) => node.nextElementSibling?.id), 'project-mapetite');
+    assert.equal(await page.locator('#project-oddworks').evaluate((node) => node.nextElementSibling?.getAttribute('aria-label')), 'Engineering principles');
     assert.equal(await page.getByRole('navigation', { name: 'Project index' }).getByRole('link').count(), 4);
     await page.getByRole('navigation', { name: 'Project index' }).getByRole('link', { name: /Rivet/ }).click();
     assert.match(page.url(), /#project-rivet$/);
