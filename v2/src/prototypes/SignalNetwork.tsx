@@ -16,23 +16,23 @@ type RouteVisual = {
 const routeVisuals: readonly RouteVisual[] = [
   {
     id: "project-mapetite", tone: "mint", index: "01", role: "PLACE / VALIDATE",
-    desktopPath: "M 144 210 H 188 L 258 86 H 425",
-    mobilePath: "M 110 135 H 135 V 47 H 182",
+    desktopPath: "M 144 210 H 188 L 258 86 H 434",
+    mobilePath: "M 110 135 H 135 V 47 H 190",
   },
   {
     id: "project-rivet", tone: "amber", index: "02", role: "MATCH / AUTHORIZE",
-    desktopPath: "M 144 210 H 205 L 273 165 H 470",
-    mobilePath: "M 110 147 H 151 V 120 H 182",
+    desktopPath: "M 144 210 H 205 L 273 165 H 479",
+    mobilePath: "M 110 147 H 151 V 120 H 190",
   },
   {
     id: "project-secureagent", tone: "lavender", index: "03", role: "ACTION / BOUNDARY",
-    desktopPath: "M 144 210 H 206 L 275 296 H 425",
-    mobilePath: "M 110 159 H 142 V 200 H 182",
+    desktopPath: "M 144 210 H 206 L 275 296 H 434",
+    mobilePath: "M 110 159 H 142 V 200 H 190",
   },
   {
     id: "project-oddworks", tone: "blue", index: "04", role: "STATE / SERVER",
-    desktopPath: "M 144 210 H 186 L 302 375 H 470",
-    mobilePath: "M 110 171 H 128 V 275 H 182",
+    desktopPath: "M 144 210 H 186 L 302 375 H 479",
+    mobilePath: "M 110 171 H 128 V 275 H 190",
   },
 ];
 

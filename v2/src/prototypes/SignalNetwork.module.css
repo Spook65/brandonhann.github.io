@@ -70,8 +70,8 @@
 .lavender { --route: #c5b5ff; }
 .blue { --route: #78bcff; }
 .traceUnderlay, .trace, .packet { fill: none; stroke-linejoin: bevel; }
-.traceUnderlay { stroke: #1a2a39; stroke-width: 10; }
-.trace { stroke: #476176; stroke-width: 2; opacity: .75; transition: stroke .17s ease, stroke-width .17s ease, opacity .17s ease; }
+.traceUnderlay { stroke: #22384b; stroke-width: 10; }
+.trace { stroke: #87a8bf; stroke-width: 2.4; opacity: .96; transition: stroke .17s ease, stroke-width .17s ease, opacity .17s ease; }
 [data-active="true"] > .trace { stroke: var(--route); stroke-width: 3; opacity: 1; filter: drop-shadow(0 0 4px var(--route)); }
 .packet { stroke: var(--route); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 2 100; animation: signalTravel .78s cubic-bezier(.18,.72,.33,1) both; filter: drop-shadow(0 0 5px var(--route)); }
 @keyframes signalTravel { 0% { stroke-dashoffset: 0; opacity: 0; } 12% { opacity: 1; } 82% { opacity: 1; } 100% { stroke-dashoffset: -98; opacity: 0; } }

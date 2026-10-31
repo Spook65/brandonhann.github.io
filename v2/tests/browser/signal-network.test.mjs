@@ -89,3 +89,35 @@ test("ordinary homepage never requests prototype code or art", async () => {
     assert.equal(await page.getByRole("heading", { name: "Signal Network." }).count(), 0);
   } finally { await browser.close(); }
 });
+
+test("all routes visibly reach their destinations at rest and while selected", async () => {
+  const browser = await chromium.launch();
+  try {
+    for (const width of [390, 1440]) {
+      const page = await browser.newPage({ viewport: { width, height: 900 } });
+      await page.goto(prototype);
+      const variant = width < 540 ? "mobile" : "desktop";
+      for (const id of ["project-mapetite", "project-rivet", "project-secureagent", "project-oddworks"]) {
+        const name = { "project-mapetite": "Mapetite", "project-rivet": "Rivet", "project-secureagent": "SecureAgent Lab", "project-oddworks": "ODDWORKS" }[id];
+        const reach = async () => page.locator(`svg[data-signal-variant="${variant}"] g[data-route-id="${id}"] path`).first().evaluate((path) => {
+          const point = path.getPointAtLength(path.getTotalLength());
+          const matrix = path.getScreenCTM();
+          if (!matrix) return null;
+          const end = point.matrixTransform(matrix);
+          const port = document.querySelector(`div[data-route-id="${path.parentElement?.getAttribute("data-route-id")}"]`);
+          if (!port) return null;
+          const box = port.getBoundingClientRect();
+          return { endX: end.x, left: box.left, endY: end.y, top: box.top, bottom: box.bottom };
+        });
+        for (const state of ["rest", "selected"]) {
+          if (state === "selected") await page.getByRole("button", { name: `Inspect ${name}` }).click();
+          const geometry = await reach();
+          assert.ok(geometry, `${id}: endpoint and destination exist at ${state}`);
+          assert.ok(geometry.endX >= geometry.left + 2, `${id}: trace reaches underneath the port at ${state}`);
+          assert.ok(geometry.endY >= geometry.top && geometry.endY <= geometry.bottom, `${id}: trace enters port vertically at ${state}`);
+        }
+      }
+      await page.close();
+    }
+  } finally { await browser.close(); }
+});
