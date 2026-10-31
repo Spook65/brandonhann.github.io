@@ -4,8 +4,16 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-padding-top: 5rem;
+/* The document is the scroller; Guardian keeps its own navigation timing. */
+html:has(#top) {
+  scroll-behavior: smooth;
+  scroll-padding-top: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:has(#top) {
+    scroll-behavior: auto;
+  }
 }
 
 body {

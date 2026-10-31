@@ -284,6 +284,10 @@
   cursor: pointer;
   padding: 0.8rem 0;
   font-size: 0.9rem;
+  transition: color 0.15s ease;
+}
+.details summary:hover {
+  color: var(--cyan);
 }
 .details summary span {
   color: var(--muted);

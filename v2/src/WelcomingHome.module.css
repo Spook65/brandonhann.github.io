@@ -114,6 +114,7 @@
   align-items: center;
   font-size: 0.875rem;
   color: var(--muted);
+  transition: color 0.15s ease;
 }
 .eyebrow {
   font-family: var(--mono);
@@ -263,6 +264,10 @@
   cursor: pointer;
   color: var(--ink);
   padding: 0.5rem 0;
+  transition: color 0.15s ease;
+}
+.additional summary:hover {
+  color: var(--cyan);
 }
 .additional details p {
   margin-top: 0.8rem;
@@ -327,6 +332,9 @@
   border-top: 1px solid var(--line);
   color: var(--muted);
   font-size: 0.78rem;
+}
+.footer a {
+  transition: color 0.15s ease;
 }
 .anchor {
   display: block;

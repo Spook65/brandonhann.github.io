@@ -50,7 +50,7 @@ function EngineeringPrinciple({
 export function WelcomingHome() {
   const [principle, setPrinciple] = useState(1);
   return (
-    <div className={styles.home}>
+    <div id="top" className={styles.home}>
       <a className={styles.skipLink} href="#main-content">
         Skip to content
       </a>
@@ -227,7 +227,7 @@ export function WelcomingHome() {
       </main>
       <footer className={styles.footer}>
         <span>Brandon Hann / Built with care.</span>
-        <a href="#main-content">Back to top ↑</a>
+        <a href="#top">Back to top ↑</a>
       </footer>
     </div>
   );
