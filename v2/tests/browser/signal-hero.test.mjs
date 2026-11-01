@@ -12,12 +12,21 @@ test("desktop routes preview canonical project facts and navigate with native ha
     const network = page.getByRole("navigation", { name: "Signal Network project destinations" });
     const links = network.locator("svg a");
     assert.equal(await links.count(), 4);
+    assert.deepEqual(
+      await network.locator("[data-project-mark]").evaluateAll((nodes) => nodes.map((node) => node.getAttribute("data-project-mark"))),
+      ["location-validation", "matching", "policy-boundary", "server-owned-state"],
+    );
     assert.equal(await network.locator("path[class*='selectedRoute']").count(), 0);
     const secure = network.getByRole("link", { name: "Open SecureAgent Lab case study" });
     await secure.hover();
     const highlighted = network.locator("path[class*='selectedRoute']");
     await highlighted.waitFor();
     assert.equal(await highlighted.getAttribute("d"), "M220 205 H359 L421 215 H505");
+    assert.match(await highlighted.evaluate((node) => getComputedStyle(node).filter), /201, 167, 255/);
+    assert.match(
+      await network.locator("a[data-preview='true'] [class*='terminalShell']").evaluate((node) => getComputedStyle(node).animationName),
+      /terminal-acknowledge/,
+    );
     assert.match(await page.locator("[aria-live='polite']").first().innerText(), /deterministic policy decides before simulated execution/i);
     await secure.click();
     assert.match(page.url(), /#project-secureagent$/);
@@ -37,6 +46,7 @@ test("keyboard, reduced motion, and no-JavaScript links retain a useful static n
     await rivet.focus();
     assert.match(await page.locator("[aria-live='polite']").first().innerText(), /ownership checks/i);
     assert.equal(await page.locator("[class*='courierReact']").evaluate((node) => getComputedStyle(node).animationName), "none");
+    assert.equal(await network.locator("a[data-preview='true'] [class*='terminalShell']").evaluate((node) => getComputedStyle(node).animationName), "none");
     await page.keyboard.press("Enter");
     assert.match(page.url(), /#project-rivet$/);
     await page.close();
@@ -47,6 +57,20 @@ test("keyboard, reduced motion, and no-JavaScript links retain a useful static n
     await staticPage.getByRole("navigation", { name: "Signal Network project destinations" }).getByRole("link", { name: "Open Mapetite case study" }).click();
     assert.match(staticPage.url(), /#project-mapetite$/);
     await staticPage.close();
+  } finally { await browser.close(); }
+});
+
+test("courier and terminal react briefly, then settle without idle animation", async () => {
+  const browser = await chromium.launch();
+  try {
+    const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+    await page.goto(site);
+    await page.waitForTimeout(600);
+    assert.equal(await page.evaluate(() => document.getAnimations().filter((animation) => animation.playState === "running").length), 0);
+    await page.getByRole("navigation", { name: "Signal Network project destinations" }).getByRole("link", { name: "Open Mapetite case study" }).hover();
+    assert.ok(await page.evaluate(() => document.getAnimations().filter((animation) => animation.playState === "running").length) >= 2);
+    await page.waitForTimeout(700);
+    assert.equal(await page.evaluate(() => document.getAnimations().filter((animation) => animation.playState === "running").length), 0);
   } finally { await browser.close(); }
 });
 

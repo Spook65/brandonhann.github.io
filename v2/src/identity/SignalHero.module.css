@@ -17,27 +17,35 @@
 .cutout { fill: #0a1019; stroke: #28384a; stroke-width: 2; }
 .accentSlash { fill: #3aa0ff; }
 .neutralRoutes { opacity: 0.78; }
-.selectedRoute { filter: drop-shadow(0 0 5px currentColor); pointer-events: none; }
+.selectedRoute { pointer-events: none; }
 .build path:first-child { fill: #318ee4; stroke: #b6e0ff; stroke-width: 2.5; }
 .buildEdge { fill: none; stroke: #061321; stroke-width: 6; }
 .build text { fill: #071522; font: 800 35px/1 Sora, sans-serif; letter-spacing: -1.8px; }
 .build .buildSub { font: 600 10px/1 "IBM Plex Mono", monospace; letter-spacing: 1.5px; }
 .nodes a { cursor: pointer; text-decoration: none; }
-.nodes a > g { transition: filter 0.16s ease, transform 0.16s ease; transform-box: fill-box; transform-origin: center; }
-.nodes a:hover > g,
-.nodes a:focus-visible > g,
-.nodes a[data-preview="true"] > g { filter: brightness(1.24) drop-shadow(0 4px 9px #0008); }
+.terminalShell { transform-box: fill-box; transform-origin: center; }
+.terminalPlate { transition: fill 0.15s ease, stroke-width 0.15s ease; }
+.nodes a[data-preview="true"] .terminalShell {
+  animation: terminal-acknowledge 480ms cubic-bezier(.16,.8,.23,1) both;
+}
+.nodes a[data-preview="true"] .terminalPlate { fill: #20344b; stroke-width: 3; }
 .nodes a:focus-visible { outline: none; }
-.nodes a:focus-visible > g path:first-child { stroke-width: 4; }
+.nodes a:focus-visible .terminalPlate { stroke-width: 4; }
+@keyframes terminal-acknowledge {
+  0% { transform: translateX(-4px) scale(.96); }
+  55% { transform: translateX(2px) scale(1.045); }
+  100% { transform: translateX(0) scale(1); }
+}
 .nodeNumber { font: 500 11px/1 "IBM Plex Mono", monospace; letter-spacing: 0.7px; }
 .nodeName { fill: #f5f7fb; font: 700 18px/1 Sora, sans-serif; letter-spacing: -0.45px; }
 .courier,
-.courierReact { transform-origin: 270px 307px; }
-.courierReact { animation: courier-acknowledge 420ms cubic-bezier(.2,.85,.2,1) both; }
+.courierReact { transform-origin: 263px 332px; }
+.courierReact { animation: courier-acknowledge 500ms cubic-bezier(.2,.85,.2,1) both; }
 @keyframes courier-acknowledge {
   0% { transform: translate(0, 0) rotate(0deg); }
-  45% { transform: translate(10px, -7px) rotate(-7deg); }
-  100% { transform: translate(7px, 0) rotate(-3deg); }
+  40% { transform: translate(14px, -9px) rotate(-8deg); }
+  65% { transform: translate(8px, -3px) rotate(3deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
 }
 .readout {
   display: grid;
@@ -67,10 +75,10 @@
     position: absolute;
     right: 1.3rem;
     bottom: 1rem;
-    width: 44px;
-    height: 53px;
+    width: 50px;
+    height: 60px;
   }
-  .mobile img { display: block; width: 44px; height: 53px; object-fit: contain; }
+  .mobile img { display: block; width: 50px; height: 60px; object-fit: contain; }
   .mobile:hover,
   .mobile:focus-visible { filter: drop-shadow(0 0 8px #8bc7ff88); }
 }
@@ -78,6 +86,7 @@
   .mobile { top: 7.3rem; bottom: auto; right: 1.2rem; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .courierReact { animation: none; }
-  .nodes a > g { transition: none; }
+  .courierReact,
+  .nodes a[data-preview="true"] .terminalShell { animation: none; }
+  .terminalPlate { transition: none; }
 }

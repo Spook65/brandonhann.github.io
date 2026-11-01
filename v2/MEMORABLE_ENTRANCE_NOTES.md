@@ -18,3 +18,11 @@ This branch starts at `experiment/interaction-polish` (`0f42aec`). It changes th
 ## Performance measurement
 
 The before/after comparison used local Vite preview, Chromium at 390 × 844, 150ms network latency, 200,000 bytes/s download, 4× CPU slowdown, and five cold plus five warm navigations per build. Median cold FCP/LCP was 700ms on the H.3F foundation and 744ms here; median warm FCP/LCP was 544ms and 548ms. CLS stayed near 0.016. Measured cold resource transfer rose from 141,045 to 144,696 bytes. The entry JS gzip size rose from 70.45 to 72.28 kB; CSS from 5.01 to 5.98 kB. These are lab observations, not field Core Web Vitals, and do not prove production performance.
+
+## H.4D.1 — Entrance art polish review
+
+The courier is larger and sits clear of the four route traces. Each destination keeps the same visual family while receiving a distinct original mark: a place-validation pin, paired matching shapes, a policy shield, and a server-to-clients state motif. The marks illustrate the projects' verified engineering themes; they are not product screenshots or claims of live connectivity. The route glow now uses the selected project's explicit accent, and a terminal acknowledgment and courier gesture finish within 500ms. The selected route and canonical case-study insight remain visible after motion settles.
+
+At 1440px the character and four destinations have a stronger identity than H.4D. At 900px all destinations fit the initial viewport, though the marks are smaller. At 390px the courier remains a compact link beside the existing Projects action, and the project index retains its early placement. The network still has a diagram-like route structure; the added marks improve recognition but do not by themselves establish owner approval of the artwork. The mobile version intentionally has no miniature copy of the desktop network.
+
+Using the same local 390 × 844 throttle as above, five cold and five warm loads of the H.4D base and H.4D.1 produced median cold FCP/LCP of 756ms and 748ms, median warm FCP/LCP of 576ms and 580ms, and CLS of about 0.016 in both. Cold resource transfer rose from 144,696 to 145,227 bytes. Entry JS gzip size rose from 72.28 to 72.74 kB; CSS from 5.98 to 6.05 kB. Differences this small are ordinary local-test variation, not evidence of a production performance improvement.
