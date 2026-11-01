@@ -1,6 +1,6 @@
 # Living Signal Workshop — H.4B static art review
 
-These four SVGs are **static review artwork**, outside `public/` and every Vite entry. They are not a playable prototype or an approved homepage change. Run `node art-direction/living-signal/generate.mjs` from `v2/` to regenerate them. The rendered PNGs are local review captures and are not source-controlled.
+This document records the original H.4B art proposal, preserved at commit `4fcedd7`. H.4B.1 supersedes its ambiguous selected still with six clarity-review states documented in `CLARITY_REVIEW.md`. All artwork remains outside `public/` and every Vite entry; the rendered PNGs are ignored local review captures.
 
 ## Composition
 
