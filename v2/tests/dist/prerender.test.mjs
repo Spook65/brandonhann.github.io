@@ -23,5 +23,7 @@ test('first frame preloads only the homepage typefaces and no portrait or world 
   for (const font of ['sora-latin', 'ibm-plex-mono-latin-400']) assert.match(html, new RegExp(`rel="preload" as="font"[^>]+/brandonhann\\.github\\.io/fonts/${font}`));
   assert.match(html, /href="\.\/portfolio-type\.css"/);
   assert.doesNotMatch(html, /fonts\.googleapis\.com|fonts\.gstatic\.com/);
-  assert.doesNotMatch(html, /<img|guardian-organic-sheet|mouth-cavity-organic|operator-core-concept/);
+  assert.equal((html.match(/<img\b/g) ?? []).length, 1);
+  assert.match(html, /src="\/brandonhann\.github\.io\/assets\/relay-courier\.svg"/);
+  assert.doesNotMatch(html, /guardian-organic-sheet|mouth-cavity-organic|operator-core-concept/);
 });

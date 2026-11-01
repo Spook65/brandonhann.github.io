@@ -4,6 +4,7 @@ import { projects } from "./data/projects";
 import { legacyAnchors } from "./data/legacyAnchors";
 import { principles } from "./data/caseStudies";
 import { ProjectShowcase } from "./showcase/ProjectShowcase";
+import { SignalHero } from "./identity/SignalHero";
 import styles from "./WelcomingHome.module.css";
 
 const base = import.meta.env.BASE_URL;
@@ -108,11 +109,7 @@ export function WelcomingHome() {
                 </a>
               </div>
             </div>
-            <EngineeringPrinciple
-              principle={principle}
-              onSelect={setPrinciple}
-              className={styles.desktopPrinciple}
-            />
+            <SignalHero />
           </div>
         </section>
         <ProjectShowcase

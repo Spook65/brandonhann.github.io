@@ -44,16 +44,15 @@ test('narrow phones reveal Projects sooner with compact, full-width links', asyn
         const firstStudy = document.querySelector('#project-mapetite');
         const lastStudy = document.querySelector('#project-oddworks');
         const asides = [...document.querySelectorAll('aside[aria-label="Engineering principles"]')];
-        const visible = asides.find((aside) => getComputedStyle(aside).display !== 'none');
-        const hidden = asides.find((aside) => aside !== visible);
+        const visible = asides[0];
         return {
           continuous: preview.nextElementSibling === firstStudy,
           afterStudies: lastStudy.nextElementSibling === visible &&
             visible.getBoundingClientRect().top > lastStudy.getBoundingClientRect().bottom,
-          hiddenFromFocus: getComputedStyle(hidden).display === 'none',
+          oneInstance: asides.length === 1,
         };
       });
-      assert.deepEqual(order, { continuous: true, afterStudies: true, hiddenFromFocus: true });
+      assert.deepEqual(order, { continuous: true, afterStudies: true, oneInstance: true });
       await principle.getByRole('button', { name: 'Validate' }).tap();
       assert.match(await principle.locator('[aria-live="polite"]').innerText(), /uncertain input/);
       await principle.getByRole('button', { name: 'Verify' }).focus();

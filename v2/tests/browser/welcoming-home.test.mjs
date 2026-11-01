@@ -16,7 +16,8 @@ test("engineering homepage exposes identity and keeps optional worlds out of ent
     await page
       .getByRole("heading", { name: "Brandon Hann.", exact: true })
       .waitFor();
-    assert.equal(await page.locator("main img").count(), 0);
+    assert.equal(await page.locator("main img").count(), 1);
+    assert.match(await page.locator("main img").getAttribute("src"), /relay-courier/);
     assert.ok(
       await page
         .getByRole("link", { name: "Projects", exact: true })
