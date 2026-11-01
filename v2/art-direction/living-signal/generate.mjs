@@ -74,21 +74,27 @@ const desktopPaths = [
  ["secureagent","M342 615 524 615 618 673 935 673"],
  ["oddworks","M342 615 493 615 570 769 620 769"],
 ];
-function desktop(decision=null){
+function desktop(state="idle"){
+ const chosen=state!=="idle";
+ const example=state==="result";
  const bg=`<path d="M0 316 361 260 461 288 328 754 0 802Z" fill="#102034"/>${stroke("M0 345 298 286 436 301","#27629b",3)}<path d="M1080 0 1440 0 1440 734 1328 797 1160 575Z" fill="#101b30"/>${stroke("M1190 0 1440 0 1440 626","#253b5c",3)}`;
- const head=`${tag(76,69,"BH / PORTFOLIO",C.blue,15)}${tag(1145,69,"STATIC ART REVIEW",C.muted,13)}${stroke("M76 86H1364","#335270",2)}${text(72,173,72,760,"Brandon Hann",'letter-spacing="-5"')}${text(77,218,25,480,"Software engineering with a curious edge.")}${text(79,255,17,450,"BUILD is where my projects start. Choose a route to see a decision.")}`;
+ const head=`${tag(76,69,"BH / PORTFOLIO",C.blue,15)}${tag(1145,69,"STATIC ART REVIEW",C.muted,13)}${stroke("M76 86H1364","#335270",2)}${text(72,173,72,760,"Brandon Hann",'letter-spacing="-5"')}${text(77,218,25,480,"Software engineering with a curious edge.")}${text(79,255,17,450,"Choose a project. Its example runs only when you ask to try it.")}`;
  const field=`<path d="M52 298 418 277 1390 293 1362 536 1404 787 1261 849 42 846Z" fill="${C.field}" stroke="#315174" stroke-width="3"/>${stroke("M52 298 418 277 1390 293",C.blue,6)}${stroke("M380 297 283 843M1064 292 1118 849","#28425b",2)}`;
- const source=`<path d="M80 547 310 529 352 559 332 692 95 713 61 681Z" fill="#1768b3" stroke="#a7d6ff" stroke-width="5"/><path d="M80 547 310 529 352 559 118 584Z" fill="#4ca9ff"/><path d="M118 584 352 559 332 692 95 713Z" fill="#122a48"/>${tag(109,611,"BRANDON'S WORK",C.blue,12)}${text(106,661,44,800,"BUILD",'letter-spacing="2"')}${tag(109,691,"START HERE",C.muted,12)}`;
+ const source=`<path d="M80 547 310 529 352 559 332 692 95 713 61 681Z" fill="#1768b3" stroke="#a7d6ff" stroke-width="5"/><path d="M80 547 310 529 352 559 118 584Z" fill="#4ca9ff"/><path d="M118 584 352 559 332 692 95 713Z" fill="#122a48"/>${tag(109,611,"BRANDON'S PROJECTS",C.blue,12)}${text(106,661,44,800,"BUILD",'letter-spacing="2"')}${tag(109,691,"CHOOSE A ROUTE",C.muted,12)}`;
  const destinations=`${tab(840,305,"Mapetite","01 / DATA VALIDATION",C.mint)}${tab(871,448,"Rivet","02 / BACKEND TRUST",C.amber)}${tab(620,738,"ODDWORKS","04 / SERVER STATE",C.blue)}`;
  const network=desktopPaths.map(([id,path])=>neutralRoute(path,id)).join("");
- const selected=decision?selectedRoute(desktopPaths[2][1],"secureagent"):"";
- const idle=`${use("relay",275,607,100,120)}${tag(928,542,"SECUREAGENT LAB",C.lavender,13)}${tag(1120,630,"POLICY CHECK",C.lavender,13)}${text(77,801,16,600,"Pick a route. Each one leads to a real project case study.")}`;
- const outcome=decision==="allow"
-  ? `${stroke("M1167 659h108",C.mint,5)}${stroke("M1259 649l16 10-16 10",C.mint,5)}<path d="M1269 623h93l18 17v65h-111Z" fill="#153a3a" stroke="${C.mint}" stroke-width="3"/>${text(1282,663,25,760,"ALLOW",`style="fill:${C.mint}"`)}${tag(1283,687,"SIMULATED STEP",C.ink,10)}`
-  : `${stroke("M1167 659h61",C.amber,5)}${stroke("M1228 635v48",C.amber,8)}<path d="M1251 623h111l18 17v65h-129Z" fill="#402e2c" stroke="${C.amber}" stroke-width="3"/>${text(1264,663,25,760,"DENY",`style="fill:${C.amber}"`)}${tag(1265,687,"NO TOOL STEP",C.ink,10)}`;
- const active=decision?`${tag(104,747,"1 / PROPOSED TOOL ACTION",C.blue,12)}${use("relay-side",716,536,100,120)}${tag(703,522,"2 / COURIER",C.muted,12)}${use("packet",790,651,58,44,`data-packet="secureagent"`)}${tag(924,542,"3 / POLICY CHECK",C.lavender,12)}${outcome}${tag(1227,588,"4 / DECISION",decision==="allow"?C.mint:C.amber,12)}${text(77,801,16,600,"Illustrative offline check. Open the case study for the real engineering details.")}`:idle;
- const foot=`${tag(76,882,"FOUR INDEPENDENT PROJECTS · NOT A LIVE PIPELINE",C.muted,11)}${tag(1050,882,decision?"SECUREAGENT CASE STUDY ↗":"CHOOSE A PROJECT ↗",C.blue,12)}`;
- return svg(1440,900,`Living Signal desktop ${decision??"idle"} art study`,bg+head+field+network+selected+source+destinations+station(905,568,decision)+active+foot);
+ const selected=chosen?selectedRoute(desktopPaths[2][1],"secureagent"):"";
+ const stationaryCourier=use("relay",275,607,100,120);
+ const idle=`${stationaryCourier}${tag(928,542,"SECUREAGENT LAB",C.lavender,13)}${tag(1120,630,"POLICY BOUNDARY",C.lavender,13)}${text(77,801,16,600,"Hover or focus for a quick insight. Select to explore a project.")}`;
+ const selectedPanel=`${stationaryCourier}${tag(924,542,"SECUREAGENT LAB / SELECTED",C.lavender,13)}${text(615,570,17,620,"Policy before simulated tool use.")}
+ <path d="M1180 614h185l16 17-16 40h-185Z" fill="${C.blue}"/>${text(1195,650,16,740,"Try an example →",'style="fill:#081522"')}
+ ${text(1184,718,15,600,"Read case study ↗",`style="fill:${C.blue}"`)}${text(77,801,16,600,"Selected project. The courier waits until you try an example.")}`;
+ const result=`${use("relay-side",716,536,100,120)}${use("packet",790,651,58,44,`data-packet="secureagent"`)}${tag(688,522,"REQUEST COURIER",C.muted,12)}${tag(924,542,"SECUREAGENT LAB / EXAMPLE",C.lavender,13)}
+ ${stroke("M1167 659h61",C.amber,5)}${stroke("M1228 635v48",C.amber,8)}<path d="M1251 623h111l18 17v65h-129Z" fill="#402e2c" stroke="${C.amber}" stroke-width="3"/>${text(1264,663,25,760,"DENY",`style="fill:${C.amber}"`)}${tag(1265,687,"NO TOOL STEP",C.ink,10)}
+ ${tag(1117,589,"ILLUSTRATIVE REQUEST",C.amber,11)}${text(77,801,16,600,"Example request denied before simulated execution. Reset or read the case study.")}`;
+ const scene=state==="idle"?idle:state==="selected"?selectedPanel:result;
+ const foot=`${tag(76,882,"FOUR INDEPENDENT PROJECTS · NOT A LIVE PIPELINE",C.muted,11)}${tag(1050,882,chosen?"SECUREAGENT CASE STUDY ↗":"CHOOSE A PROJECT ↗",C.blue,12)}`;
+ return svg(1440,900,`Living Signal desktop ${state} art study`,bg+head+field+network+selected+source+destinations+station(905,568,example?"deny":null)+scene+foot);
 }
 
 function mobileSelector(decision){
@@ -99,24 +105,34 @@ function mobileSelector(decision){
   ${tag(x+12,y+23,num,color,14)}${text(x+12,y+45,16.5,700,name)}${active?stroke(`M${x+143} ${y+19}l9 8-9 8`,color,3):""}`;
  }).join("");
 }
-function mobile(decision=null){
- const bg=`<path d="M0 388 350 377 390 405 372 783 18 774Z" fill="#102039" stroke="#315174" stroke-width="3"/>${stroke("M0 388 350 377 390 405",C.blue,5)}`;
- const head=`${tag(24,35,"BH / PORTFOLIO",C.blue,13)}${stroke("M24 48H366","#335270",1)}${text(22,95,40,760,"Brandon Hann",'letter-spacing="-3"')}${text(24,125,17,500,"Software engineering with a curious edge.")}
+function mobile(state="idle"){
+ const chosen=state!=="idle";
+ const example=state==="result";
+ const height=example?844:chosen?800:760;
+ const bottom=example?783:chosen?716:684;
+ const bg=`<path d="M0 388 350 377 390 405 372 ${bottom} 18 ${bottom-9}Z" fill="#102039" stroke="#315174" stroke-width="3"/>${stroke("M0 388 350 377 390 405",C.blue,5)}`;
+ const head=`${tag(24,35,"BH / PORTFOLIO",C.blue,13)}${stroke("M24 48H366","#335270",1)}${text(22,95,40,760,"Brandon Hann",'letter-spacing="-3"')}${text(24,125,17,500,"Curious about software engineering.")}
  <path d="M24 151h134l15 17-15 37H24Z" fill="${C.blue}"/>${text(39,184,17,700,"Projects ↗",'style="fill:#061522"')}
- ${text(24,230,18,650,decision?"SecureAgent checks the request.":"Choose a project. Follow its decision.")}${mobileSelector(decision)}`;
- const source=`<path d="M28 423 117 410 139 431 128 494 31 503 19 486Z" fill="#1768b3" stroke="#a7d6ff" stroke-width="3"/><path d="M31 444 138 432 128 494 31 503Z" fill="#142a46"/>${text(38,467,22,800,"BUILD")}${tag(39,487,"MY WORK",C.blue,12)}`;
- const foot=`${tag(24,797,"ILLUSTRATIVE · NO LIVE PROJECT PIPELINE",C.muted,13)}${text(24,830,17,650,decision?"Open SecureAgent Lab case study ↗":"Open actual project case studies ↗",`style="fill:${C.blue}"`)}`;
- if(!decision){
-  const scene=`${source}${stroke("M139 453H211",C.blue,5)}${use("relay",205,484,118,142)}${use("packet",145,429,47,36)}${text(31,679,20,670,"BUILD means Brandon's projects.")}${text(31,711,16,450,"Select one above to meet its key decision.")}`;
-  return svg(390,844,"Living Signal mobile idle art study",bg+head+scene+foot);
+ ${text(24,230,18,650,example?"Example request: blocked by policy.":chosen?"SecureAgent Lab selected.":"Choose a project to inspect.")}${mobileSelector(chosen)}`;
+ const source=`<path d="M28 423 117 410 139 431 128 494 31 503 19 486Z" fill="#1768b3" stroke="#a7d6ff" stroke-width="3"/><path d="M31 444 138 432 128 494 31 503Z" fill="#142a46"/>${text(38,467,22,800,"BUILD")}${tag(39,487,"PROJECTS",C.blue,12)}`;
+ const foot=example?`${tag(24,797,"ILLUSTRATIVE · OFFLINE EXAMPLE",C.muted,13)}${text(24,830,17,650,"Read SecureAgent Lab case study ↗",`style="fill:${C.blue}"`)}`:
+  chosen?`${tag(24,750,"ILLUSTRATIVE · NO LIVE PIPELINE",C.muted,13)}${text(24,785,17,650,"Read SecureAgent Lab case study ↗",`style="fill:${C.blue}"`)}`:
+  `${tag(24,712,"ILLUSTRATIVE · NO LIVE PIPELINE",C.muted,13)}${text(24,748,17,650,"Open actual project case studies ↗",`style="fill:${C.blue}"`)}`;
+ if(state==="idle"){
+  const scene=`${source}${use("relay",205,455,118,142)}${text(31,620,19,670,"Choose one of Brandon's projects.")}${text(31,651,16,450,"The courier waits for an example request.")}`;
+  return svg(390,height,"Living Signal mobile idle art study",bg+head+scene+foot);
+ }
+ if(state==="selected"){
+  const scene=`${tag(32,423,"SECUREAGENT LAB / SELECTED",C.lavender,14)}${use("relay",56,449,102,122)}${tag(55,585,"COURIER WAITING",C.muted,13)}${station(201,439,null,.56)}
+  ${text(29,617,17,620,"Policy before simulated tool use.")}
+  <path d="M24 632h325l17 15-17 52H24Z" fill="${C.blue}"/>${text(40,672,18,740,"Try an illustrative request →",'style="fill:#081522"')}`;
+  return svg(390,height,"Living Signal mobile selected art study",bg+head+scene+foot);
  }
  const path="M128 453 H153 V594 H207";
  const route=selectedRoute(path,"secureagent");
- const result=decision==="allow"
-  ? `<path d="M192 710h173l13 14-13 50H192Z" fill="#153a3a" stroke="${C.mint}" stroke-width="3"/>${stroke("M207 733h20m-8-8 8 8-8 8",C.mint,4)}${text(234,738,20,750,"ALLOW",`style="fill:${C.mint}"`)}${text(207,760,15,550,"Simulation permitted")}`
-  : `<path d="M192 710h173l13 14-13 50H192Z" fill="#402e2c" stroke="${C.amber}" stroke-width="3"/>${stroke("M215 724v25",C.amber,6)}${text(233,738,20,750,"DENY",`style="fill:${C.amber}"`)}${text(207,760,15,550,"Tool step blocked")}`;
- const scene=`${route}${source}${tag(30,410,"1 / PROPOSED TOOL ACTION",C.blue,15)}${use("relay-side",29,509,98,118)}${tag(29,648,"2 / COURIER",C.muted,16)}${use("packet",129,511,48,36,`data-packet="secureagent"`)}${tag(190,543,"3 / POLICY CHECK",C.lavender,16)}${station(188,560,decision,.60)}${tag(192,701,"4 / DECISION",decision==="allow"?C.mint:C.amber,16)}${result}`;
- return svg(390,844,`Living Signal mobile SecureAgent ${decision} art study`,bg+head+scene+foot);
+ const result=`<path d="M192 710h173l13 14-13 50H192Z" fill="#402e2c" stroke="${C.amber}" stroke-width="3"/>${stroke("M215 724v25",C.amber,6)}${text(233,738,20,750,"DENY",`style="fill:${C.amber}"`)}${text(207,760,15,550,"Tool step blocked")}`;
+ const scene=`${route}${source}${tag(30,410,"1 / EXAMPLE REQUEST",C.blue,15)}${use("relay-side",29,509,98,118)}${tag(29,648,"2 / COURIER",C.muted,16)}${use("packet",129,511,48,36,`data-packet="secureagent"`)}${tag(190,543,"3 / POLICY CHECK",C.lavender,16)}${station(188,560,"deny",.60)}${tag(192,701,"4 / DECISION",C.amber,16)}${result}`;
+ return svg(390,height,"Living Signal mobile result art study",bg+head+scene+foot);
 }
 
 function sheet(){
@@ -132,10 +148,10 @@ function sheet(){
 
 for (const [name,art] of Object.entries({
  "desktop-idle.svg":desktop(),
- "desktop-allow.svg":desktop("allow"),
- "desktop-deny.svg":desktop("deny"),
+ "desktop-selected.svg":desktop("selected"),
+ "desktop-result.svg":desktop("result"),
  "mobile-idle.svg":mobile(),
- "mobile-allow.svg":mobile("allow"),
- "mobile-deny.svg":mobile("deny"),
+ "mobile-selected.svg":mobile("selected"),
+ "mobile-result.svg":mobile("result"),
  "relay-character-sheet.svg":sheet(),
 })) writeFileSync(new URL(name,import.meta.url),art);

@@ -1,5 +1,7 @@
 # H.4B.1 — Living Signal clarity review
 
+Historical art checkpoint. H.4B.2 separates project selection from the optional request example; see `UX_CLARITY_REVIEW.md`. The H.4B.1 ALLOW/DENY SVGs are preserved at commit `0f31353`.
+
 **Status:** six static art-direction keyframes for owner review. No homepage integration, character animation, policy execution, or new project feature. The H.4A prototype remains separate and functional. `desktop-secureagent.svg` from H.4B contained an ambiguous pending checkmark and is recoverable at commit `4fcedd7`; the new generator deliberately replaces it with explicit ALLOW and DENY states.
 
 From `v2/`, run `node art-direction/living-signal/generate.mjs` to regenerate the six SVGs and the existing relay pose sheet. The SVGs are review source. Browser-rendered PNGs and the selected-route comparison stay under ignored `artifacts/living-signal-clarity/`.
