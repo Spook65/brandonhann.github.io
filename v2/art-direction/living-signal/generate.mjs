@@ -103,7 +103,7 @@ function mobile(decision=null){
  const bg=`<path d="M0 388 350 377 390 405 372 783 18 774Z" fill="#102039" stroke="#315174" stroke-width="3"/>${stroke("M0 388 350 377 390 405",C.blue,5)}`;
  const head=`${tag(24,35,"BH / PORTFOLIO",C.blue,13)}${stroke("M24 48H366","#335270",1)}${text(22,95,40,760,"Brandon Hann",'letter-spacing="-3"')}${text(24,125,17,500,"Software engineering with a curious edge.")}
  <path d="M24 151h134l15 17-15 37H24Z" fill="${C.blue}"/>${text(39,184,17,700,"Projects ↗",'style="fill:#061522"')}
- ${text(24,230,18,650,"Choose a project. Follow its decision.")}${mobileSelector(decision)}`;
+ ${text(24,230,18,650,decision?"SecureAgent checks the request.":"Choose a project. Follow its decision.")}${mobileSelector(decision)}`;
  const source=`<path d="M28 423 117 410 139 431 128 494 31 503 19 486Z" fill="#1768b3" stroke="#a7d6ff" stroke-width="3"/><path d="M31 444 138 432 128 494 31 503Z" fill="#142a46"/>${text(38,467,22,800,"BUILD")}${tag(39,487,"MY WORK",C.blue,12)}`;
  const foot=`${tag(24,797,"ILLUSTRATIVE · NO LIVE PROJECT PIPELINE",C.muted,13)}${text(24,830,17,650,decision?"Open SecureAgent Lab case study ↗":"Open actual project case studies ↗",`style="fill:${C.blue}"`)}`;
  if(!decision){
