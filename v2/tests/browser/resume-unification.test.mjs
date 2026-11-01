@@ -79,3 +79,21 @@ test('résumé PDF actions open a new tab and download the expected filename', a
     await page.close();
   } finally { await browser.close(); }
 });
+
+test('phone widths use direct PDF controls while desktop retains the embedded viewer', async () => {
+  const browser = await chromium.launch();
+  try {
+    for (const width of [320, 390, 900, 1440]) {
+      const page = await browser.newPage({ viewport: { width, height: 900 }, javaScriptEnabled: false });
+      await page.goto(`${site}resume.html`);
+      const mobile = width <= 700;
+      assert.equal(await page.locator('.resume-mobile-note').isVisible(), mobile);
+      assert.equal(await page.locator('.resume-viewer-section').isVisible(), !mobile);
+      assert.equal(await page.getByTitle('Brandon Hann résumé PDF preview').isVisible(), !mobile);
+      assert.ok(await page.getByRole('link', { name: 'Open PDF' }).isVisible());
+      assert.ok(await page.getByRole('link', { name: 'Download PDF' }).isVisible());
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1), false);
+      await page.close();
+    }
+  } finally { await browser.close(); }
+});
