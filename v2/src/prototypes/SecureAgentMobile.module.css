@@ -50,13 +50,14 @@
 .sceneLabel { position: absolute; left: 17px; top: 16px; z-index: 2; color: #a8c9e7; font-size: 11px; letter-spacing: .1em; }
 .route { position: absolute; left: 30%; top: 61%; width: 51%; border-top: 5px solid #7bb6ee; transform: skewY(-8deg); transform-origin: left; }
 .route::after { content: ""; position: absolute; right: -2px; top: -11px; width: 12px; height: 12px; border-top: 3px solid #7bb6ee; border-right: 3px solid #7bb6ee; transform: rotate(45deg); }
-.courier { position: absolute; z-index: 3; left: 9%; bottom: 18px; width: min(34%, 132px); height: auto; filter: drop-shadow(0 8px 4px #0008); }
+.courier { position: absolute; z-index: 3; left: 4%; bottom: 18px; width: min(32%, 120px); height: auto; filter: drop-shadow(0 8px 4px #0008); }
 .packet {
-  position: absolute; z-index: 4; left: 48%; top: 46%;
-  display: grid; place-items: center; width: 68px; height: 54px;
+  --packet-start: -36px;
+  position: absolute; z-index: 4; left: calc(66% - 63px); top: 49%;
+  display: grid; place-items: center; width: 58px; height: 46px;
   background: var(--amber); color: #142032; border: 3px solid #142032;
   clip-path: polygon(0 16%, 50% 0, 100% 16%, 100% 85%, 50% 100%, 0 85%);
-  transform: rotate(-7deg);
+  transform: translate(var(--packet-start), 15px) rotate(-7deg);
   font-size: 9px; font-weight: 700; letter-spacing: .02em;
 }
 .boundary {
@@ -67,11 +68,39 @@
   clip-path: polygon(50% 0, 93% 15%, 100% 54%, 82% 91%, 50% 100%, 15% 88%, 0 50%, 9% 15%);
 }
 .boundaryMark { display: block; font: 750 52px/.95 Sora, sans-serif; }
+.boundaryDenied { position: absolute; opacity: 0; }
+.boundaryMark.boundaryDenied { top: 16%; }
+.boundaryDenied:not(.boundaryMark) { bottom: 14%; }
 .experience[data-stage="selected"] .courier { transform: translateX(10px) rotate(-4deg); }
-.experience[data-stage="result"] .courier { transform: translateX(4px) rotate(3deg); }
-.experience[data-stage="result"] .boundary { color: var(--amber); border-color: var(--amber); }
-.experience[data-stage="result"] .packet { animation: requestStops .38s ease-out both; }
-@keyframes requestStops { from { transform: translate(-36px, 9px) rotate(-12deg); } to { transform: translate(0, 0) rotate(-7deg); } }
+.experience[data-stage="result"] .courierPreparing { animation: courierPrepares .72s ease-out both; }
+.experience[data-stage="result"] .courierStopping { animation: courierStops .72s ease-out both; }
+.experience[data-stage="result"] .packet { animation: requestStops .72s ease-out both; }
+.experience[data-stage="result"] .boundary { animation: boundaryChecks .72s ease-out both; }
+.experience[data-stage="result"] .boundaryPending { animation: pendingFades .72s linear both; }
+.experience[data-stage="result"] .boundaryDenied { animation: denialAppears .72s linear both; }
+@keyframes courierPrepares {
+  0% { opacity: 1; transform: translateX(10px) rotate(-4deg); }
+  18% { opacity: 1; transform: translateX(17px) rotate(-10deg); }
+  57% { opacity: 1; transform: translateX(12px) rotate(-5deg); }
+  69%, 100% { opacity: 0; transform: translateX(5px) rotate(2deg); }
+}
+@keyframes courierStops {
+  0%, 65% { opacity: 0; transform: translateX(5px) rotate(2deg); }
+  69%, 100% { opacity: 1; transform: translateX(4px) rotate(3deg); }
+}
+@keyframes requestStops {
+  0%, 18% { transform: translate(var(--packet-start), 15px) rotate(-7deg); }
+  58% { transform: translate(-3px, -1px) rotate(-4deg); }
+  70% { transform: translate(-10px, 1px) rotate(-10deg); }
+  100% { transform: translate(-5px, 0) rotate(-7deg); }
+}
+@keyframes boundaryChecks {
+  0%, 55% { color: var(--lavender); border-color: var(--lavender); transform: scale(1); }
+  63% { color: #fff4dc; border-color: #fff4dc; transform: scale(1.035); }
+  75%, 100% { color: var(--amber); border-color: var(--amber); transform: scale(1); }
+}
+@keyframes pendingFades { 0%, 63% { opacity: 1; } 68%, 100% { opacity: 0; } }
+@keyframes denialAppears { 0%, 63% { opacity: 0; } 68%, 100% { opacity: 1; } }
 .content { padding: 20px 20px 22px; }
 .eyebrow { margin: 0 0 7px; color: var(--lavender); font-size: 11px; font-weight: 600; letter-spacing: .06em; }
 .content h2 { margin: 0 0 9px; font-size: 21px; line-height: 1.25; letter-spacing: -.035em; font-weight: 700; }
@@ -92,7 +121,6 @@
 .requestDetails div { display: grid; grid-template-columns: 82px minmax(0, 1fr); gap: 8px; padding: 7px 0; border-bottom: 1px solid #3a516d; }
 .requestDetails dt { color: #b3c8db; font-size: 11px; text-transform: uppercase; }
 .requestDetails dd { margin: 0; color: var(--ink); font: 500 13px/1.4 "IBM Plex Mono", monospace; overflow-wrap: anywhere; }
-.content .note { font-size: 12px; }
 .decision h2 { color: var(--amber); font-size: 27px; }
 .decision h2 span { display: block; margin-top: 2px; color: var(--ink); font-size: 18px; }
 .decision code { display: inline-block; margin: 0 0 13px; color: var(--amber); font-size: 11px; overflow-wrap: anywhere; }
@@ -104,7 +132,15 @@
   .brand span { font-size: 12px; }
   .projects { font-size: 13px; }
   .intro { font-size: 14px; }
+  .packet { --packet-start: -20px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .page *, .page *::before, .page *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .experience[data-stage="result"] .courierPreparing,
+  .experience[data-stage="result"] .boundaryPending { opacity: 0; }
+  .experience[data-stage="result"] .courierStopping,
+  .experience[data-stage="result"] .boundaryDenied { opacity: 1; }
+  .experience[data-stage="result"] .courierStopping { transform: translateX(4px) rotate(3deg); }
+  .experience[data-stage="result"] .packet { transform: translate(-5px, 0) rotate(-7deg); }
+  .experience[data-stage="result"] .boundary { color: var(--amber); border-color: var(--amber); }
 }
