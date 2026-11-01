@@ -28,8 +28,11 @@ test('artifact retains required paths and subpath-based assets', () => {
 test('standalone résumé has working relative paths and no script dependency', () => {
   assert.match(resume, /href="assets\/resume\/Brandon-Hann-Resume\.pdf"/);
   assert.match(resume, /src="assets\/resume\/Brandon-Hann-Resume\.pdf#view=FitH"/);
-  assert.match(resume, /href="index\.html#projects"/);
-  assert.match(resume, /href="index\.html#main-content"/);
+  assert.match(resume, /href="\.\/#projects"/);
+  assert.match(resume, /href="\.\/#contact"/);
+  assert.match(resume, /href="\.\/" aria-label="Brandon Hann, homepage"/);
+  assert.match(resume, /href="resume\.html" aria-current="page"/);
+  assert.doesNotMatch(resume, /og:image|twitter:image|ambient-orb|ambient-grid/);
   assert.doesNotMatch(resume, /<script|site\.js|opacity:\s*0\s*;\s*transform:\s*translateY\(24px\)/);
 });
 

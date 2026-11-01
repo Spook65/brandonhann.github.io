@@ -63,7 +63,7 @@ test('direct legacy hash navigation and static assets work', async () => {
 
     const resume = await browser.newPage({ javaScriptEnabled: false });
     await resume.goto(`${site}resume.html`);
-    assert.ok(await resume.getByRole('heading', { name: 'Brandon Hann', level: 1 }).isVisible());
+    assert.ok(await resume.getByRole('heading', { name: 'Résumé.', level: 1 }).isVisible());
     assert.ok(await resume.getByRole('link', { name: 'Download PDF' }).isVisible());
     assert.equal(await resume.getByRole('link', { name: 'Download PDF' }).getAttribute('href'), 'assets/resume/Brandon-Hann-Resume.pdf');
     await resume.close();

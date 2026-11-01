@@ -54,8 +54,8 @@ test("résumé paths and return anchor resolve at the Pages subpath", async () =
     assert.equal(resume.status(), 200);
     const pdf = await page.request.get(`${site}assets/resume/Brandon-Hann-Resume.pdf`);
     assert.equal(pdf.status(), 200);
-    await page.getByRole("link", { name: "Back to Brandon Hann portfolio" }).click();
-    assert.match(page.url(), /#main-content$/);
+    await page.getByRole("link", { name: "Brandon Hann, homepage" }).click();
+    assert.match(page.url(), /brandonhann\.github\.io\/$/);
     assert.equal(await page.locator("#main-content").count(), 1);
   } finally {
     await browser.close();
