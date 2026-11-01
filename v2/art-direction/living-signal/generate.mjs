@@ -1,4 +1,4 @@
-// Static art studies only. Not imported by the portfolio or its Vite build.
+// The standalone mobile prototype imports only the three courier pose exports.
 import { writeFileSync } from "node:fs";
 
 const C = { bg: "#080e18", field: "#0d1a2b", ink: "#eef4f8", blue: "#54a8ff", mint: "#9be8cf", amber: "#ffc779", lavender: "#c3adff", muted: "#a9b8c8" };
@@ -146,6 +146,11 @@ function sheet(){
  return svg(1440,900,"Original relay character pose and silhouette sheet",body);
 }
 
+function pose(id){
+ const title=`Original relay courier ${id} pose`;
+ return `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="144" viewBox="0 0 120 144" role="img" aria-label="${title}"><title>${title}</title>${defs}${use(id,0,0,120,144)}</svg>`;
+}
+
 for (const [name,art] of Object.entries({
  "desktop-idle.svg":desktop(),
  "desktop-selected.svg":desktop("selected"),
@@ -154,4 +159,7 @@ for (const [name,art] of Object.entries({
  "mobile-selected.svg":mobile("selected"),
  "mobile-result.svg":mobile("result"),
  "relay-character-sheet.svg":sheet(),
+ "courier-waiting.svg":pose("relay"),
+ "courier-inspecting.svg":pose("relay-side"),
+ "courier-denied.svg":pose("relay-denied"),
 })) writeFileSync(new URL(name,import.meta.url),art);

@@ -1,0 +1,110 @@
+.page {
+  --background: #080e18;
+  --panel: #112039;
+  --ink: #eef4f8;
+  --muted: #b7c6d4;
+  --blue: #54a8ff;
+  --lavender: #c3adff;
+  --amber: #ffc779;
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--ink);
+  font: 400 16px/1.55 Sora, system-ui, sans-serif;
+}
+.page * { box-sizing: border-box; }
+.page a { text-decoration: none; }
+.page :is(a, button):focus-visible { outline: 3px solid #e3f2ff; outline-offset: 4px; }
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: min(440px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 12px 0;
+  border-bottom: 1px solid #36506d;
+}
+.brand, .projects { display: inline-flex; align-items: center; min-height: 44px; }
+.brand { gap: .55rem; color: var(--blue); font: 650 16px/1.2 "IBM Plex Mono", monospace; }
+.brand span { color: var(--ink); font: 550 14px/1.25 Sora, sans-serif; }
+.projects { gap: .3rem; color: var(--ink); font-weight: 650; font-size: 14px; }
+.projects:hover, .caseStudy:hover { color: #a8d7ff; text-decoration: underline; text-underline-offset: .2em; }
+.main { width: min(440px, calc(100% - 32px)); margin: 0 auto; padding: 20px 0 48px; }
+.kicker, .eyebrow, .sceneLabel, .boundary, .packet, .scope, .requestDetails dt, .decision code {
+  font-family: "IBM Plex Mono", monospace;
+}
+.kicker { margin: 0 0 .55rem; color: var(--blue); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+.main h1 { margin: 0; font-size: clamp(32px, 10vw, 46px); font-weight: 760; line-height: 1.05; letter-spacing: -.06em; }
+.main h1 span { color: var(--blue); }
+.intro { max-width: 36ch; margin: .75rem 0 1.3rem; color: var(--muted); font-size: 15px; line-height: 1.55; }
+.experience { overflow: hidden; background: var(--panel); border: 1px solid #41627f; border-radius: 20px; box-shadow: 0 22px 50px #0005; }
+.scene {
+  position: relative;
+  height: clamp(210px, 62vw, 260px);
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(145deg, #142a47, #0c192c 68%);
+  border-bottom: 1px solid #375777;
+}
+.sceneGrain { position: absolute; inset: 0; opacity: .22; background: repeating-linear-gradient(150deg, transparent 0 11px, #7b9bc116 11px 12px); }
+.sceneLabel { position: absolute; left: 17px; top: 16px; z-index: 2; color: #a8c9e7; font-size: 11px; letter-spacing: .1em; }
+.route { position: absolute; left: 30%; top: 61%; width: 51%; border-top: 5px solid #7bb6ee; transform: skewY(-8deg); transform-origin: left; }
+.route::after { content: ""; position: absolute; right: -2px; top: -11px; width: 12px; height: 12px; border-top: 3px solid #7bb6ee; border-right: 3px solid #7bb6ee; transform: rotate(45deg); }
+.courier { position: absolute; z-index: 3; left: 9%; bottom: 18px; width: min(34%, 132px); height: auto; filter: drop-shadow(0 8px 4px #0008); }
+.packet {
+  position: absolute; z-index: 4; left: 48%; top: 46%;
+  display: grid; place-items: center; width: 68px; height: 54px;
+  background: var(--amber); color: #142032; border: 3px solid #142032;
+  clip-path: polygon(0 16%, 50% 0, 100% 16%, 100% 85%, 50% 100%, 0 85%);
+  transform: rotate(-7deg);
+  font-size: 9px; font-weight: 700; letter-spacing: .02em;
+}
+.boundary {
+  position: absolute; z-index: 2; right: 7%; top: 28%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 27%; height: 46%; color: var(--lavender); font-size: 10px; font-weight: 650; letter-spacing: .05em;
+  background: #17243f; border: 3px solid var(--lavender);
+  clip-path: polygon(50% 0, 93% 15%, 100% 54%, 82% 91%, 50% 100%, 15% 88%, 0 50%, 9% 15%);
+}
+.boundaryMark { display: block; font: 750 52px/.95 Sora, sans-serif; }
+.experience[data-stage="selected"] .courier { transform: translateX(10px) rotate(-4deg); }
+.experience[data-stage="result"] .courier { transform: translateX(4px) rotate(3deg); }
+.experience[data-stage="result"] .boundary { color: var(--amber); border-color: var(--amber); }
+.experience[data-stage="result"] .packet { animation: requestStops .38s ease-out both; }
+@keyframes requestStops { from { transform: translate(-36px, 9px) rotate(-12deg); } to { transform: translate(0, 0) rotate(-7deg); } }
+.content { padding: 20px 20px 22px; }
+.eyebrow { margin: 0 0 7px; color: var(--lavender); font-size: 11px; font-weight: 600; letter-spacing: .06em; }
+.content h2 { margin: 0 0 9px; font-size: 21px; line-height: 1.25; letter-spacing: -.035em; font-weight: 700; }
+.content p { margin-top: 0; font-size: 14px; line-height: 1.55; color: var(--muted); }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.primary, .secondary {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  min-height: 48px; border-radius: 999px; padding: 10px 18px;
+  font: 700 14px/1.25 Sora, sans-serif; cursor: pointer;
+  transition: transform .15s ease, background .15s ease, border-color .15s ease;
+}
+.primary { color: #081522; background: var(--blue); border: 2px solid var(--blue); }
+.secondary { color: var(--ink); background: transparent; border: 2px solid #6c829d; }
+.primary:hover { background: #9ad0ff; }
+.secondary:hover { border-color: #bcd7ef; background: #ffffff12; }
+.primary:active, .secondary:active { transform: translateY(2px); }
+.requestDetails { margin: 12px 0; border-top: 1px solid #526985; }
+.requestDetails div { display: grid; grid-template-columns: 82px minmax(0, 1fr); gap: 8px; padding: 7px 0; border-bottom: 1px solid #3a516d; }
+.requestDetails dt { color: #b3c8db; font-size: 11px; text-transform: uppercase; }
+.requestDetails dd { margin: 0; color: var(--ink); font: 500 13px/1.4 "IBM Plex Mono", monospace; overflow-wrap: anywhere; }
+.content .note { font-size: 12px; }
+.decision h2 { color: var(--amber); font-size: 27px; }
+.decision h2 span { display: block; margin-top: 2px; color: var(--ink); font-size: 18px; }
+.decision code { display: inline-block; margin: 0 0 13px; color: var(--amber); font-size: 11px; overflow-wrap: anywhere; }
+.caseStudy { display: flex; align-items: center; min-height: 44px; width: fit-content; margin-top: 13px; color: #a6d8ff; font-size: 13px; font-weight: 600; }
+.scope, .noScript { margin: 14px 2px 0; color: #aebfd1; font-size: 11px; line-height: 1.5; }
+.noScript { font-family: Sora, sans-serif; font-size: 13px; }
+@media (max-width: 340px) {
+  .content { padding: 17px 16px 19px; }
+  .brand span { font-size: 12px; }
+  .projects { font-size: 13px; }
+  .intro { font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page *, .page *::before, .page *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
