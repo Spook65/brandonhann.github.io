@@ -21,30 +21,30 @@
   text-transform: uppercase;
   color: var(--accent);
 }
+/* Compact project index (review): the Signal Network remains the illustrated entry. */
 .index {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  background: var(--surface);
+  gap: 0.65rem;
 }
 .index > a {
   position: relative;
-  display: grid;
-  gap: 0.7rem;
-  padding: 1.35rem 1.25rem;
-  border-right: 1px solid var(--line);
-  min-height: 174px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+  min-height: 64px;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
   color: var(--ink);
   text-decoration: none;
-  transition: background 0.15s ease, box-shadow 0.15s ease;
-}
-.index > a:last-child {
-  border-right: 0;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
 .index > a[data-preview="true"] {
   background: var(--surface-raised);
+  border-color: #506884;
   box-shadow: inset 0 -2px var(--accent);
 }
 .index > a:is(:hover, :focus-visible) {
@@ -52,46 +52,54 @@
 }
 .index > a[aria-current] {
   background: #172433;
-  box-shadow: inset 0 4px var(--accent);
+  border-color: var(--accent);
+  box-shadow: inset 0 3px var(--accent);
 }
 .index > a:focus-visible {
   outline: 2px solid var(--accent);
-  outline-offset: -3px;
+  outline-offset: 3px;
   z-index: 1;
 }
-.index > a:active {
-  background: #23405d;
-}
+.index > a:active { background: #23405d; }
 .indexNumber {
+  order: 2;
   display: flex;
+  flex: none;
   align-items: center;
-  justify-content: space-between;
-  font: 0.78rem var(--mono);
+  gap: 0.4rem;
+  margin-left: auto;
+  font: 0.7rem/1.4 var(--mono);
   color: var(--muted);
 }
 .indexState {
-  font: 0.78rem/1.4 var(--mono);
+  font: 0.7rem/1.4 var(--mono);
   color: var(--accent);
+  white-space: nowrap;
 }
-.index > a[aria-current] .indexState {
-  color: var(--cyan);
+.index > a[aria-current] .indexState { color: var(--cyan); }
+.index > a:not([aria-current]) .indexState { font-size: 0; }
+.index > a:not([aria-current]) .indexState::after {
+  content: "↘";
+  font-size: 0.85rem;
 }
 .index strong {
-  font-size: 1.2rem;
+  order: 1;
+  min-width: 0;
+  flex: 1;
+  font-size: 0.95rem;
   font-weight: 650;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 }
-.index small {
-  color: var(--muted);
-  font-size: 0.875rem;
-  line-height: 1.5;
-}
+/* Project categories are already present in the immediately following case studies. */
+.index small { display: none; }
 .preview {
   display: grid;
-  grid-template-columns: 1.1fr 2fr auto;
-  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 2fr) auto;
+  gap: 1rem;
   align-items: center;
-  min-height: 112px;
-  padding: 1.3rem 0;
+  min-height: 72px;
+  padding: 0.85rem 0;
   border-bottom: 1px solid var(--line);
 }
 .preview > span {
@@ -103,10 +111,7 @@
   margin: 0;
   color: var(--muted);
 }
-.preview a {
-  font-size: 0.875rem;
-  white-space: nowrap;
-}
+.preview a { font-size: 0.875rem; white-space: nowrap; }
 .study {
   scroll-margin-top: 1.5rem;
   margin-top: 1.5rem;
@@ -305,86 +310,56 @@
 }
 @media (max-width: 1100px) {
   .index { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .index > a:nth-child(2) { border-right: 0; }
-  .index > a:nth-child(-n + 2) { border-bottom: 1px solid var(--line); }
   .studyBody { grid-template-columns: 1fr; gap: 1.5rem; }
 }
 @media (max-width: 700px) {
-  .showcase {
-    padding-top: 2.5rem;
-  }
-  .heading {
-    display: block;
-  }
-  .heading > p {
-    margin-top: 1rem;
-  }
-  .index {
-    grid-template-columns: 1fr 1fr;
-  }
+  .showcase { padding-top: 2.5rem; }
+  .heading { display: block; }
+  .heading > p { margin-top: 1rem; }
   .index > a {
-    min-height: 152px;
-    padding: 1.1rem;
+    min-height: 60px;
+    padding: 0.75rem 0.85rem;
   }
+  .indexNumber { font-size: 0; }
+  .index strong { font-size: 0.9rem; }
+  .indexState { font-size: 0.7rem; }
+  .index > a:not([aria-current]) .indexState { font-size: 0; }
   .preview {
     grid-template-columns: 1fr auto;
-    gap: 0.7rem;
+    gap: 0.5rem 0.75rem;
   }
   .preview p {
-    grid-column: 1/-1;
+    grid-column: 1 / -1;
     grid-row: 2;
     font-size: 0.9rem;
   }
-  .preview a {
-    font-size: 0.875rem;
-  }
-  .preview > span {
-    font-size: 0.78rem;
-  }
+  .preview a { font-size: 0.875rem; }
+  .preview > span { font-size: 0.78rem; }
   .studyHeader {
     flex-direction: column;
     align-items: start;
     gap: 0.5rem;
   }
-  .studyBody {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  .details summary span {
-    display: block;
-    margin: 0.2rem 0 0 1rem;
-  }
-  .study {
-    padding: 1.5rem;
-  }
+  .studyBody { grid-template-columns: 1fr; gap: 2rem; }
+  .details summary span { display: block; margin: 0.2rem 0 0 1rem; }
+  .study { padding: 1.5rem; }
 }
 @media (max-width: 540px) {
-  .index { grid-template-columns: 1fr; }
+  .index { gap: 0.5rem; }
   .index > a {
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-rows: auto auto;
-    align-content: center;
-    column-gap: 0.75rem;
-    row-gap: 0.15rem;
-    min-height: 78px;
-    padding: 0.8rem 1rem;
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
+    min-height: 60px;
+    padding: 0.65rem 0.75rem;
+    gap: 0.4rem;
   }
-  .indexNumber {
-    grid-column: 2;
-    grid-row: 1 / 3;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 0.25rem;
-  }
-  .index strong { grid-column: 1; grid-row: 1; font-size: 1.1rem; }
-  .index small { grid-column: 1; grid-row: 2; font-size: 0.875rem; }
-  .index > a:last-child { border-bottom: 0; }
+  .index strong { font-size: 0.875rem; }
   .preview { grid-template-columns: 1fr; }
   .preview p { grid-column: auto; grid-row: auto; }
   .showcase { padding-top: 2rem; }
+}
+@media (max-width: 350px) {
+  .index > a { padding: 0.6rem; gap: 0.3rem; }
+  .index strong { font-size: 0.82rem; }
+  .indexState { font-size: 0.64rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .index > a {
